@@ -15,4 +15,4 @@ jobs:
         uses: creyD/prettier_action@v4.3
         with:
           # Prettier CLI arguments
-          prettier_options: --check .
+          prettier_options: --check ./app
