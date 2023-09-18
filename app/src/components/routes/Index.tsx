@@ -8,7 +8,7 @@ const Index = () => {
       .from('example')
       .select('id', { count: 'exact' })
       .eq('id', 2)
-      .single()
+      .single(),
   )
 
   return (
