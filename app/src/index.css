@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+  .min-h-screen-dvh {
+    height: 100vh; /* fallback */
+    height: 100dvh;
+  }
+}

@@ -1,14 +1,12 @@
 import { createBrowserRouter } from 'react-router-dom'
 import Index from '~/components/routes/Index'
+import Root from '~/components/routes/Root'
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Index />,
-  },
-  {
-    path: '/other',
-    element: <div>Other example page</div>,
+    element: <Root />,
+    children: [{ index: true, element: <Index /> }],
   },
 ])
 
