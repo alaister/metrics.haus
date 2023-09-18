@@ -2,7 +2,7 @@ import { useQuery } from '@supabase-cache-helpers/postgrest-react-query'
 import { Button } from '~/components/ui/Button'
 import supabase from '~/lib/supabase'
 
-const App = () => {
+const Index = () => {
   const { data, count, error } = useQuery(
     supabase
       .from('example')
@@ -21,4 +21,4 @@ const App = () => {
   )
 }
 
-export default App
+export default Index
