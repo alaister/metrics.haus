@@ -12,7 +12,7 @@ const CURRENT_YEAR = new Date().getFullYear()
 
 const Footer = () => {
   return (
-    <div className="bg-white border-t p-4 mt-auto md:flex md:items-center md:justify-between">
+    <div className="bg-white border-t p-4 md:flex md:items-center md:justify-between">
       <div className="flex space-x-6 md:order-2">
         {SOCIAL.map((item) => (
           <a

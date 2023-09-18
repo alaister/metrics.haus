@@ -4,7 +4,7 @@
 
 @layer utilities {
   .min-h-screen-dvh {
-    height: 100vh; /* fallback */
-    height: 100dvh;
+    min-height: 100vh; /* fallback */
+    min-height: 100dvh;
   }
 }
