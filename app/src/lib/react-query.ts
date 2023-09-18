@@ -10,7 +10,8 @@ export const queryClient = new QueryClient({
           typeof error === 'object' &&
           error !== null &&
           'code' in error &&
-          error.code === 'PGRST116'
+          typeof error.code === 'string' &&
+          (error.code === 'PGRST116' || error.code === '42P01')
         ) {
           return false
         }

@@ -1,4 +1,4 @@
-name: Check Code Formatting with Prettier
+name: Check App Code Formatting with Prettier
 
 on:
   pull_request:
@@ -11,8 +11,10 @@ jobs:
     steps:
       - name: Check out repo
         uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
       - name: Run Prettier
         uses: creyD/prettier_action@v4.3
         with:
           # Prettier CLI arguments
-          prettier_options: --check ./app
+          prettier_options: '--config ./app/.prettierrc --check ./app'
