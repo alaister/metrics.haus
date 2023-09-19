@@ -28,7 +28,8 @@ create table
     public.metrics_data_points (
         time TIMESTAMPTZ not null,
         metric_id uuid not null,
-        value double precision not null
+        value double precision not null,
+        reported_by uuid not null references public.profiles ("id") on delete set null on update cascade
     );
 
 select
