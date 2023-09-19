@@ -1,8 +1,11 @@
 import { createBrowserRouter, redirect } from 'react-router-dom'
 import AuthLayout from '~/components/layout/AuthLayout'
+import DialogLayout from '~/components/layout/DialogLayout'
 import RootLayout from '~/components/layout/RootLayout'
 import ErrorPage from '~/components/routes/ErrorPage'
 import Index from '~/components/routes/Index'
+import Metrics from '~/components/routes/Metrics'
+import NewMetric from '~/components/routes/NewMetric'
 import SignIn from '~/components/routes/SignIn'
 import { toast } from './hooks/use-toast'
 import supabase from './supabase'
@@ -33,7 +36,24 @@ const router = createBrowserRouter([
 
       return null
     },
-    children: [{ index: true, element: <Index /> }],
+    children: [
+      { index: true, element: <Index /> },
+      {
+        path: 'metrics',
+        element: <Metrics />,
+        children: [
+          {
+            element: <DialogLayout />,
+            children: [
+              {
+                path: 'new',
+                element: <NewMetric />,
+              },
+            ],
+          },
+        ],
+      },
+    ],
   },
   {
     path: '/',
