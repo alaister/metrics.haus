@@ -3,10 +3,10 @@ import { createBrowserRouter, redirect } from 'react-router-dom'
 import AuthLayout from '~/components/layout/AuthLayout'
 import DialogLayout from '~/components/layout/DialogLayout'
 import RootLayout from '~/components/layout/RootLayout'
+import ErrorPage from '~/components/routes/ErrorPage'
 import { toast } from './hooks/use-toast'
 import supabase from './supabase'
 
-const ErrorPage = lazy(() => import('../components/routes/ErrorPage'))
 const Index = lazy(() => import('../components/routes/Index'))
 const Metrics = lazy(() => import('../components/routes/Metrics'))
 const NewMetric = lazy(() => import('../components/routes/NewMetric'))
