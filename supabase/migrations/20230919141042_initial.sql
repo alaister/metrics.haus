@@ -21,7 +21,7 @@ create table
         "created_at" timestamp with time zone not null default now(),
         "updated_at" timestamp with time zone not null default now(),
         name text not null,
-        sso_provider_id uuid 
+        sso_provider_id text 
     );
 
 -- Team members

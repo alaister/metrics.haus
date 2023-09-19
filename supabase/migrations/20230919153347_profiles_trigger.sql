@@ -1,7 +1,8 @@
 -- inserts a row into public.profiles
-create function public.handle_new_user () returns trigger language plpgsql security definer
+create
+or replace function public.handle_new_user () returns trigger language plpgsql security definer
 set
-    search_path = public as $$
+  search_path = public as $$
 begin
   insert into public.profiles (id, name)
 
