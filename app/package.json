@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "relay": "relay-compiler"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.1",
@@ -15,18 +16,16 @@
     "@radix-ui/react-label": "^2.0.2",
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-toast": "^1.1.4",
-    "@supabase-cache-helpers/postgrest-react-query": "^1.0.25",
-    "@supabase/postgrest-js": "^1.8.4",
     "@supabase/supabase-js": "^2.33.2",
-    "@tanstack/react-query": "^4.35.3",
-    "@tanstack/react-query-devtools": "^4.35.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "lucide-react": "^0.279.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.46.1",
+    "react-relay": "^15.0.0",
     "react-router-dom": "^6.16.0",
+    "relay-runtime": "^15.0.0",
     "tailwind-merge": "^1.14.0",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.22.2"
@@ -35,18 +34,45 @@
     "@types/node": "^20.6.2",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
+    "@types/relay-runtime": "^14.1.13",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "@vitejs/plugin-react": "^4.0.3",
     "autoprefixer": "^10.4.15",
+    "babel-plugin-relay": "^15.0.0",
     "eslint": "^8.45.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.3",
     "postcss": "^8.4.29",
     "prettier": "^3.0.3",
+    "relay-compiler": "^15.0.0",
     "tailwindcss": "^3.3.3",
     "typescript": "^5.0.2",
     "vite": "^4.4.5",
-    "vite-plugin-minify": "^1.5.2"
+    "vite-plugin-minify": "^1.5.2",
+    "vite-plugin-relay": "^2.0.0"
+  },
+  "relay": {
+    "src": "./src",
+    "language": "typescript",
+    "schema": "./lib/schema.graphql",
+    "exclude": [
+      "**/node_modules/**",
+      "**/__mocks__/**",
+      "**/__generated__/**"
+    ],
+    "eagerEsModules": true,
+    "schemaConfig": {
+      "nodeInterfaceIdField": "nodeId",
+      "nodeInterfaceIdVariableName": "nodeId"
+    },
+    "customScalars": {
+      "UUID": "string",
+      "Datetime": "string",
+      "JSON": "string",
+      "BigInt": "string",
+      "BigFloat": "string",
+      "Opaque": "any"
+    }
   }
 }

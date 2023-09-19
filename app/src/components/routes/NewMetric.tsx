@@ -1,5 +1,11 @@
+import MetricForm from '../metrics/MetricForm'
+
 const NewMetric = () => {
-  return <div>hello make a new metric</div>
+  return (
+    <div>
+      <MetricForm />
+    </div>
+  )
 }
 
 export default NewMetric

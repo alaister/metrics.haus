@@ -1,11 +1,12 @@
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useInsertMutation } from '@supabase-cache-helpers/postgrest-react-query'
+import { Save } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { Button } from '~/components/ui/Button'
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -16,21 +17,29 @@ import { useToast } from '~/lib/hooks/use-toast'
 import supabase from '~/lib/supabase'
 
 const formSchema = z.object({
-  email: z.string().email(),
+  name: z.string().min(1, "Can't be empty"),
 })
 
-const SignInForm = () => {
+const MetricForm = () => {
   const { toast } = useToast()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: '',
+      name: '',
     },
   })
 
+  const { mutateAsync: insert } = useInsertMutation(
+    supabase.from('metrics'),
+    ['id'],
+    'name',
+  )
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const { error } = await supabase.auth.signInWithOtp({ email: values.email })
+    const { error } = await insert({
+      name: values.name,
+    })
     if (error) {
       toast({
         variant: 'destructive',
@@ -41,35 +50,27 @@ const SignInForm = () => {
     }
 
     toast({
-      title: 'Check your email',
-      description: 'We sent you a magic link to sign in.',
+      title: 'Metric created successfully',
     })
 
-    form.reset({ email: '' })
+    form.reset({ name: '' })
   }
 
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col gap-2"
+        className="flex flex-col gap-6"
       >
         <FormField
           control={form.control}
-          name="email"
+          name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input
-                  placeholder="you@example.com"
-                  type="email"
-                  autoFocus={true}
-                  autoComplete="email"
-                  {...field}
-                />
+                <Input placeholder="MRR" {...field} />
               </FormControl>
-              <FormDescription>Use your work email address.</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -81,11 +82,12 @@ const SignInForm = () => {
           isLoading={form.formState.isSubmitting}
           disabled={form.formState.isSubmitting}
         >
-          Sign In
+          <Save className="w-4 h-4" />
+          <span>Save</span>
         </Button>
       </form>
     </Form>
   )
 }
 
-export default SignInForm
+export default MetricForm
