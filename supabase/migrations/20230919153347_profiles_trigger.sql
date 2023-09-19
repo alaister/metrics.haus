@@ -6,13 +6,13 @@ begin
   insert into public.profiles (id, name)
 
   values (
-    new.id, 
+    new.id,
     CASE
-        WHEN new.raw_user_metadata->'custom_claims'->>'first_name' IS NOT NULL THEN CONCAT(new.raw_user_metadata->'custom_claims'->>'first_name', '', new.raw_user_metadata->'custom_claims'->>'last_name')
+        WHEN (new.raw_user_meta_data->'custom_claims'->>'first_name') IS NOT NULL THEN CONCAT(new.raw_user_meta_data->'custom_claims'->>'first_name', ' ', new.raw_user_meta_data->'custom_claims'->>'last_name')
         ELSE 'Anonymous'
     END
   );
-  
+
   return new;
 end;
 $$;
