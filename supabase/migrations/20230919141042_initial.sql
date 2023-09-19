@@ -20,7 +20,8 @@ create table
         "id" uuid primary key not null default gen_random_uuid (),
         "created_at" timestamp with time zone not null default now(),
         "updated_at" timestamp with time zone not null default now(),
-        name text not null
+        name text not null,
+        sso_provider_id uuid 
     );
 
 -- Team members
