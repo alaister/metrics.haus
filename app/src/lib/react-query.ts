@@ -4,7 +4,6 @@ export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       retry: (failureCount, error) => {
-        console.log('error:', error)
         // Don't retry on 404s
         if (
           typeof error === 'object' &&
