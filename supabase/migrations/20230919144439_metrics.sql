@@ -7,7 +7,7 @@ create table
         "created_at" timestamp with time zone not null default now(),
         "updated_at" timestamp with time zone not null default now(),
         name text not null,
-        team_id uuid references public.teams ("id") on delete cascade on update cascade
+        team_id uuid not null references public.teams ("id") on delete cascade on update cascade
     );
 
 alter table public.metrics enable row level security;
@@ -37,16 +37,17 @@ select
 alter table public.metrics_data_points enable row level security;
 
 create policy "user can see data points from accessible metrics" on public.metrics_data_points for
-select using (
-    exists (
-        select
-            1
-        from
-            public.metrics as m
-        where
-            metric_id = m.id
-    )
-);
+select
+    using (
+        exists (
+            select
+                1
+            from
+                public.metrics as m
+            where
+                metric_id = m.id
+        )
+    );
 
 create index ix_metric_data_point_metric on public.metrics_data_points (metric_id, time desc);
 
