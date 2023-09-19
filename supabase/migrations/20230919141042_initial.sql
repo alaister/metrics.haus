@@ -1,5 +1,10 @@
 create extension if not exists moddatetime schema extensions;
 
+comment on schema public is e'@graphql({
+  "inflect_names": true,
+  "max_rows": 1000
+})';
+
 -- Profiles
 create table
     public.profiles (
@@ -28,8 +33,9 @@ create table
         "updated_at" timestamp with time zone not null default now()
     );
 
-revoke
-update on public.profiles
+revoke insert,
+update,
+delete on public.profiles
 from
     public,
     anon,
@@ -106,3 +112,10 @@ select
                 user_id = profiles.id
         )
     );
+
+revoke insert,
+update on public.team_members
+from
+    public,
+    anon,
+    authenticated;
