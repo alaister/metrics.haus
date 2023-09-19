@@ -1,14 +1,16 @@
+import { lazy } from 'react'
 import { createBrowserRouter, redirect } from 'react-router-dom'
-import AuthLayout from '~/components/layout/AuthLayout'
-import DialogLayout from '~/components/layout/DialogLayout'
-import RootLayout from '~/components/layout/RootLayout'
-import ErrorPage from '~/components/routes/ErrorPage'
-import Index from '~/components/routes/Index'
-import Metrics from '~/components/routes/Metrics'
-import NewMetric from '~/components/routes/NewMetric'
-import SignIn from '~/components/routes/SignIn'
 import { toast } from './hooks/use-toast'
 import supabase from './supabase'
+
+const AuthLayout = lazy(() => import('../components/layout/AuthLayout'))
+const DialogLayout = lazy(() => import('../components/layout/DialogLayout'))
+const ErrorPage = lazy(() => import('../components/routes/ErrorPage'))
+const Index = lazy(() => import('../components/routes/Index'))
+const Metrics = lazy(() => import('../components/routes/Metrics'))
+const NewMetric = lazy(() => import('../components/routes/NewMetric'))
+const RootLayout = lazy(() => import('../components/layout/RootLayout'))
+const SignIn = lazy(() => import('../components/routes/SignIn'))
 
 const router = createBrowserRouter([
   {
