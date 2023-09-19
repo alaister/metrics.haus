@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import { Outlet, useNavigate } from 'react-router-dom'
 import { Dialog, DialogContent } from '../ui/Dialog'
 
@@ -14,7 +15,9 @@ const DialogLayout = () => {
       }}
     >
       <DialogContent>
-        <Outlet />
+        <Suspense>
+          <Outlet />
+        </Suspense>
       </DialogContent>
     </Dialog>
   )
