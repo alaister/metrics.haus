@@ -1,5 +1,4 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { AuthError } from '@supabase/supabase-js'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { Button } from '~/components/ui/Button'
@@ -31,31 +30,45 @@ const SignInForm = () => {
   })
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    let error: AuthError | null = null
-
     if (import.meta.env.MODE === 'development') {
-      const result = await supabase.auth.signInWithOtp({ email: values.email })
-      error = result.error
+      const { error } = await supabase.auth.signInWithOtp({
+        email: values.email,
+      })
+
+      if (error) {
+        toast({
+          variant: 'destructive',
+          title: 'Something went wrong',
+          description: error.message,
+        })
+        return
+      }
+
+      toast({
+        title: 'Check your email',
+        description: 'We sent you a magic link to sign in.',
+      })
     } else {
-      const result = await supabase.auth.signInWithSSO({
+      const { error, data } = await supabase.auth.signInWithSSO({
         domain: values.email.split('@')[1],
       })
-      error = result.error
-    }
 
-    if (error) {
+      if (error) {
+        toast({
+          variant: 'destructive',
+          title: 'Something went wrong',
+          description: error.message,
+        })
+        return
+      }
+
       toast({
-        variant: 'destructive',
-        title: 'Something went wrong',
-        description: error.message,
+        title: 'Success',
+        description: 'Redirecting...',
       })
-      return
-    }
 
-    toast({
-      title: 'Check your email',
-      description: 'We sent you a magic link to sign in.',
-    })
+      window.location.href = data.url
+    }
 
     form.reset({ email: '' })
   }
