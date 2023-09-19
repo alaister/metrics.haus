@@ -1,5 +1,5 @@
 import { Outlet, useNavigate } from 'react-router-dom'
-import { Dialog, DialogContent } from '../ui/dialog'
+import { Dialog, DialogContent } from '../ui/Dialog'
 
 const DialogLayout = () => {
   const navigate = useNavigate()
