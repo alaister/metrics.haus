@@ -61,7 +61,13 @@ const SignInForm = () => {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="you@example.com" {...field} />
+                <Input
+                  placeholder="you@example.com"
+                  type="email"
+                  autoFocus={true}
+                  autoComplete="email"
+                  {...field}
+                />
               </FormControl>
               <FormDescription>Use your work email address.</FormDescription>
               <FormMessage />

@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import { Link, Outlet } from 'react-router-dom'
 import Footer from '~/components/layout/Footer'
 
@@ -13,7 +14,9 @@ const AuthLayout = () => {
       </header>
 
       <main className="flex-1 max-w-xl w-full mx-auto px-8 overflow-x-hidden pt-8 md:pt-16 pb-16">
-        <Outlet />
+        <Suspense>
+          <Outlet />
+        </Suspense>
       </main>
 
       <Footer />
