@@ -1,4 +1,3 @@
-import { useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from '~/lib/hooks/use-toast'
@@ -6,7 +5,6 @@ import supabase from '~/lib/supabase'
 import { Button } from '../ui/Button'
 
 const Header = () => {
-  const queryClient = useQueryClient()
   const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate()
 
@@ -23,8 +21,6 @@ const Header = () => {
       setIsLoading(false)
       return
     }
-
-    queryClient.resetQueries()
 
     setIsLoading(false)
     navigate('/sign-in', { replace: true })

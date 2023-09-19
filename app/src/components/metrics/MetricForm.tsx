@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useInsertMutation } from '@supabase-cache-helpers/postgrest-react-query'
 import { Save } from 'lucide-react'
 import { useForm } from 'react-hook-form'
+import { graphql, useMutation } from 'react-relay'
 import { z } from 'zod'
 import { Button } from '~/components/ui/Button'
 import {
@@ -14,7 +14,20 @@ import {
 } from '~/components/ui/Form'
 import { Input } from '~/components/ui/Input'
 import { useToast } from '~/lib/hooks/use-toast'
-import supabase from '~/lib/supabase'
+import { MetricForm_Mutation } from './__generated__/MetricForm_Mutation.graphql'
+
+const MetricInsertMutation = graphql`
+  mutation MetricForm_Mutation($input: MetricsInsertInput!) {
+    insertIntoMetricsCollection(objects: [$input]) {
+      affectedCount
+      records {
+        nodeId
+        id
+        name
+      }
+    }
+  }
+`
 
 const formSchema = z.object({
   name: z.string().min(1, "Can't be empty"),
@@ -30,30 +43,30 @@ const MetricForm = () => {
     },
   })
 
-  const { mutateAsync: insert } = useInsertMutation(
-    supabase.from('metrics'),
-    ['id'],
-    'name',
-  )
+  const [mutate] = useMutation<MetricForm_Mutation>(MetricInsertMutation)
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const { error } = await insert({
-      name: values.name,
-    })
-    if (error) {
-      toast({
-        variant: 'destructive',
-        title: 'Something went wrong',
-        description: error.message,
-      })
-      return
-    }
+    mutate({
+      variables: {
+        input: {
+          name: values.name,
+        },
+      },
+      onError(error) {
+        toast({
+          variant: 'destructive',
+          title: 'Something went wrong',
+          description: error.message,
+        })
+      },
+      onCompleted() {
+        toast({
+          title: 'Metric created successfully',
+        })
 
-    toast({
-      title: 'Metric created successfully',
+        form.reset({ name: '' })
+      },
     })
-
-    form.reset({ name: '' })
   }
 
   return (

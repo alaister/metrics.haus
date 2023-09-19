@@ -1,20 +1,36 @@
-import { useQuery } from '@supabase-cache-helpers/postgrest-react-query'
-import { AlertCircle, Plus } from 'lucide-react'
-import { Link, Outlet } from 'react-router-dom'
-import supabase from '~/lib/supabase'
-import SkeletonList from '../loading/SkeletonList'
-import MetricCard, { MetricCardSkeleton } from '../metrics/MetricCard'
-import { Alert, AlertDescription, AlertTitle } from '../ui/Alert'
+import { Plus } from 'lucide-react'
+import { loadQuery, usePreloadedQuery } from 'react-relay'
+import { Link, Outlet, useLoaderData } from 'react-router-dom'
+import { graphql } from 'relay-runtime'
+import environment from '~/lib/relay'
+import MetricCard from '../metrics/MetricCard'
 import { Button } from '../ui/Button'
+import { Metrics_Query } from './__generated__/Metrics_Query.graphql'
+
+export const MetricsQuery = graphql`
+  query Metrics_Query {
+    metricsCollection {
+      edges {
+        cursor
+        node {
+          nodeId
+          ...MetricCard_metrics
+        }
+      }
+    }
+  }
+`
+
+export async function loader() {
+  return {
+    preloaded: loadQuery<Metrics_Query>(environment, MetricsQuery, {}),
+  }
+}
 
 const Metrics = () => {
-  const {
-    isLoading,
-    isError,
-    isSuccess,
-    data: metrics,
-    error,
-  } = useQuery(supabase.from('metrics').select('id,name', { count: 'exact' }))
+  const { preloaded } = useLoaderData() as Awaited<ReturnType<typeof loader>>
+  const data = usePreloadedQuery(MetricsQuery, preloaded)
+  const metrics = data.metricsCollection?.edges ?? []
 
   return (
     <>
@@ -35,22 +51,9 @@ const Metrics = () => {
         <hr />
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {isLoading && (
-            <SkeletonList count={3} skeleton={MetricCardSkeleton} />
-          )}
-
-          {isError && (
-            <Alert variant="destructive" className="col-span-3">
-              <AlertCircle className="h-4 w-4" />
-              <AlertTitle>Something went wrong</AlertTitle>
-              <AlertDescription>{error?.message}</AlertDescription>
-            </Alert>
-          )}
-
-          {isSuccess &&
-            metrics?.length > 0 &&
-            metrics.map((metric) => (
-              <MetricCard key={metric.id} metric={metric} />
+          {metrics.length > 0 &&
+            metrics.map(({ node: metric }) => (
+              <MetricCard key={metric.nodeId} metric={metric} />
             ))}
         </div>
       </div>
