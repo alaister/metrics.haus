@@ -64,7 +64,6 @@ const router = createBrowserRouter([
           },
         ],
       },
-
       {
         path: 'metrics',
         children: [
@@ -79,34 +78,38 @@ const router = createBrowserRouter([
           },
           {
             path: ':metricId',
-            element: (
-              <QueryPageShell
-                pageComponent={MetricDetails}
-                fallback={MetricDetailsData.fallback}
-                query={MetricDetailsData.query}
-              />
-            ),
-            loader: async ({ params }) => {
-              if (!params.metricId) return null
-
-              const nodeId = toGlobalId(params.metricId, 'metrics')
-
-              return {
-                initialQueryRef: loadQuery(
-                  environment,
-                  MetricDetailsData.query,
-                  { nodeId },
-                ),
-              }
-            },
-          },
-
-          {
-            element: <DialogLayout />,
             children: [
               {
-                path: ':metricId/new-data',
-                element: <NewMetricDataPoint />,
+                index: true,
+                element: (
+                  <QueryPageShell
+                    pageComponent={MetricDetails}
+                    fallback={MetricDetailsData.fallback}
+                    query={MetricDetailsData.query}
+                  />
+                ),
+                loader: async ({ params }) => {
+                  if (!params.metricId) return null
+
+                  const nodeId = toGlobalId(params.metricId, 'metrics')
+
+                  return {
+                    initialQueryRef: loadQuery(
+                      environment,
+                      MetricDetailsData.query,
+                      { nodeId },
+                    ),
+                  }
+                },
+              },
+              {
+                element: <DialogLayout />,
+                children: [
+                  {
+                    path: 'new-data',
+                    element: <NewMetricDataPoint />,
+                  },
+                ],
               },
             ],
           },
