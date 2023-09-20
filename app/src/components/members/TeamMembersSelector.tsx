@@ -66,7 +66,7 @@ const TeamMembersSelector = ({ onValueChange }: TeamMembersSelectorProps) => {
         })}
         // copy pasta https://stackoverflow.com/a/74481208/1476137
         styles={{
-          control: (base, state) => ({
+          control: (base) => ({
             ...base,
             boxShadow: 'none',
             borderColor: '#e5e7eb',
