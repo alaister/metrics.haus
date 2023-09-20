@@ -2,7 +2,8 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from '~/lib/hooks/use-toast'
 import supabase from '~/lib/supabase'
-import { Button } from '../ui/Button'
+import { Button } from '~/components/ui/Button'
+import { ThemeButton } from '~/components/ui/ThemeButton'
 
 const Header = () => {
   const [isLoading, setIsLoading] = useState(false)
@@ -32,6 +33,8 @@ const Header = () => {
         <h1 className="font-medium">
           <Link to="/">metrics.haus</Link>
         </h1>
+
+        <ThemeButton />
 
         <Button
           variant="ghost"
