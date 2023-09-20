@@ -33,7 +33,7 @@ const MetricDetails = ({ queryRef }: MetricDetailsProps) => {
         <Outlet />
       </div>
 
-      <div className='mt-5'>{data.node?.id}</div>
+      <div className="mt-5">{data.node?.id}</div>
     </div>
   )
 }

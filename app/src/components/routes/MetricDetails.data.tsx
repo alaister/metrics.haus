@@ -3,15 +3,15 @@ import SkeletonList from '../loading/SkeletonList'
 import { MetricDetailsSkeleton } from './MetricDetails'
 
 export const query = graphql`
-query MetricDetails_Query($nodeId: ID!) {
-  node(nodeId: $nodeId) {
-    nodeId
-    ... on Metrics {
-      id
-      name
+  query MetricDetails_Query($nodeId: ID!) {
+    node(nodeId: $nodeId) {
+      nodeId
+      ... on Metrics {
+        id
+        name
+      }
     }
   }
-}
 `
 
 export const fallback = (
@@ -19,4 +19,3 @@ export const fallback = (
     <SkeletonList count={3} skeleton={MetricDetailsSkeleton} />
   </div>
 )
-
