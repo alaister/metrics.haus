@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<0924e760d965dd66f77408ae3860114f>>
+ * @generated SignedSource<<7452f28e6f9a24ab7675be04a0d3d125>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -12,12 +12,9 @@ import { ConcreteRequest, Mutation } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type MetricInterval = "day" | "hour" | "minute" | "month" | "week" | "%future added value";
 export type MetricsInsertInput = {
-  createdAt?: string | null;
-  id?: string | null;
   interval?: MetricInterval | null;
   name?: string | null;
   teamId?: string | null;
-  updatedAt?: string | null;
 };
 export type MetricForm_Mutation$variables = {
   connections: ReadonlyArray<string>;

@@ -200,6 +200,73 @@ type MetricsConnection {
   pageInfo: PageInfo!
 }
 
+type MetricsDataPoints implements Node {
+  """
+  Globally Unique Record Identifier
+  """
+  nodeId: ID!
+  time: Datetime!
+  metricId: UUID!
+  value: Float!
+  reportedBy: UUID!
+  profiles: Profiles!
+}
+
+type MetricsDataPointsConnection {
+  edges: [MetricsDataPointsEdge!]!
+  pageInfo: PageInfo!
+}
+
+type MetricsDataPointsDeleteResponse {
+  """
+  Count of the records impacted by the mutation
+  """
+  affectedCount: Int!
+
+  """
+  Array of records impacted by the mutation
+  """
+  records: [MetricsDataPoints!]!
+}
+
+type MetricsDataPointsEdge {
+  cursor: String!
+  node: MetricsDataPoints!
+}
+
+input MetricsDataPointsFilter {
+  time: DatetimeFilter
+  metricId: UUIDFilter
+  value: FloatFilter
+  reportedBy: UUIDFilter
+  nodeId: IDFilter
+}
+
+input MetricsDataPointsInsertInput {
+  time: Datetime
+  metricId: UUID
+  value: Float
+}
+
+type MetricsDataPointsInsertResponse {
+  """
+  Count of the records impacted by the mutation
+  """
+  affectedCount: Int!
+
+  """
+  Array of records impacted by the mutation
+  """
+  records: [MetricsDataPoints!]!
+}
+
+input MetricsDataPointsOrderBy {
+  time: OrderByDirection
+  metricId: OrderByDirection
+  value: OrderByDirection
+  reportedBy: OrderByDirection
+}
+
 type MetricsDeleteResponse {
   """
   Count of the records impacted by the mutation
@@ -228,9 +295,6 @@ input MetricsFilter {
 }
 
 input MetricsInsertInput {
-  id: UUID
-  createdAt: Datetime
-  updatedAt: Datetime
   interval: MetricInterval
   name: String
   teamId: UUID
@@ -263,10 +327,10 @@ type MetricsOwners implements Node {
   """
   nodeId: ID!
   metricId: UUID!
-  userId: UUID!
+  profileId: UUID!
   createdAt: Datetime!
   metric: Metrics!
-  user: Profiles!
+  profile: Profiles!
 }
 
 type MetricsOwnersConnection {
@@ -293,14 +357,14 @@ type MetricsOwnersEdge {
 
 input MetricsOwnersFilter {
   metricId: UUIDFilter
-  userId: UUIDFilter
+  profileId: UUIDFilter
   createdAt: DatetimeFilter
   nodeId: IDFilter
 }
 
 input MetricsOwnersInsertInput {
   metricId: UUID
-  userId: UUID
+  profileId: UUID
   createdAt: Datetime
 }
 
@@ -318,13 +382,13 @@ type MetricsOwnersInsertResponse {
 
 input MetricsOwnersOrderBy {
   metricId: OrderByDirection
-  userId: OrderByDirection
+  profileId: OrderByDirection
   createdAt: OrderByDirection
 }
 
 input MetricsOwnersUpdateInput {
   metricId: UUID
-  userId: UUID
+  profileId: UUID
   createdAt: Datetime
 }
 
@@ -341,12 +405,8 @@ type MetricsOwnersUpdateResponse {
 }
 
 input MetricsUpdateInput {
-  id: UUID
-  createdAt: Datetime
-  updatedAt: Datetime
   interval: MetricInterval
   name: String
-  teamId: UUID
 }
 
 type MetricsUpdateResponse {
@@ -379,6 +439,21 @@ type Mutation {
     """
     atMost: Int! = 1
   ): MetricsDeleteResponse!
+
+  """
+  Deletes zero or more records from the `MetricsDataPoints` collection
+  """
+  deleteFromMetricsDataPointsCollection(
+    """
+    Restricts the mutation's impact to records matching the criteria
+    """
+    filter: MetricsDataPointsFilter
+
+    """
+    The maximum number of records in the collection permitted to be affected
+    """
+    atMost: Int! = 1
+  ): MetricsDataPointsDeleteResponse!
 
   """
   Deletes zero or more records from the `MetricsOwners` collection
@@ -431,6 +506,13 @@ type Mutation {
   insertIntoMetricsCollection(
     objects: [MetricsInsertInput!]!
   ): MetricsInsertResponse
+
+  """
+  Adds one or more `MetricsDataPoints` records to the collection
+  """
+  insertIntoMetricsDataPointsCollection(
+    objects: [MetricsDataPointsInsertInput!]!
+  ): MetricsDataPointsInsertResponse
 
   """
   Adds one or more `MetricsOwners` records to the collection
@@ -586,6 +668,68 @@ type Profiles implements Node {
   createdAt: Datetime!
   updatedAt: Datetime!
   name: String!
+  teamMembersCollection(
+    """
+    Query the first `n` records in the collection
+    """
+    first: Int
+
+    """
+    Query the last `n` records in the collection
+    """
+    last: Int
+
+    """
+    Query values in the collection before the provided cursor
+    """
+    before: Cursor
+
+    """
+    Query values in the collection after the provided cursor
+    """
+    after: Cursor
+
+    """
+    Filters to apply to the results set when querying from the collection
+    """
+    filter: TeamMembersFilter
+
+    """
+    Sort order to apply to the collection
+    """
+    orderBy: [TeamMembersOrderBy!]
+  ): TeamMembersConnection
+  metricsDataPointsCollection(
+    """
+    Query the first `n` records in the collection
+    """
+    first: Int
+
+    """
+    Query the last `n` records in the collection
+    """
+    last: Int
+
+    """
+    Query values in the collection before the provided cursor
+    """
+    before: Cursor
+
+    """
+    Query values in the collection after the provided cursor
+    """
+    after: Cursor
+
+    """
+    Filters to apply to the results set when querying from the collection
+    """
+    filter: MetricsDataPointsFilter
+
+    """
+    Sort order to apply to the collection
+    """
+    orderBy: [MetricsDataPointsOrderBy!]
+  ): MetricsDataPointsConnection
   metricsOwnersCollection(
     """
     Query the first `n` records in the collection
@@ -698,6 +842,41 @@ type Query {
     """
     orderBy: [MetricsOrderBy!]
   ): MetricsConnection
+
+  """
+  A pagable collection of type `MetricsDataPoints`
+  """
+  metricsDataPointsCollection(
+    """
+    Query the first `n` records in the collection
+    """
+    first: Int
+
+    """
+    Query the last `n` records in the collection
+    """
+    last: Int
+
+    """
+    Query values in the collection before the provided cursor
+    """
+    before: Cursor
+
+    """
+    Query values in the collection after the provided cursor
+    """
+    after: Cursor
+
+    """
+    Filters to apply to the results set when querying from the collection
+    """
+    filter: MetricsDataPointsFilter
+
+    """
+    Sort order to apply to the collection
+    """
+    orderBy: [MetricsDataPointsOrderBy!]
+  ): MetricsDataPointsConnection
 
   """
   A pagable collection of type `MetricsOwners`
@@ -874,11 +1053,11 @@ type TeamMembers implements Node {
   Globally Unique Record Identifier
   """
   nodeId: ID!
-  id: UUID!
   teamId: UUID!
-  userId: UUID!
+  profileId: UUID!
   createdAt: Datetime!
   updatedAt: Datetime!
+  profile: Profiles!
   team: Teams!
 }
 
@@ -905,18 +1084,16 @@ type TeamMembersEdge {
 }
 
 input TeamMembersFilter {
-  id: UUIDFilter
   teamId: UUIDFilter
-  userId: UUIDFilter
+  profileId: UUIDFilter
   createdAt: DatetimeFilter
   updatedAt: DatetimeFilter
   nodeId: IDFilter
 }
 
 input TeamMembersOrderBy {
-  id: OrderByDirection
   teamId: OrderByDirection
-  userId: OrderByDirection
+  profileId: OrderByDirection
   createdAt: OrderByDirection
   updatedAt: OrderByDirection
 }

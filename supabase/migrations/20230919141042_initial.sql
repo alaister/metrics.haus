@@ -27,11 +27,11 @@ create table
 -- Team members
 create table
     public.team_members (
-        "id" uuid primary key not null default gen_random_uuid (),
         team_id uuid not null references public.teams ("id") on delete cascade on update cascade,
         profile_id uuid not null references public.profiles ("id") on delete cascade on update cascade,
         "created_at" timestamp with time zone not null default now(),
-        "updated_at" timestamp with time zone not null default now()
+        "updated_at" timestamp with time zone not null default now(),
+        primary key (team_id, profile_id)
     );
 
 revoke insert,
