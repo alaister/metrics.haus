@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<087f87fea564c93de4b9becf65a42056>>
+ * @generated SignedSource<<e3ccc16ba1419770a4f9c4b31aae7092>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,30 +10,32 @@
 
 import { ConcreteRequest, Query } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
-export type Metrics_Query$variables = {
+export type MetricsPagination_Query$variables = {
   count?: number | null;
   cursor?: any | null;
 };
-export type Metrics_Query$data = {
+export type MetricsPagination_Query$data = {
   readonly " $fragmentSpreads": FragmentRefs<"MetricsFragment_query">;
 };
-export type Metrics_Query = {
-  response: Metrics_Query$data;
-  variables: Metrics_Query$variables;
+export type MetricsPagination_Query = {
+  response: MetricsPagination_Query$data;
+  variables: MetricsPagination_Query$variables;
 };
 
 const node: ConcreteRequest = (function(){
-var v0 = {
-  "defaultValue": null,
-  "kind": "LocalArgument",
-  "name": "count"
-},
-v1 = {
-  "defaultValue": null,
-  "kind": "LocalArgument",
-  "name": "cursor"
-},
-v2 = [
+var v0 = [
+  {
+    "defaultValue": 100,
+    "kind": "LocalArgument",
+    "name": "count"
+  },
+  {
+    "defaultValue": null,
+    "kind": "LocalArgument",
+    "name": "cursor"
+  }
+],
+v1 = [
   {
     "kind": "Variable",
     "name": "after",
@@ -56,13 +58,10 @@ v2 = [
 ];
 return {
   "fragment": {
-    "argumentDefinitions": [
-      (v0/*: any*/),
-      (v1/*: any*/)
-    ],
+    "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "Metrics_Query",
+    "name": "MetricsPagination_Query",
     "selections": [
       {
         "args": [
@@ -86,16 +85,13 @@ return {
   },
   "kind": "Request",
   "operation": {
-    "argumentDefinitions": [
-      (v1/*: any*/),
-      (v0/*: any*/)
-    ],
+    "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "Metrics_Query",
+    "name": "MetricsPagination_Query",
     "selections": [
       {
         "alias": null,
-        "args": (v2/*: any*/),
+        "args": (v1/*: any*/),
         "concreteType": "MetricsConnection",
         "kind": "LinkedField",
         "name": "metricsCollection",
@@ -195,7 +191,7 @@ return {
       },
       {
         "alias": null,
-        "args": (v2/*: any*/),
+        "args": (v1/*: any*/),
         "filters": [
           "orderBy"
         ],
@@ -207,16 +203,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "0808cb4b1e4624187a2fe3f388c6225f",
+    "cacheID": "06d09e783803541922aec56bc5ba02f1",
     "id": null,
     "metadata": {},
-    "name": "Metrics_Query",
+    "name": "MetricsPagination_Query",
     "operationKind": "query",
-    "text": "query Metrics_Query(\n  $cursor: Cursor\n  $count: Int\n) {\n  ...MetricsFragment_query_1G22uz\n}\n\nfragment MetricCard_metrics on Metrics {\n  id\n  name\n  createdAt\n}\n\nfragment MetricsFragment_query_1G22uz on Query {\n  metricsCollection(after: $cursor, first: $count, orderBy: [{createdAt: DescNullsLast}]) {\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n    edges {\n      cursor\n      node {\n        nodeId\n        ...MetricCard_metrics\n        __typename\n      }\n    }\n  }\n}\n"
+    "text": "query MetricsPagination_Query(\n  $count: Int = 100\n  $cursor: Cursor\n) {\n  ...MetricsFragment_query_1G22uz\n}\n\nfragment MetricCard_metrics on Metrics {\n  id\n  name\n  createdAt\n}\n\nfragment MetricsFragment_query_1G22uz on Query {\n  metricsCollection(after: $cursor, first: $count, orderBy: [{createdAt: DescNullsLast}]) {\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n    edges {\n      cursor\n      node {\n        nodeId\n        ...MetricCard_metrics\n        __typename\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "8217142e86e6ceb2bc2beef5815eb9e8";
+(node as any).hash = "124ae18990665cc728be28d769b203a0";
 
 export default node;

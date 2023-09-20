@@ -11,7 +11,7 @@ const MetricsLayout = () => {
         </h1>
 
         <Button variant="outline" asChild>
-          <Link to="new">
+          <Link to="metrics/new">
             <Plus className="w-4 h-4" />
             <span>New Metric</span>
           </Link>
