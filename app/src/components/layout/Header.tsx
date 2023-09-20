@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { toast } from '~/lib/hooks/use-toast'
 import supabase from '~/lib/supabase'
 import TeamSelector from '../teams/TeamSelector'
+import { UserAvatar } from '../UserAvatar'
 import { Button } from '../ui/Button'
 
 const Header = () => {
@@ -57,15 +58,10 @@ const Header = () => {
           </h1>
           <TeamSelector />
         </div>
-        Points: {userStats.num_data_points_created ?? '...'}
-        <Button
-          variant="ghost"
-          onClick={signOut}
-          isLoading={isLoading}
-          disabled={isLoading}
-        >
-          Sign Out
-        </Button>
+          Points: {userStats.num_data_points_created ?? '...'}
+        <div className="flex pr-6 gap-3">
+          <UserAvatar />
+        </div>
       </div>
     </header>
   )
