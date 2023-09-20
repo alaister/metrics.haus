@@ -39,7 +39,3 @@ const MetricDetails = ({ queryRef }: MetricDetailsProps) => {
 }
 
 export default MetricDetails
-
-export const MetricDetailsSkeleton = () => {
-  return <div className="rounded-lg border shadow">loading...</div>
-}
