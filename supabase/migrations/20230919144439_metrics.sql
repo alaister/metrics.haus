@@ -15,8 +15,7 @@ create table
 
 alter table public.metrics enable row level security;
 
-create policy "user can see metrics for teams they are in" on public.metrics for
-all using (
+create policy "user can see metrics for teams they are in" on public.metrics for all using (
     exists (
         select
             1
@@ -43,16 +42,16 @@ authenticated;
 create table
     public.metrics_data_points (
         time TIMESTAMPTZ not null,
-        metric_id uuid not null,
+        metric_id uuid not null references public.metrics ("id") on delete cascade on update cascade,
         value double precision not null,
-        reported_by uuid not null default auth.uid() references public.profiles ("id") on delete set null on update cascade,
-        PRIMARY KEY(metric_id, time)
+        reported_by uuid not null default auth.uid () references public.profiles ("id") on delete set null on update cascade,
+        primary key (metric_id, time)
     );
 
 select
     create_hypertable ('metrics_data_points', 'time');
 
-    revoke
+revoke
 update,
 insert on public.metrics_data_points
 from
@@ -60,24 +59,22 @@ from
     anon,
     authenticated;
 
-grant
-insert (time, metric_id, value), delete on public.metrics_data_points to public,
+grant insert (time, metric_id, value),
+delete on public.metrics_data_points to public,
 authenticated;
 
 alter table public.metrics_data_points enable row level security;
 
-create policy "user can manage data points from accessible metrics" on public.metrics_data_points for
-all
-    using (
-        exists (
-            select
-                1
-            from
-                public.metrics as m
-            where
-                metric_id = m.id
-        )
-    );
+create policy "user can manage data points from accessible metrics" on public.metrics_data_points for all using (
+    exists (
+        select
+            1
+        from
+            public.metrics as m
+        where
+            metric_id = m.id
+    )
+);
 
 create index ix_metric_data_point_metric on public.metrics_data_points (metric_id, time desc);
 
