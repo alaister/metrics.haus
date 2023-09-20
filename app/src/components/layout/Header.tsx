@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { toast } from '~/lib/hooks/use-toast'
 import supabase from '~/lib/supabase'
 import { UserAvatar } from '../UserAvatar'
+import { CmdKDialog } from '../cmdk/CmdKDialog'
 import { Notifications } from '../notifications'
 import TeamSelector from '../teams/TeamSelector'
 
@@ -38,11 +39,14 @@ const Header = () => {
           <TeamSelector />
         </div>
 
-        <span>Points: {userStats.num_data_points_created ?? '...'}</span>
+        <CmdKDialog />
 
         <div className="flex pr-6 gap-3">
           <Notifications />
           <UserAvatar />
+          <div className="flex items-center justify-center">
+            <span>{userStats.num_data_points_created ?? '0'} Points</span>
+          </div>
         </div>
       </div>
     </header>
