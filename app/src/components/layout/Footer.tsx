@@ -12,7 +12,7 @@ const CURRENT_YEAR = new Date().getFullYear()
 
 const Footer = () => {
   return (
-    <div className="bg-white border-t p-4 md:flex md:items-center md:justify-between">
+    <div className="bg-white border-t p-4 md:flex md:items-center md:justify-between dark:bg-gray-900">
       <div className="flex space-x-6 md:order-2">
         {SOCIAL.map((item) => (
           <a
@@ -27,7 +27,7 @@ const Footer = () => {
           </a>
         ))}
       </div>
-      <p className="flex items-center gap-1 mt-4 text-xs leading-5 text-gray-600 md:order-1 md:mt-0">
+      <p className="flex items-center gap-1 mt-4 text-xs leading-5 text-gray-600 md:order-1 md:mt-0 dark:text-gray-10">
         <span>&copy; {CURRENT_YEAR} metrics.haus. Started in</span>
         <span className="text-xl">🇲🇰</span>
         <span>by</span>
