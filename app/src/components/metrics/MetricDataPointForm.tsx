@@ -41,7 +41,7 @@ const MetricForm = ({ onSuccess, metricId }: MetricFormProps) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      timestamp: undefined,
+      timestamp: new Date().toISOString(),
       value: undefined,
     },
   })
@@ -69,11 +69,6 @@ const MetricForm = ({ onSuccess, metricId }: MetricFormProps) => {
       onCompleted() {
         toast({
           title: 'Data Point created successfully',
-        })
-
-        form.reset({
-          timestamp: undefined,
-          value: undefined,
         })
 
         onSuccess?.()

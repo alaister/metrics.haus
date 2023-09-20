@@ -38,7 +38,7 @@ export interface Database {
         Row: {
           created_at: string
           id: string
-          interval: Database["public"]["Enums"]["metric_interval"]
+          interval: Database['public']['Enums']['metric_interval']
           name: string
           team_id: string
           updated_at: string
@@ -46,7 +46,7 @@ export interface Database {
         Insert: {
           created_at?: string
           id?: string
-          interval: Database["public"]["Enums"]["metric_interval"]
+          interval: Database['public']['Enums']['metric_interval']
           name: string
           team_id: string
           updated_at?: string
@@ -54,18 +54,18 @@ export interface Database {
         Update: {
           created_at?: string
           id?: string
-          interval?: Database["public"]["Enums"]["metric_interval"]
+          interval?: Database['public']['Enums']['metric_interval']
           name?: string
           team_id?: string
           updated_at?: string
         }
         Relationships: [
           {
-            foreignKeyName: "metrics_team_id_fkey"
-            columns: ["team_id"]
-            referencedRelation: "teams"
-            referencedColumns: ["id"]
-          }
+            foreignKeyName: 'metrics_team_id_fkey'
+            columns: ['team_id']
+            referencedRelation: 'teams'
+            referencedColumns: ['id']
+          },
         ]
       }
       metrics_data_points: {
@@ -89,17 +89,17 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "metrics_data_points_metric_id_fkey"
-            columns: ["metric_id"]
-            referencedRelation: "metrics"
-            referencedColumns: ["id"]
+            foreignKeyName: 'metrics_data_points_metric_id_fkey'
+            columns: ['metric_id']
+            referencedRelation: 'metrics'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "metrics_data_points_reported_by_fkey"
-            columns: ["reported_by"]
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          }
+            foreignKeyName: 'metrics_data_points_reported_by_fkey'
+            columns: ['reported_by']
+            referencedRelation: 'profiles'
+            referencedColumns: ['id']
+          },
         ]
       }
       metrics_owners: {
@@ -120,17 +120,17 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "metrics_owners_metric_id_fkey"
-            columns: ["metric_id"]
-            referencedRelation: "metrics"
-            referencedColumns: ["id"]
+            foreignKeyName: 'metrics_owners_metric_id_fkey'
+            columns: ['metric_id']
+            referencedRelation: 'metrics'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "metrics_owners_profile_id_fkey"
-            columns: ["profile_id"]
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          }
+            foreignKeyName: 'metrics_owners_profile_id_fkey'
+            columns: ['profile_id']
+            referencedRelation: 'profiles'
+            referencedColumns: ['id']
+          },
         ]
       }
       profiles: {
@@ -154,11 +154,11 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "profiles_id_fkey"
-            columns: ["id"]
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          }
+            foreignKeyName: 'profiles_id_fkey'
+            columns: ['id']
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
         ]
       }
       team_members: {
@@ -182,17 +182,17 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "team_members_profile_id_fkey"
-            columns: ["profile_id"]
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
+            foreignKeyName: 'team_members_profile_id_fkey'
+            columns: ['profile_id']
+            referencedRelation: 'profiles'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "team_members_team_id_fkey"
-            columns: ["team_id"]
-            referencedRelation: "teams"
-            referencedColumns: ["id"]
-          }
+            foreignKeyName: 'team_members_team_id_fkey'
+            columns: ['team_id']
+            referencedRelation: 'teams'
+            referencedColumns: ['id']
+          },
         ]
       }
       teams: {
@@ -956,7 +956,7 @@ export interface Database {
       }
     }
     Enums: {
-      metric_interval: "minute" | "hour" | "day" | "week" | "month"
+      metric_interval: 'minute' | 'hour' | 'day' | 'week' | 'month'
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1000,11 +1000,11 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "buckets_owner_fkey"
-            columns: ["owner"]
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          }
+            foreignKeyName: 'buckets_owner_fkey'
+            columns: ['owner']
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
         ]
       }
       migrations: {
@@ -1067,11 +1067,11 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "objects_bucketId_fkey"
-            columns: ["bucket_id"]
-            referencedRelation: "buckets"
-            referencedColumns: ["id"]
-          }
+            foreignKeyName: 'objects_bucketId_fkey'
+            columns: ['bucket_id']
+            referencedRelation: 'buckets'
+            referencedColumns: ['id']
+          },
         ]
       }
     }
@@ -1142,4 +1142,3 @@ export interface Database {
     }
   }
 }
-
