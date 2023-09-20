@@ -12,7 +12,6 @@ if (!supabaseUrl || !supabaseAnonKey) {
 const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
   auth: {
     lock: navigatorLock, // old Safari not accepted
-    debug: true,
   },
 })
 
