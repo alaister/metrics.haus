@@ -181,18 +181,7 @@ const MetricForm = ({ onSuccess }: MetricFormProps) => {
             </FormItem>
           )}
         />
-        {selectedTeamId !== null && (
-          <FormField
-            control={form.control}
-            name="members"
-            render={({ field }) => (
-              <TeamMembersSelector
-                onValueChange={field.onChange}
-                selectedTeamId={selectedTeamId}
-              />
-            )}
-          />
-        )}
+
         {selectedTeamId !== null && (
           <FormField
             control={form.control}
@@ -211,6 +200,7 @@ const MetricForm = ({ onSuccess }: MetricFormProps) => {
             )}
           />
         )}
+
         <Button
           type="submit"
           className="self-end"
