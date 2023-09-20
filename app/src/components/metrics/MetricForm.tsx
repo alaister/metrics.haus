@@ -25,7 +25,6 @@ import { useToast } from '~/lib/hooks/use-toast'
 import { useAppSelector } from '~/stores'
 import { MetricForm_Mutation } from './__generated__/MetricForm_Mutation.graphql'
 import { MetricForm_Owners_Mutation } from './__generated__/MetricForm_Owners_Mutation.graphql'
-import { useState } from 'react'
 
 const MetricInsertMutation = graphql`
   mutation MetricForm_Mutation(
