@@ -44,13 +44,13 @@ export interface MMMMProps {
 const MMMM = ({ query }: MMMMProps) => {
   const {
     data,
-    loadNext,
-    loadPrevious,
-    hasNext,
-    hasPrevious,
-    isLoadingNext,
-    isLoadingPrevious,
-    refetch,
+    // loadNext,
+    // loadPrevious,
+    // hasNext,
+    // hasPrevious,
+    // isLoadingNext,
+    // isLoadingPrevious,
+    // refetch,
   } = usePaginationFragment(MetricsFragment, query)
   const metrics = data.metricsCollection?.edges ?? []
 
