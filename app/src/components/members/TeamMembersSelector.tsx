@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useLazyLoadQuery } from 'react-relay'
 import { graphql } from 'relay-runtime'
-import { useAppDispatch, useAppSelector } from '~/stores'
+import { useAppSelector } from '~/stores'
 import { TeamMembersSelector_Query } from './__generated__/TeamMembersSelector_Query.graphql'
-import Select from 'react-select'
+import Select, { MultiValue } from 'react-select'
 
 const TeamMembersSelectorQuery = graphql`
   query TeamMembersSelector_Query($teamId: UUID!) {
@@ -22,22 +22,32 @@ const TeamMembersSelectorQuery = graphql`
 `
 
 interface TeamMembersSelectorProps {
-  onValueChange: any[]
+  onValueChange: (profileIds: string[]) => void
 }
 
 const TeamMembersSelector = ({ onValueChange }: TeamMembersSelectorProps) => {
   const selectedTeamId = useAppSelector((state) => state.team.selectedTeamId)
   const data = useLazyLoadQuery<TeamMembersSelector_Query>(
     TeamMembersSelectorQuery,
-    { teamId: selectedTeamId },
+    { teamId: selectedTeamId ?? '' },
   )
   const options = data.teamMembersCollection?.edges.map((x) => ({
     label: x.node.profile.name,
     value: x.node.profile.id,
   }))
-  const [selectedMembers, setSelectedMembers] = useState(null)
+  const [selectedMembers, setSelectedMembers] = useState<
+    MultiValue<{
+      label: string
+      value: string
+    }>
+  >([])
 
-  const updateSelectedMembers = (selectedMembers) => {
+  const updateSelectedMembers = (
+    selectedMembers: MultiValue<{
+      label: string
+      value: string
+    }>,
+  ) => {
     const memberIds = selectedMembers.map((x) => x.value)
     setSelectedMembers(selectedMembers)
     onValueChange(memberIds)

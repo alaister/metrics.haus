@@ -24,6 +24,7 @@ import {
 import { useToast } from '~/lib/hooks/use-toast'
 import { useAppSelector } from '~/stores'
 import { MetricForm_Mutation } from './__generated__/MetricForm_Mutation.graphql'
+import { MetricForm_Owners_Mutation } from './__generated__/MetricForm_Owners_Mutation.graphql'
 
 const MetricInsertMutation = graphql`
   mutation MetricForm_Mutation(
@@ -73,7 +74,7 @@ const MetricForm = ({ onSuccess }: MetricFormProps) => {
   })
 
   const [mutate] = useMutation<MetricForm_Mutation>(MetricInsertMutation)
-  const [mutateOwners] = useMutation<MetricOwnersInsertMutation>(
+  const [mutateOwners] = useMutation<MetricForm_Owners_Mutation>(
     MetricOwnersInsertMutation,
   )
 
@@ -101,7 +102,7 @@ const MetricForm = ({ onSuccess }: MetricFormProps) => {
         })
       },
       onCompleted(response) {
-        const metricId = response.insertIntoMetricsCollection.records[0].id
+        const metricId = response.insertIntoMetricsCollection!.records[0].id
         mutateOwners({
           variables: {
             input: values.members.map((x) => ({
