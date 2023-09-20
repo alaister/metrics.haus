@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<3d23992e68e6b8c1cb432e9929ef9d76>>
+ * @generated SignedSource<<ad0bde818efca4e70046420952e53492>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,9 +9,11 @@
 // @ts-nocheck
 
 import { ConcreteRequest, Mutation } from 'relay-runtime';
+export type MetricInterval = "day" | "hour" | "minute" | "month" | "week" | "%future added value";
 export type MetricsInsertInput = {
   createdAt?: string | null;
   id?: string | null;
+  interval?: MetricInterval | null;
   name?: string | null;
   teamId?: string | null;
   updatedAt?: string | null;
