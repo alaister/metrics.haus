@@ -1,14 +1,5 @@
-'use client'
-
 import * as React from 'react'
-import {
-  Calculator,
-  Calendar,
-  CreditCard,
-  Settings,
-  Smile,
-  User,
-} from 'lucide-react'
+import { Calculator, Calendar, Smile } from 'lucide-react'
 
 import {
   CommandDialog,
@@ -17,13 +8,24 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-  CommandSeparator,
-  CommandShortcut,
 } from '../ui/Command'
 import { Button } from '../ui/Button'
+import debounce from 'lodash.debounce'
 
 export function CmdKDialog() {
   const [open, setOpen] = React.useState(false)
+  const [searchTerm, setSearchTerm] = React.useState('')
+
+  const debounceFn = React.useCallback(debounce(handleDebounceFn, 350), [])
+
+  function handleDebounceFn(inputValue: string) {
+    console.log(inputValue)
+  }
+
+  function handleChange(val: string) {
+    setSearchTerm(val)
+    debounceFn(val)
+  }
 
   React.useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -50,7 +52,11 @@ export function CmdKDialog() {
         </kbd>
       </Button>
       <CommandDialog open={open} onOpenChange={setOpen}>
-        <CommandInput placeholder="Type a command or search..." />
+        <CommandInput
+          placeholder="Type a command or search..."
+          value={searchTerm}
+          onValueChange={(val) => handleChange(val)}
+        />
         <CommandList>
           <CommandEmpty>No results found.</CommandEmpty>
           <CommandGroup heading="Suggestions">
@@ -65,24 +71,6 @@ export function CmdKDialog() {
             <CommandItem>
               <Calculator className="mr-2 h-4 w-4" />
               <span>Calculator</span>
-            </CommandItem>
-          </CommandGroup>
-          <CommandSeparator />
-          <CommandGroup heading="Settings">
-            <CommandItem>
-              <User className="mr-2 h-4 w-4" />
-              <span>Profile</span>
-              <CommandShortcut>⌘P</CommandShortcut>
-            </CommandItem>
-            <CommandItem>
-              <CreditCard className="mr-2 h-4 w-4" />
-              <span>Billing</span>
-              <CommandShortcut>⌘B</CommandShortcut>
-            </CommandItem>
-            <CommandItem>
-              <Settings className="mr-2 h-4 w-4" />
-              <span>Settings</span>
-              <CommandShortcut>⌘S</CommandShortcut>
             </CommandItem>
           </CommandGroup>
         </CommandList>
