@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<ad0bde818efca4e70046420952e53492>>
+ * @generated SignedSource<<4f3691c25d881b6f9f4feb02c7fb74e2>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -26,8 +26,10 @@ export type MetricForm_Mutation$data = {
     readonly affectedCount: number;
     readonly records: ReadonlyArray<{
       readonly id: string;
+      readonly interval: MetricInterval;
       readonly name: string;
       readonly nodeId: string;
+      readonly teamId: string;
     }>;
   } | null;
 };
@@ -100,6 +102,20 @@ v1 = [
             "kind": "ScalarField",
             "name": "name",
             "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "interval",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "teamId",
+            "storageKey": null
           }
         ],
         "storageKey": null
@@ -126,16 +142,16 @@ return {
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "cdf74d6c58d39da217e2dd1a52a79e40",
+    "cacheID": "6ac95a90d56a11524520fd64586a5f7c",
     "id": null,
     "metadata": {},
     "name": "MetricForm_Mutation",
     "operationKind": "mutation",
-    "text": "mutation MetricForm_Mutation(\n  $input: MetricsInsertInput!\n) {\n  insertIntoMetricsCollection(objects: [$input]) {\n    affectedCount\n    records {\n      nodeId\n      id\n      name\n    }\n  }\n}\n"
+    "text": "mutation MetricForm_Mutation(\n  $input: MetricsInsertInput!\n) {\n  insertIntoMetricsCollection(objects: [$input]) {\n    affectedCount\n    records {\n      nodeId\n      id\n      name\n      interval\n      teamId\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "5e9eb7fcda88bcbdcf58aacbd6200e76";
+(node as any).hash = "a34fec439b5c1a68c355c0c3f138fda1";
 
 export default node;

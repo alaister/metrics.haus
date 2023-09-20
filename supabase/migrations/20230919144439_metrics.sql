@@ -16,7 +16,7 @@ create table
 alter table public.metrics enable row level security;
 
 create policy "user can see metrics for teams they are in" on public.metrics for
-update using (
+all using (
     exists (
         select
             1
@@ -26,6 +26,19 @@ update using (
             team_id = public.metrics.team_id
     )
 );
+
+revoke
+update,
+insert on public.metrics
+from
+    public,
+    anon,
+    authenticated;
+
+grant
+update (name, interval),
+insert (name, interval, team_id) on public.metrics to public,
+authenticated;
 
 create table
     public.metrics_data_points (
