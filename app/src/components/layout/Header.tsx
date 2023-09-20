@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { toast } from '~/lib/hooks/use-toast'
 import supabase from '~/lib/supabase'
 import TeamSelector from '../teams/TeamSelector'
+import { Notifications } from '../notifications'
 import { UserAvatar } from '../UserAvatar'
 import { Button } from '../ui/Button'
 
@@ -60,6 +61,7 @@ const Header = () => {
         </div>
           Points: {userStats.num_data_points_created ?? '...'}
         <div className="flex pr-6 gap-3">
+          <Notifications />
           <UserAvatar />
         </div>
       </div>
