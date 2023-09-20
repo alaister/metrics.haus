@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<66f68f4dd2fba0539e19ff68885ba205>>
+ * @generated SignedSource<<0924e760d965dd66f77408ae3860114f>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -196,12 +196,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "483fe0ae934dfa3e300388c5324895ca",
+    "cacheID": "b960726dc86bc76a0d4a057a23601894",
     "id": null,
     "metadata": {},
     "name": "MetricForm_Mutation",
     "operationKind": "mutation",
-    "text": "mutation MetricForm_Mutation(\n  $input: MetricsInsertInput!\n) {\n  insertIntoMetricsCollection(objects: [$input]) {\n    affectedCount\n    records {\n      nodeId\n      ...MetricCard_metrics\n    }\n  }\n}\n\nfragment MetricCard_metrics on Metrics {\n  nodeId\n  id\n  name\n  createdAt\n}\n"
+    "text": "mutation MetricForm_Mutation(\n  $input: MetricsInsertInput!\n) {\n  insertIntoMetricsCollection(objects: [$input]) {\n    affectedCount\n    records {\n      nodeId\n      ...MetricCard_metrics\n    }\n  }\n}\n\nfragment MetricCard_metrics on Metrics {\n  id\n  name\n  createdAt\n}\n"
   }
 };
 })();
