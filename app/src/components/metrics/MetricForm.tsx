@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form'
 import { ConnectionHandler, graphql, useMutation } from 'react-relay'
 import { z } from 'zod'
 import { Button } from '~/components/ui/Button'
+import TeamMembersSelector from '~/components/members/TeamMembersSelector'
 import {
   Form,
   FormControl,
@@ -33,6 +34,7 @@ const MetricInsertMutation = graphql`
       affectedCount
       records
         @prependNode(connections: $connections, edgeTypeName: "MetricsEdge") {
+        id
         nodeId
         ...MetricCard_metrics
       }
@@ -40,9 +42,18 @@ const MetricInsertMutation = graphql`
   }
 `
 
+const MetricOwnersInsertMutation = graphql`
+  mutation MetricForm_Owners_Mutation($input: [MetricsOwnersInsertInput!]!) {
+    insertIntoMetricsOwnersCollection(objects: $input) {
+      affectedCount
+    }
+  }
+`
+
 const formSchema = z.object({
   name: z.string().min(1, "Can't be empty"),
   interval: z.enum(['minute', 'hour', 'day', 'week', 'month']),
+  members: z.string().array(),
 })
 
 export interface MetricFormProps {
@@ -62,6 +73,9 @@ const MetricForm = ({ onSuccess }: MetricFormProps) => {
   })
 
   const [mutate] = useMutation<MetricForm_Mutation>(MetricInsertMutation)
+  const [mutateOwners] = useMutation<MetricOwnersInsertMutation>(
+    MetricOwnersInsertMutation,
+  )
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const connectionID = ConnectionHandler.getConnectionID(
@@ -86,14 +100,28 @@ const MetricForm = ({ onSuccess }: MetricFormProps) => {
           description: error.message,
         })
       },
-      onCompleted() {
-        toast({
-          title: 'Metric created successfully',
+      onCompleted(response) {
+        const metricId = response.insertIntoMetricsCollection.records[0].id
+        mutateOwners({
+          variables: {
+            input: values.members.map((x) => ({
+              metricId,
+              profileId: x,
+            })),
+          },
+          onError(error) {
+            toast({
+              variant: 'destructive',
+              title: 'Something went wrong',
+              description: error.message,
+            })
+          },
+          onCompleted() {
+            toast({ title: 'Metric created successfully' })
+            form.reset({ name: '', interval: 'week', members: [] })
+            onSuccess?.()
+          },
         })
-
-        form.reset({ name: '', interval: 'week' })
-
-        onSuccess?.()
       },
     })
   }
@@ -143,7 +171,15 @@ const MetricForm = ({ onSuccess }: MetricFormProps) => {
             </FormItem>
           )}
         />
-
+        <FormField
+          control={form.control}
+          name="members"
+          render={({ field }) => (
+            <TeamMembersSelector
+              onValueChange={field.onChange}
+            ></TeamMembersSelector>
+          )}
+        />
         <Button
           type="submit"
           className="self-end"
