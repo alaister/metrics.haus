@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { Button } from '~/components/ui/Button'
+import { ThemeButton } from '~/components/ui/ThemeButton'
 import { toast } from '~/lib/hooks/use-toast'
 import supabase from '~/lib/supabase'
 import TeamSelector from '../teams/TeamSelector'
-import { Button } from '../ui/Button'
 
 const Header = () => {
   const [isLoading, setIsLoading] = useState(false)
@@ -28,24 +29,28 @@ const Header = () => {
   }
 
   return (
-    <header className="sticky top-0 border-b bg-white z-10">
+    <header className="sticky top-0 border-b bg-white dark:bg-gray-900 z-10">
       <div className="flex h-16 justify-between items-center px-4">
         <div className="flex items-center gap-2">
-          <h1 className="font-medium">
+          <h1 className="font-medium dark:text-white">
             <Link to="/">metrics.haus</Link>
           </h1>
 
           <TeamSelector />
         </div>
 
-        <Button
-          variant="ghost"
-          onClick={signOut}
-          isLoading={isLoading}
-          disabled={isLoading}
-        >
-          Sign Out
-        </Button>
+        <div className="flex items-center gap-2">
+          <ThemeButton />
+
+          <Button
+            variant="ghost"
+            onClick={signOut}
+            isLoading={isLoading}
+            disabled={isLoading}
+          >
+            Sign Out
+          </Button>
+        </div>
       </div>
     </header>
   )

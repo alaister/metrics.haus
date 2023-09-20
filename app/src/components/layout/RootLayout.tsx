@@ -22,7 +22,7 @@ const RootLayout = () => {
   }, [navigate])
 
   return (
-    <div className="flex flex-col relative items-stretch min-h-screen-dvh font-sans">
+    <div className="flex flex-col relative items-stretch min-h-screen-dvh font-sans dark:bg-gray-950">
       <Header />
 
       <main className="flex-1 container overflow-x-hidden pt-8 pb-16 sm:pb-20 lg:pb-24">
