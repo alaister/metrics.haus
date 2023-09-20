@@ -29,26 +29,28 @@ const Header = () => {
   }
 
   return (
-    <header className="sticky top-0 border-b bg-white z-10">
+    <header className="sticky top-0 border-b bg-white dark:bg-gray-900 z-10">
       <div className="flex h-16 justify-between items-center px-4">
         <div className="flex items-center gap-2">
-          <h1 className="font-medium">
+          <h1 className="font-medium dark:text-white">
             <Link to="/">metrics.haus</Link>
           </h1>
 
           <TeamSelector />
         </div>
 
-        <ThemeButton />
+        <div className="flex items-center gap-2">
+          <ThemeButton />
 
-        <Button
-          variant="ghost"
-          onClick={signOut}
-          isLoading={isLoading}
-          disabled={isLoading}
-        >
-          Sign Out
-        </Button>
+          <Button
+            variant="ghost"
+            onClick={signOut}
+            isLoading={isLoading}
+            disabled={isLoading}
+          >
+            Sign Out
+          </Button>
+        </div>
       </div>
     </header>
   )
