@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Save } from 'lucide-react'
 import { useForm } from 'react-hook-form'
-import { graphql, useMutation } from 'react-relay'
+import { ConnectionHandler, graphql, useMutation } from 'react-relay'
 import { z } from 'zod'
 import { Button } from '~/components/ui/Button'
 import {
@@ -13,8 +13,6 @@ import {
   FormMessage,
 } from '~/components/ui/Form'
 import { Input } from '~/components/ui/Input'
-import { useToast } from '~/lib/hooks/use-toast'
-import { MetricForm_Mutation } from './__generated__/MetricForm_Mutation.graphql'
 import {
   Select,
   SelectContent,
@@ -22,17 +20,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from '~/components/ui/Select'
+import { useToast } from '~/lib/hooks/use-toast'
+import { MetricForm_Mutation } from './__generated__/MetricForm_Mutation.graphql'
 
 const MetricInsertMutation = graphql`
-  mutation MetricForm_Mutation($input: MetricsInsertInput!) {
+  mutation MetricForm_Mutation(
+    $input: MetricsInsertInput!
+    $connections: [ID!]!
+  ) {
     insertIntoMetricsCollection(objects: [$input]) {
       affectedCount
-      records {
+      records
+        @prependNode(connections: $connections, edgeTypeName: "MetricsEdge") {
         nodeId
-        id
-        name
-        interval
-        teamId
+        ...MetricCard_metrics
       }
     }
   }
@@ -43,7 +44,11 @@ const formSchema = z.object({
   interval: z.enum(['minute', 'hour', 'day', 'week', 'month']),
 })
 
-const MetricForm = () => {
+export interface MetricFormProps {
+  onSuccess?: () => void
+}
+
+const MetricForm = ({ onSuccess }: MetricFormProps) => {
   const { toast } = useToast()
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -56,13 +61,20 @@ const MetricForm = () => {
   const [mutate] = useMutation<MetricForm_Mutation>(MetricInsertMutation)
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    const connectionID = ConnectionHandler.getConnectionID(
+      'root',
+      'Metrics_query_metricsCollection',
+      { orderBy: [{ createdAt: 'DescNullsLast' }] },
+    )
+
     mutate({
       variables: {
         input: {
           name: values.name,
           interval: values.interval,
-          teamId: '6ff9e003-6488-4ef6-959d-6abe1eb72135',
+          teamId: '35524f16-7feb-4e74-9de9-72e0717d27da',
         },
+        connections: [connectionID],
       },
       onError(error) {
         toast({
@@ -77,6 +89,8 @@ const MetricForm = () => {
         })
 
         form.reset({ name: '', interval: 'week' })
+
+        onSuccess?.()
       },
     })
   }

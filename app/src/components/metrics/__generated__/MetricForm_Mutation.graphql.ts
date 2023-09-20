@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<4f3691c25d881b6f9f4feb02c7fb74e2>>
+ * @generated SignedSource<<0924e760d965dd66f77408ae3860114f>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,6 +9,7 @@
 // @ts-nocheck
 
 import { ConcreteRequest, Mutation } from 'relay-runtime';
+import { FragmentRefs } from "relay-runtime";
 export type MetricInterval = "day" | "hour" | "minute" | "month" | "week" | "%future added value";
 export type MetricsInsertInput = {
   createdAt?: string | null;
@@ -19,17 +20,15 @@ export type MetricsInsertInput = {
   updatedAt?: string | null;
 };
 export type MetricForm_Mutation$variables = {
+  connections: ReadonlyArray<string>;
   input: MetricsInsertInput;
 };
 export type MetricForm_Mutation$data = {
   readonly insertIntoMetricsCollection: {
     readonly affectedCount: number;
     readonly records: ReadonlyArray<{
-      readonly id: string;
-      readonly interval: MetricInterval;
-      readonly name: string;
       readonly nodeId: string;
-      readonly teamId: string;
+      readonly " $fragmentSpreads": FragmentRefs<"MetricCard_metrics">;
     }>;
   } | null;
 };
@@ -39,119 +38,174 @@ export type MetricForm_Mutation = {
 };
 
 const node: ConcreteRequest = (function(){
-var v0 = [
+var v0 = {
+  "defaultValue": null,
+  "kind": "LocalArgument",
+  "name": "connections"
+},
+v1 = {
+  "defaultValue": null,
+  "kind": "LocalArgument",
+  "name": "input"
+},
+v2 = [
   {
-    "defaultValue": null,
-    "kind": "LocalArgument",
-    "name": "input"
+    "items": [
+      {
+        "kind": "Variable",
+        "name": "objects.0",
+        "variableName": "input"
+      }
+    ],
+    "kind": "ListValue",
+    "name": "objects"
   }
 ],
-v1 = [
-  {
-    "alias": null,
-    "args": [
-      {
-        "items": [
-          {
-            "kind": "Variable",
-            "name": "objects.0",
-            "variableName": "input"
-          }
-        ],
-        "kind": "ListValue",
-        "name": "objects"
-      }
-    ],
-    "concreteType": "MetricsInsertResponse",
-    "kind": "LinkedField",
-    "name": "insertIntoMetricsCollection",
-    "plural": false,
-    "selections": [
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "affectedCount",
-        "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "concreteType": "Metrics",
-        "kind": "LinkedField",
-        "name": "records",
-        "plural": true,
-        "selections": [
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "nodeId",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "id",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "name",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "interval",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "teamId",
-            "storageKey": null
-          }
-        ],
-        "storageKey": null
-      }
-    ],
-    "storageKey": null
-  }
-];
+v3 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "affectedCount",
+  "storageKey": null
+},
+v4 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "nodeId",
+  "storageKey": null
+};
 return {
   "fragment": {
-    "argumentDefinitions": (v0/*: any*/),
+    "argumentDefinitions": [
+      (v0/*: any*/),
+      (v1/*: any*/)
+    ],
     "kind": "Fragment",
     "metadata": null,
     "name": "MetricForm_Mutation",
-    "selections": (v1/*: any*/),
+    "selections": [
+      {
+        "alias": null,
+        "args": (v2/*: any*/),
+        "concreteType": "MetricsInsertResponse",
+        "kind": "LinkedField",
+        "name": "insertIntoMetricsCollection",
+        "plural": false,
+        "selections": [
+          (v3/*: any*/),
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "Metrics",
+            "kind": "LinkedField",
+            "name": "records",
+            "plural": true,
+            "selections": [
+              (v4/*: any*/),
+              {
+                "args": null,
+                "kind": "FragmentSpread",
+                "name": "MetricCard_metrics"
+              }
+            ],
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
+      }
+    ],
     "type": "Mutation",
     "abstractKey": null
   },
   "kind": "Request",
   "operation": {
-    "argumentDefinitions": (v0/*: any*/),
+    "argumentDefinitions": [
+      (v1/*: any*/),
+      (v0/*: any*/)
+    ],
     "kind": "Operation",
     "name": "MetricForm_Mutation",
-    "selections": (v1/*: any*/)
+    "selections": [
+      {
+        "alias": null,
+        "args": (v2/*: any*/),
+        "concreteType": "MetricsInsertResponse",
+        "kind": "LinkedField",
+        "name": "insertIntoMetricsCollection",
+        "plural": false,
+        "selections": [
+          (v3/*: any*/),
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "Metrics",
+            "kind": "LinkedField",
+            "name": "records",
+            "plural": true,
+            "selections": [
+              (v4/*: any*/),
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "id",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "name",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "createdAt",
+                "storageKey": null
+              }
+            ],
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "filters": null,
+            "handle": "prependNode",
+            "key": "",
+            "kind": "LinkedHandle",
+            "name": "records",
+            "handleArgs": [
+              {
+                "kind": "Variable",
+                "name": "connections",
+                "variableName": "connections"
+              },
+              {
+                "kind": "Literal",
+                "name": "edgeTypeName",
+                "value": "MetricsEdge"
+              }
+            ]
+          }
+        ],
+        "storageKey": null
+      }
+    ]
   },
   "params": {
-    "cacheID": "6ac95a90d56a11524520fd64586a5f7c",
+    "cacheID": "b960726dc86bc76a0d4a057a23601894",
     "id": null,
     "metadata": {},
     "name": "MetricForm_Mutation",
     "operationKind": "mutation",
-    "text": "mutation MetricForm_Mutation(\n  $input: MetricsInsertInput!\n) {\n  insertIntoMetricsCollection(objects: [$input]) {\n    affectedCount\n    records {\n      nodeId\n      id\n      name\n      interval\n      teamId\n    }\n  }\n}\n"
+    "text": "mutation MetricForm_Mutation(\n  $input: MetricsInsertInput!\n) {\n  insertIntoMetricsCollection(objects: [$input]) {\n    affectedCount\n    records {\n      nodeId\n      ...MetricCard_metrics\n    }\n  }\n}\n\nfragment MetricCard_metrics on Metrics {\n  id\n  name\n  createdAt\n}\n"
   }
 };
 })();
 
-(node as any).hash = "a34fec439b5c1a68c355c0c3f138fda1";
+(node as any).hash = "2b7cdd690fb9b0db20457117844506be";
 
 export default node;
