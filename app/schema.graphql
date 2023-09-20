@@ -699,6 +699,7 @@ type Profiles implements Node {
     """
     orderBy: [TeamMembersOrderBy!]
   ): TeamMembersConnection
+
   metricsDataPointsCollection(
     """
     Query the first `n` records in the collection
@@ -730,6 +731,7 @@ type Profiles implements Node {
     """
     orderBy: [MetricsDataPointsOrderBy!]
   ): MetricsDataPointsConnection
+
   metricsOwnersCollection(
     """
     Query the first `n` records in the collection
@@ -1059,6 +1061,7 @@ type TeamMembers implements Node {
   updatedAt: Datetime!
   profile: Profiles!
   team: Teams!
+  profile: Profiles!
 }
 
 type TeamMembersConnection {

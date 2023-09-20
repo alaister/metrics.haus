@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<7452f28e6f9a24ab7675be04a0d3d125>>
+ * @generated SignedSource<<dd55245b607620e396f1c9b0d9e33e6a>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -24,6 +24,7 @@ export type MetricForm_Mutation$data = {
   readonly insertIntoMetricsCollection: {
     readonly affectedCount: number;
     readonly records: ReadonlyArray<{
+      readonly id: string;
       readonly nodeId: string;
       readonly " $fragmentSpreads": FragmentRefs<"MetricCard_metrics">;
     }>;
@@ -69,6 +70,13 @@ v4 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
+  "name": "id",
+  "storageKey": null
+},
+v5 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
   "name": "nodeId",
   "storageKey": null
 };
@@ -100,6 +108,7 @@ return {
             "plural": true,
             "selections": [
               (v4/*: any*/),
+              (v5/*: any*/),
               {
                 "args": null,
                 "kind": "FragmentSpread",
@@ -142,13 +151,7 @@ return {
             "plural": true,
             "selections": [
               (v4/*: any*/),
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "id",
-                "storageKey": null
-              },
+              (v5/*: any*/),
               {
                 "alias": null,
                 "args": null,
@@ -193,16 +196,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "b960726dc86bc76a0d4a057a23601894",
+    "cacheID": "e886e6a3b14797be9639035cdd148ca6",
     "id": null,
     "metadata": {},
     "name": "MetricForm_Mutation",
     "operationKind": "mutation",
-    "text": "mutation MetricForm_Mutation(\n  $input: MetricsInsertInput!\n) {\n  insertIntoMetricsCollection(objects: [$input]) {\n    affectedCount\n    records {\n      nodeId\n      ...MetricCard_metrics\n    }\n  }\n}\n\nfragment MetricCard_metrics on Metrics {\n  id\n  name\n  createdAt\n}\n"
+    "text": "mutation MetricForm_Mutation(\n  $input: MetricsInsertInput!\n) {\n  insertIntoMetricsCollection(objects: [$input]) {\n    affectedCount\n    records {\n      id\n      nodeId\n      ...MetricCard_metrics\n    }\n  }\n}\n\nfragment MetricCard_metrics on Metrics {\n  id\n  name\n  createdAt\n}\n"
   }
 };
 })();
 
-(node as any).hash = "2b7cdd690fb9b0db20457117844506be";
+(node as any).hash = "1fddfe86230403c6586d714527a83df7";
 
 export default node;
