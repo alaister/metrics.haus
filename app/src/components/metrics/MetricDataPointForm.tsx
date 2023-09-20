@@ -3,6 +3,7 @@ import { Save } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { graphql, useMutation } from 'react-relay'
 import { z } from 'zod'
+import ConfettiExplosion from 'react-confetti-explosion'
 import { Button } from '~/components/ui/Button'
 import {
   Form,
@@ -16,6 +17,7 @@ import { Input } from '~/components/ui/Input'
 import { useToast } from '~/lib/hooks/use-toast'
 import { MetricDataPointForm_Mutation } from './__generated__/MetricDataPointForm_Mutation.graphql'
 import { DateTimePicker } from '../ui/DateTimePicker'
+import { useState } from 'react'
 
 const MetricDataPointInsertMutation = graphql`
   mutation MetricDataPointForm_Mutation($input: MetricsDataPointsInsertInput!) {
@@ -41,7 +43,7 @@ const MetricForm = ({ onSuccess, metricId }: MetricFormProps) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      timestamp: undefined,
+      timestamp: new Date().toISOString(),
       value: undefined,
     },
   })
@@ -49,6 +51,8 @@ const MetricForm = ({ onSuccess, metricId }: MetricFormProps) => {
   const [mutate] = useMutation<MetricDataPointForm_Mutation>(
     MetricDataPointInsertMutation,
   )
+
+  const [isExploding, setIsExploding] = useState(false)
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     mutate({
@@ -76,6 +80,7 @@ const MetricForm = ({ onSuccess, metricId }: MetricFormProps) => {
           value: undefined,
         })
 
+        setIsExploding(true)
         onSuccess?.()
       },
     })
@@ -122,7 +127,6 @@ const MetricForm = ({ onSuccess, metricId }: MetricFormProps) => {
             </FormItem>
           )}
         />
-
         <Button
           type="submit"
           className="self-end"
@@ -130,6 +134,7 @@ const MetricForm = ({ onSuccess, metricId }: MetricFormProps) => {
           disabled={form.formState.isSubmitting}
         >
           <Save className="w-4 h-4" />
+          {isExploding && <ConfettiExplosion zIndex={1000} />}
           <span>Save</span>
         </Button>
       </form>
