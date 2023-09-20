@@ -62,6 +62,21 @@ const TeamMembersSelector = ({
         onChange={updateSelectedMembers}
         options={options}
         isMulti
+        theme={(theme) => ({
+          ...theme,
+          borderRadius: 5,
+        })}
+        // copy pasta https://stackoverflow.com/a/74481208/1476137
+        styles={{
+          control: (base) => ({
+            ...base,
+            boxShadow: 'none',
+            borderColor: '#e5e7eb',
+            '&:hover': { borderColor: '#e5e7eb' },
+            fontFamily: 'Inter var',
+            fontSize: '14px',
+          }),
+        }}
       />
     </div>
   )

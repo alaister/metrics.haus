@@ -3,8 +3,8 @@ import { Save } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { ConnectionHandler, graphql, useMutation } from 'react-relay'
 import { z } from 'zod'
-import { Button } from '~/components/ui/Button'
 import TeamMembersSelector from '~/components/members/TeamMembersSelector'
+import { Button } from '~/components/ui/Button'
 import {
   Form,
   FormControl,
@@ -173,6 +173,7 @@ const MetricForm = ({ onSuccess }: MetricFormProps) => {
                     <SelectItem value="day">Day</SelectItem>
                     <SelectItem value="week">Week</SelectItem>
                     <SelectItem value="month">Month</SelectItem>
+                    <SelectItem value="year">Year</SelectItem>
                   </SelectContent>
                 </Select>
               </FormControl>
@@ -189,6 +190,24 @@ const MetricForm = ({ onSuccess }: MetricFormProps) => {
                 onValueChange={field.onChange}
                 selectedTeamId={selectedTeamId}
               />
+            )}
+          />
+        )}
+        {selectedTeamId !== null && (
+          <FormField
+            control={form.control}
+            name="members"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Metric Owners</FormLabel>
+                <FormControl>
+                  <TeamMembersSelector
+                    onValueChange={field.onChange}
+                    selectedTeamId={selectedTeamId}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
             )}
           />
         )}
