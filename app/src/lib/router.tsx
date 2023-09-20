@@ -5,12 +5,14 @@ import DialogLayout from '~/components/layout/DialogLayout'
 import RootLayout from '~/components/layout/RootLayout'
 import QueryPageShell from '~/components/loading/QueryPageShell'
 import ErrorPage from '~/components/routes/ErrorPage'
-import Index from '~/components/routes/Index'
+import MetricDetails from '~/components/routes/MetricDetails'
 import Metrics from '~/components/routes/Metrics'
 import MetricsLayout from '~/components/routes/Metrics.layout'
 import NewMetric from '~/components/routes/NewMetric'
 import SignIn from '~/components/routes/SignIn'
+import * as MetricDetailsData from '../components/routes/MetricDetails.data'
 import * as MetricsData from '../components/routes/Metrics.data'
+import { toGlobalId } from './graphql'
 import { toast } from './hooks/use-toast'
 import environment from './relay'
 import supabase from './supabase'
@@ -41,12 +43,11 @@ const router = createBrowserRouter([
       return null
     },
     children: [
-      { index: true, element: <Index /> },
       {
         element: <MetricsLayout />,
         children: [
           {
-            path: 'metrics',
+            path: '/',
             element: (
               <QueryPageShell
                 pageComponent={Metrics}
@@ -59,17 +60,44 @@ const router = createBrowserRouter([
                 initialQueryRef: loadQuery(environment, MetricsData.query, {}),
               }
             },
+          },
+        ],
+      },
+
+      {
+        path: 'metrics',
+        children: [
+          {
+            element: <DialogLayout />,
             children: [
               {
-                element: <DialogLayout />,
-                children: [
-                  {
-                    path: 'new',
-                    element: <NewMetric />,
-                  },
-                ],
+                path: 'new',
+                element: <NewMetric />,
               },
             ],
+          },
+          {
+            path: ':metricId',
+            element: (
+              <QueryPageShell
+                pageComponent={MetricDetails}
+                fallback={MetricDetailsData.fallback}
+                query={MetricDetailsData.query}
+              />
+            ),
+            loader: async ({ params }) => {
+              if (!params.metricId) return null
+
+              const nodeId = toGlobalId(params.metricId, 'metrics')
+
+              return {
+                initialQueryRef: loadQuery(
+                  environment,
+                  MetricDetailsData.query,
+                  { nodeId },
+                ),
+              }
+            },
           },
         ],
       },
