@@ -17,4 +17,4 @@ jobs:
         uses: creyD/prettier_action@v4.3
         with:
           # Prettier CLI arguments
-          prettier_options: '--config ./app/.prettierrc --check ./app'
+          prettier_options: '--config ./app/.prettierrc --ignore-path ./app/.prettierignore --check ./app'

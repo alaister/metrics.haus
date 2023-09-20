@@ -11,7 +11,7 @@ import {
 } from 'recharts'
 import { Metric } from './typedef'
 import { useState } from 'react'
-import { addDays, subDays } from 'date-fns'
+import { addDays } from 'date-fns'
 import { createTickDates, timestampToLabel } from './chart-helper'
 import { titleCase } from '~/lib/utils'
 import { Button } from '../ui/Button'
@@ -143,23 +143,25 @@ export function LineChart({ metric }: Props) {
   )
 }
 
-function CustomTooltip({ active, payload, handleClick }: any) {
-  const [comment, setComment] = useState('')
+type TooltipProps = {
+  active: boolean
+  payload: { payload: { ts: number } }[]
+  handleClick: (d: Date) => void
+}
+function CustomTooltip(props: Partial<TooltipProps>) {
+  // handling mf recharts + typescript
+  const { active, payload, handleClick } = props as TooltipProps
   if (!active || !payload?.length) return null
 
   const { ts } = payload[0].payload
 
   return (
-    <div className="bg-white rounded shadow ">
-      <input type="text" />
-      <Button
-        className="pointer-events-auto"
-        onClick={() => handleClick(new Date(ts))}
-      >
-        Add Comment
-      </Button>
-      cl
-    </div>
+    <Button
+      className="pointer-events-auto"
+      onClick={() => handleClick(new Date(ts))}
+    >
+      Add Comment
+    </Button>
   )
 }
 
