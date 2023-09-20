@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { toast } from '~/lib/hooks/use-toast'
 import supabase from '~/lib/supabase'
-import TeamSelector from '../teams/TeamSelector'
-import { Notifications } from '../notifications'
 import { UserAvatar } from '../UserAvatar'
 import { CmdKDialog } from '../cmdk/CmdKDialog'
+import { Notifications } from '../notifications'
+import TeamSelector from '../teams/TeamSelector'
 
 const Header = () => {
   const [userStats, setUserStats] = useState<{
@@ -38,6 +38,7 @@ const Header = () => {
           </h1>
           <TeamSelector />
         </div>
+
         <CmdKDialog />
 
         <div className="flex pr-6 gap-3">
