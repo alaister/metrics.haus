@@ -209,6 +209,9 @@ type MetricsDataPoints implements Node {
 type MetricsDataPointsConnection {
   edges: [MetricsDataPointsEdge!]!
   pageInfo: PageInfo!
+
+  """The total number of records matching the `filter` criteria"""
+  totalCount: Int!
 }
 
 type MetricsDataPointsDeleteResponse {
@@ -579,7 +582,6 @@ type Profiles implements Node {
     """Sort order to apply to the collection"""
     orderBy: [TeamMembersOrderBy!]
   ): TeamMembersConnection
-
   metricsDataPointsCollection(
     """Query the first `n` records in the collection"""
     first: Int
@@ -599,7 +601,6 @@ type Profiles implements Node {
     """Sort order to apply to the collection"""
     orderBy: [MetricsDataPointsOrderBy!]
   ): MetricsDataPointsConnection
-
   metricsOwnersCollection(
     """Query the first `n` records in the collection"""
     first: Int
@@ -821,7 +822,6 @@ type TeamMembers implements Node {
   updatedAt: Datetime!
   profile: Profiles!
   team: Teams!
-  profile: Profiles!
 }
 
 type TeamMembersConnection {

@@ -48,6 +48,8 @@ create table
         primary key (metric_id, time)
     );
 
+comment on table public.metrics_data_points is e'@graphql({"totalCount": {"enabled": true}})';
+
 select
     create_hypertable ('metrics_data_points', 'time');
 

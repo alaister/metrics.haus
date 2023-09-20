@@ -4,6 +4,7 @@ import { query } from './MetricDetails.data'
 import { Button } from '../ui/Button'
 import { Link, Outlet } from 'react-router-dom'
 import { Plus } from 'lucide-react'
+import MetricDetailsSection from '../metrics/MetricDetailsSection'
 
 export interface MetricDetailsProps {
   queryRef: PreloadedQuery<MetricDetails_Query>
@@ -33,7 +34,13 @@ const MetricDetails = ({ queryRef }: MetricDetailsProps) => {
         <Outlet />
       </div>
 
-      <div className="mt-5">{data.node?.id}</div>
+      {data.node ? (
+        <div className="mt-5">
+          <MetricDetailsSection metric={data.node} />
+        </div>
+      ) : (
+        <div>Not Found</div>
+      )}
     </div>
   )
 }

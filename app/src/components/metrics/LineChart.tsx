@@ -15,10 +15,13 @@ import { createTickDates, timestampToLabel } from './chart-helper'
 import { Button } from '../ui/Button'
 import { graphql } from 'relay-runtime'
 import { LineChart_metrics$key } from './__generated__/LineChart_metrics.graphql'
+import { subDays } from 'date-fns'
+import { cn } from '~/lib/utils'
 
 const MAX_TICKS = 5
 
 const CHART_COLOR = '#82ca9d'
+const EMPTY_CHART_COLOR = '#eee'
 
 const LineChartMetricsFragment = graphql`
   fragment LineChart_metrics on Metrics {
@@ -36,15 +39,22 @@ const LineChartMetricsFragment = graphql`
 
 export interface LineChartProps {
   dataPoints: LineChart_metrics$key
-  allowComments: boolean
+  preview?: boolean
+  containerClassName?: string
 }
 
-export function LineChart({ dataPoints, allowComments }: LineChartProps) {
+export function LineChart({
+  dataPoints,
+  preview = false,
+  containerClassName,
+}: LineChartProps) {
   const data =
     useFragment(
       LineChartMetricsFragment,
       dataPoints,
     ).metricsDataPointsCollection?.edges.map((e) => e.node) ?? []
+
+  const isEmpty = data.length == 0
 
   const [threads, setThreads] = useState<Thread[]>([])
 
@@ -59,97 +69,126 @@ export function LineChart({ dataPoints, allowComments }: LineChartProps) {
     )
   }
 
+  const dataForChart = isEmpty ? getRandomData() : data
+
   const ticks = createTickDates(
-    data.map((m) => new Date(m.time)),
+    dataForChart.map((m) => new Date(m.time)),
     MAX_TICKS,
   ).map((d) => d.getTime())
 
-  const chartData = data.map((it) => ({
+  const chartData = dataForChart.map((it) => ({
     ts: new Date(it.time).getTime(),
     value: it.value,
   }))
 
   return (
-    <div className="w-full h-full">
-      <ResponsiveContainer width="100%" height="100%">
-        <AreaChart width={750} height={250} data={chartData}>
-          <defs>
-            <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor={CHART_COLOR} stopOpacity={0.8} />
-              <stop offset="95%" stopColor={CHART_COLOR} stopOpacity={0} />
-            </linearGradient>
-          </defs>
+    <div className={cn('w-full, h-full', containerClassName)}>
+      <div className={'h-3/4 md:h-5/6'}>
+        <ResponsiveContainer height={'100%'} width="100%">
+          <AreaChart data={chartData}>
+            <defs>
+              <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
+                <stop
+                  offset="5%"
+                  stopColor={isEmpty ? EMPTY_CHART_COLOR : CHART_COLOR}
+                  stopOpacity={0.8}
+                />
+                <stop
+                  offset="95%"
+                  stopColor={isEmpty ? EMPTY_CHART_COLOR : CHART_COLOR}
+                  stopOpacity={0}
+                />
+              </linearGradient>
+            </defs>
 
-          <Area
-            type="monotone"
-            dataKey="value"
-            stroke={CHART_COLOR}
-            strokeWidth={2}
-            fillOpacity={1}
-            fill="url(#colorPv)"
-          />
-
-          {allowComments && (
-            <Tooltip
-              content={<CustomTooltip handleClick={addThread} />}
-              trigger="click"
+            <Area
+              dot={!preview}
+              type="monotone"
+              dataKey="value"
+              stroke={isEmpty ? EMPTY_CHART_COLOR : CHART_COLOR}
+              strokeWidth={2}
+              fillOpacity={1}
+              fill="url(#colorPv)"
             />
-          )}
 
-          <XAxis
-            hide
-            ticks={ticks}
-            dataKey="ts"
-            type="number"
-            padding={{ left: 16 }}
-            tickMargin={8}
-            tick={{
-              fontSize: 12,
-            }}
-            tickFormatter={(ms) => timestampToLabel(new Date(ms))}
-            domain={['dataMin', 'dataMax']}
-          />
-          <YAxis
-            type="number"
-            padding={{ bottom: 16 }}
-            tickMargin={8}
-            tickFormatter={(t) => t || ''}
-            tick={{
-              fontSize: 12,
-            }}
-          />
-        </AreaChart>
-      </ResponsiveContainer>
-      <ResponsiveContainer width="100%" height={100}>
-        <RechartsLineChart data={chartData}>
-          <YAxis tickFormatter={() => ''} type="number" tickCount={0} />
-          <XAxis
-            ticks={ticks}
-            dataKey="ts"
-            type="number"
-            padding={{ left: 16 }}
-            tickMargin={8}
-            tick={{
-              fontSize: 12,
-            }}
-            tickFormatter={(ms) => timestampToLabel(new Date(ms))}
-            domain={['dataMin', 'dataMax']}
-          />
-          {threads.map((t) => (
-            <ReferenceDot
-              className="cursor-pointer"
-              key={t.id}
-              r={6}
-              stroke=""
-              fill="#333"
-              y={0.5}
-              x={t.timestamp.getTime()}
-              onClick={() => alert(t.comment)}
-            />
-          ))}
-          <Line dataKey="value" opacity={0} />
-        </RechartsLineChart>
-      </ResponsiveContainer>
+            {!preview && (
+              <Tooltip
+                content={<CustomTooltip handleClick={addThread} />}
+                trigger="click"
+              />
+            )}
+
+            {!preview && (
+              <XAxis
+                hide
+                ticks={ticks}
+                dataKey="ts"
+                type="number"
+                padding={{ left: 16 }}
+                tickMargin={8}
+                tick={{
+                  fontSize: 12,
+                }}
+                tickFormatter={(ms) => timestampToLabel(new Date(ms))}
+                domain={['dataMin', 'dataMax']}
+              />
+            )}
+
+            {!preview && (
+              <YAxis
+                type="number"
+                padding={{ bottom: 16 }}
+                tickMargin={8}
+                tickFormatter={(t) => (isEmpty ? '' : t || '')}
+                tick={{
+                  fontSize: 12,
+                }}
+              />
+            )}
+          </AreaChart>
+        </ResponsiveContainer>
+      </div>
+      <div className={'h-1/4 md:h-1/6'}>
+        <ResponsiveContainer height={'100%'} width="100%">
+          <RechartsLineChart data={chartData.map((d) => ({ ...d, value: 0 }))}>
+            {!preview && (
+              <YAxis
+                tickFormatter={() => ''}
+                type="number"
+                tickCount={0}
+                domain={[0, 1]}
+              />
+            )}
+            {!preview && (
+              <XAxis
+                ticks={ticks}
+                dataKey="ts"
+                type="number"
+                padding={{ left: 16 }}
+                tickMargin={8}
+                tick={{
+                  fontSize: 12,
+                }}
+                tickFormatter={(ms) => timestampToLabel(new Date(ms))}
+                domain={['dataMin', 'dataMax']}
+              />
+            )}
+            {threads.map((t) => (
+              <ReferenceDot
+                className="cursor-pointer"
+                key={t.id}
+                r={6}
+                stroke=""
+                fill="#333"
+                y={0.6}
+                x={t.timestamp.getTime()}
+                onClick={() => alert(t.comment + ' TODO')}
+              />
+            ))}
+            <Line dataKey="value" opacity={0} />
+          </RechartsLineChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   )
 }
@@ -181,4 +220,17 @@ type Thread = {
   user: string
   timestamp: Date
   id: string
+}
+
+function getRandomData() {
+  const today = new Date()
+  return Array.from({
+    length: 14,
+  })
+    .map((_, idx) => ({
+      time: subDays(today, idx),
+      value: Math.random().toString(),
+      nodeId: Math.random().toString(),
+    }))
+    .reverse()
 }

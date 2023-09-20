@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<1cf4d2f8a048478709f14dcac51ab85b>>
+ * @generated SignedSource<<2db9f7a1c9511d3c1ac94ccbcfc607f7>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,6 +9,7 @@
 // @ts-nocheck
 
 import { ConcreteRequest, Query } from 'relay-runtime';
+import { FragmentRefs } from "relay-runtime";
 export type MetricDetails_Query$variables = {
   nodeId: string;
 };
@@ -17,6 +18,7 @@ export type MetricDetails_Query$data = {
     readonly id?: string;
     readonly name?: string;
     readonly nodeId: string;
+    readonly " $fragmentSpreads": FragmentRefs<"MetricDetailsSection_metrics">;
   } | null;
 };
 export type MetricDetails_Query = {
@@ -47,25 +49,18 @@ v2 = {
   "storageKey": null
 },
 v3 = {
-  "kind": "InlineFragment",
-  "selections": [
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "id",
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "name",
-      "storageKey": null
-    }
-  ],
-  "type": "Metrics",
-  "abstractKey": null
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "id",
+  "storageKey": null
+},
+v4 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "name",
+  "storageKey": null
 };
 return {
   "fragment": {
@@ -83,7 +78,20 @@ return {
         "plural": false,
         "selections": [
           (v2/*: any*/),
-          (v3/*: any*/)
+          {
+            "kind": "InlineFragment",
+            "selections": [
+              (v3/*: any*/),
+              (v4/*: any*/),
+              {
+                "args": null,
+                "kind": "FragmentSpread",
+                "name": "MetricDetailsSection_metrics"
+              }
+            ],
+            "type": "Metrics",
+            "abstractKey": null
+          }
         ],
         "storageKey": null
       }
@@ -113,23 +121,97 @@ return {
             "storageKey": null
           },
           (v2/*: any*/),
-          (v3/*: any*/)
+          {
+            "kind": "InlineFragment",
+            "selections": [
+              (v3/*: any*/),
+              (v4/*: any*/),
+              {
+                "alias": "dataPoints",
+                "args": null,
+                "concreteType": "MetricsDataPointsConnection",
+                "kind": "LinkedField",
+                "name": "metricsDataPointsCollection",
+                "plural": false,
+                "selections": [
+                  {
+                    "alias": null,
+                    "args": null,
+                    "kind": "ScalarField",
+                    "name": "totalCount",
+                    "storageKey": null
+                  }
+                ],
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "MetricsDataPointsConnection",
+                "kind": "LinkedField",
+                "name": "metricsDataPointsCollection",
+                "plural": false,
+                "selections": [
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "MetricsDataPointsEdge",
+                    "kind": "LinkedField",
+                    "name": "edges",
+                    "plural": true,
+                    "selections": [
+                      {
+                        "alias": null,
+                        "args": null,
+                        "concreteType": "MetricsDataPoints",
+                        "kind": "LinkedField",
+                        "name": "node",
+                        "plural": false,
+                        "selections": [
+                          (v2/*: any*/),
+                          {
+                            "alias": null,
+                            "args": null,
+                            "kind": "ScalarField",
+                            "name": "time",
+                            "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
+                            "kind": "ScalarField",
+                            "name": "value",
+                            "storageKey": null
+                          }
+                        ],
+                        "storageKey": null
+                      }
+                    ],
+                    "storageKey": null
+                  }
+                ],
+                "storageKey": null
+              }
+            ],
+            "type": "Metrics",
+            "abstractKey": null
+          }
         ],
         "storageKey": null
       }
     ]
   },
   "params": {
-    "cacheID": "3f68eac3955b339c7c115fa2c5949a52",
+    "cacheID": "323301ec46ca66b85d2d2df9ca0241dc",
     "id": null,
     "metadata": {},
     "name": "MetricDetails_Query",
     "operationKind": "query",
-    "text": "query MetricDetails_Query(\n  $nodeId: ID!\n) {\n  node(nodeId: $nodeId) {\n    __typename\n    nodeId\n    ... on Metrics {\n      id\n      name\n    }\n  }\n}\n"
+    "text": "query MetricDetails_Query(\n  $nodeId: ID!\n) {\n  node(nodeId: $nodeId) {\n    __typename\n    nodeId\n    ... on Metrics {\n      id\n      name\n      ...MetricDetailsSection_metrics\n    }\n  }\n}\n\nfragment LineChart_metrics on Metrics {\n  metricsDataPointsCollection {\n    edges {\n      node {\n        nodeId\n        time\n        value\n      }\n    }\n  }\n}\n\nfragment MetricDetailsSection_metrics on Metrics {\n  dataPoints: metricsDataPointsCollection {\n    totalCount\n  }\n  ...LineChart_metrics\n}\n"
   }
 };
 })();
 
-(node as any).hash = "367f3301d57baaf58840ae5197aea5c4";
+(node as any).hash = "062f71841c42cbb183a8ddeadac36c6f";
 
 export default node;
