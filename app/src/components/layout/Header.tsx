@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { toast } from '~/lib/hooks/use-toast'
 import supabase from '~/lib/supabase'
-import TeamSelector from '../teams/TeamSelector'
-import { Notifications } from '../notifications'
 import { UserAvatar } from '../UserAvatar'
+import { Notifications } from '../notifications'
+import TeamSelector from '../teams/TeamSelector'
 
 const Header = () => {
   const [userStats, setUserStats] = useState<{
@@ -37,7 +37,9 @@ const Header = () => {
           </h1>
           <TeamSelector />
         </div>
-        Points: {userStats.num_data_points_created ?? '...'}
+
+        <span>Points: {userStats.num_data_points_created ?? '...'}</span>
+
         <div className="flex pr-6 gap-3">
           <Notifications />
           <UserAvatar />

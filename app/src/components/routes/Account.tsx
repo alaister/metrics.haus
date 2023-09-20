@@ -16,7 +16,7 @@ const AccountPage = () => {
 
   useEffect(() => {
     if (!previewImage && user) {
-      setPreviewImage(getAvatarUrl(user.user_metadata.avatar_path))
+      setPreviewImage(getAvatarUrl(user.user_metadata.avatar_path ?? null))
     }
   }, [previewImage, user])
 
