@@ -5,6 +5,7 @@ import supabase from '~/lib/supabase'
 import TeamSelector from '../teams/TeamSelector'
 import { Notifications } from '../notifications'
 import { UserAvatar } from '../UserAvatar'
+import { CmdKDialog } from '../cmdk/CmdKDialog'
 
 const Header = () => {
   const [userStats, setUserStats] = useState<{
@@ -37,10 +38,14 @@ const Header = () => {
           </h1>
           <TeamSelector />
         </div>
-        Points: {userStats.num_data_points_created ?? '...'}
+        <CmdKDialog />
+
         <div className="flex pr-6 gap-3">
           <Notifications />
           <UserAvatar />
+          <div className="flex items-center justify-center">
+            <span>{userStats.num_data_points_created ?? '0'} Points</span>
+          </div>
         </div>
       </div>
     </header>
