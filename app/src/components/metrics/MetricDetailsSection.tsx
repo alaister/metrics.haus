@@ -19,8 +19,6 @@ export interface MetricDetailsProps {
 const MetricDetailsSection = ({ metric }: MetricDetailsProps) => {
   const data = useFragment(MetricDetailsSectionFragment, metric)
 
-  const hasNoDataPoints = data.dataPoints?.totalCount === 0
-
   return (
     <div className="w-full h-[250px] md:h-[500px]">
       <LineChart dataPoints={data} containerClassName="h-full" />

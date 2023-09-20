@@ -84,7 +84,7 @@ export function LineChart({
   return (
     <div className={cn('w-full, h-full', containerClassName)}>
       <div className={'h-3/4 md:h-5/6'}>
-        <ResponsiveContainer height={'100%'} width="100%">
+        <ResponsiveContainer>
           <AreaChart data={chartData}>
             <defs>
               <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
@@ -149,7 +149,7 @@ export function LineChart({
         </ResponsiveContainer>
       </div>
       <div className={'h-1/4 md:h-1/6'}>
-        <ResponsiveContainer height={'100%'} width="100%">
+        <ResponsiveContainer>
           <RechartsLineChart data={chartData.map((d) => ({ ...d, value: 0 }))}>
             {!preview && (
               <YAxis
