@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import TeamSelector from '../teams/TeamSelector'
+import { Notifications } from '../notifications'
 import { UserAvatar } from '../UserAvatar'
 
 const Header = () => {
@@ -14,6 +15,7 @@ const Header = () => {
           <TeamSelector />
         </div>
         <div className="flex pr-6 gap-3">
+          <Notifications />
           <UserAvatar />
         </div>
       </div>

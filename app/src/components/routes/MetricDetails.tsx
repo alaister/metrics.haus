@@ -20,12 +20,18 @@ const MetricDetails = ({ queryRef }: MetricDetailsProps) => {
             {data.node?.name}
           </h1>
 
-          <Button variant="outline" asChild>
-            <Link to={`new-data`}>
+          <div className="flex gap-1">
+            <Button variant="outline" asChild>
+              <Link to={`new-data`}>
+                <Plus className="w-4 h-4" />
+                <span>Add Data Point</span>
+              </Link>
+            </Button>
+            <Button variant="outline">
               <Plus className="w-4 h-4" />
-              <span>Add Data Point</span>
-            </Link>
-          </Button>
+              <span>Send a notification</span>
+            </Button>
+          </div>
         </div>
 
         <hr />
