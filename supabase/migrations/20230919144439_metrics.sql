@@ -73,9 +73,9 @@ create index ix_metric_team on public.metrics (team_id);
 create table
     public.metrics_owners (
         metric_id uuid not null references public.metrics ("id") on delete cascade on update cascade,
-        user_id uuid not null references public.profiles ("id") on delete cascade on update cascade,
+        profile_id uuid not null references public.profiles ("id") on delete cascade on update cascade,
         "created_at" timestamp with time zone not null default now(),
-        primary key (metric_id, user_id)
+        primary key (metric_id, profile_id)
     );
 
 alter table public.metrics_owners enable row level security;
@@ -93,4 +93,4 @@ create policy "user can manage metric owners from accessible metrics" on public.
 
 create index ix_metrics_owners_metric_id on public.metrics_owners (metric_id);
 
-create index ix_metrics_owners_user_id on public.metrics_owners (user_id);
+create index ix_metrics_owners_profile_id on public.metrics_owners (profile_id);

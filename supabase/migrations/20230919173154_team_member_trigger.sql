@@ -3,11 +3,11 @@ or replace function public.insert_team_member_if_not_exists () returns trigger l
 set
     search_path = public as $$
     declare
-        v_user_id uuid;
+        v_profile_id uuid;
         v_sso_provider_id text;
         v_team_id uuid;
     begin
-        v_user_id := new.user_id;
+        v_profile_id := new.user_id;
 
         -- fallback provider id to ease local development
         v_sso_provider_id := case
@@ -17,7 +17,7 @@ set
 
         select id into v_team_id from public.teams where sso_provider_id = v_sso_provider_id;
 
-        insert into public.team_members (user_id, team_id) values (v_user_id, v_team_id) on conflict do nothing;
+        insert into public.team_members (profile_id, team_id) values (v_profile_id, v_team_id) on conflict do nothing;
        
         return new;
     end;

@@ -29,7 +29,7 @@ create table
     public.team_members (
         "id" uuid primary key not null default gen_random_uuid (),
         team_id uuid not null references public.teams ("id") on delete cascade on update cascade,
-        user_id uuid not null references auth.users ("id") on delete cascade on update cascade,
+        profile_id uuid not null references public.profiles ("id") on delete cascade on update cascade,
         "created_at" timestamp with time zone not null default now(),
         "updated_at" timestamp with time zone not null default now()
     );
@@ -61,7 +61,7 @@ select
         from
             team_members
         where
-            user_id = auth.uid()
+            profile_id = auth.uid()
             and team_id = $1
     );
 
@@ -95,7 +95,7 @@ create policy "user can view fellow team members" on public.team_members for
 select
     using (is_current_user_in_team (team_id));
 
-create unique index team_members_team_id_user_id_unique on public.team_members (team_id, user_id);
+create unique index team_members_team_id_profile_id_unique on public.team_members (team_id, profile_id);
 
 create trigger team_members before
 update on public.teams for each row
@@ -110,7 +110,7 @@ select
             from
                 public.team_members
             where
-                user_id = profiles.id
+                profile_id = profiles.id
         )
     );
 
