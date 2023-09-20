@@ -1,9 +1,8 @@
 import { useState } from 'react'
 import { useLazyLoadQuery } from 'react-relay'
-import { graphql } from 'relay-runtime'
-import { useAppSelector } from '~/stores'
-import { TeamMembersSelector_Query } from './__generated__/TeamMembersSelector_Query.graphql'
 import Select, { MultiValue } from 'react-select'
+import { graphql } from 'relay-runtime'
+import { TeamMembersSelector_Query } from './__generated__/TeamMembersSelector_Query.graphql'
 
 const TeamMembersSelectorQuery = graphql`
   query TeamMembersSelector_Query($teamId: UUID!) {
@@ -22,14 +21,17 @@ const TeamMembersSelectorQuery = graphql`
 `
 
 interface TeamMembersSelectorProps {
+  selectedTeamId: string
   onValueChange: (profileIds: string[]) => void
 }
 
-const TeamMembersSelector = ({ onValueChange }: TeamMembersSelectorProps) => {
-  const selectedTeamId = useAppSelector((state) => state.team.selectedTeamId)
+const TeamMembersSelector = ({
+  onValueChange,
+  selectedTeamId,
+}: TeamMembersSelectorProps) => {
   const data = useLazyLoadQuery<TeamMembersSelector_Query>(
     TeamMembersSelectorQuery,
-    { teamId: selectedTeamId ?? '' },
+    { teamId: selectedTeamId },
   )
   const options = data.teamMembersCollection?.edges.map((x) => ({
     label: x.node.profile.name,
