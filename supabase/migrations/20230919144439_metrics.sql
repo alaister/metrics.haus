@@ -15,16 +15,20 @@ create table
 
 alter table public.metrics enable row level security;
 
-create policy "user can see metrics for teams they are in" on public.metrics for all using (
+create function is_metric_in_accessible_team (team_id uuid) returns boolean as $$
+select
     exists (
         select
             1
         from
             public.team_members
         where
-            team_id = public.metrics.team_id
-    )
-);
+            team_id = $1
+    );
+
+$$ language sql security definer stable;
+
+create policy "user can see metrics for teams they are in" on public.metrics for all using (is_metric_in_accessible_team(team_id));
 
 revoke
 update,
