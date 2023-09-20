@@ -37,11 +37,11 @@ const MetricsFragment = graphql`
   }
 `
 
-export interface MMMMProps {
+export interface MetricsListProps {
   query: MetricsFragment_query$key
 }
 
-const MMMM = ({ query }: MMMMProps) => {
+const MetricsList = ({ query }: MetricsListProps) => {
   const {
     data,
     // loadNext,
@@ -73,7 +73,7 @@ const Metrics = ({ queryRef }: MetricsProps) => {
 
   return (
     <>
-      <MMMM query={data} />
+      <MetricsList query={data} />
 
       {/* Outlet for dialogs */}
       <Outlet />
