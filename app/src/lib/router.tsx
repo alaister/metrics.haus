@@ -5,7 +5,6 @@ import DialogLayout from '~/components/layout/DialogLayout'
 import RootLayout from '~/components/layout/RootLayout'
 import QueryPageShell from '~/components/loading/QueryPageShell'
 import ErrorPage from '~/components/routes/ErrorPage'
-import MetricDetails from '~/components/routes/MetricDetails'
 import Metrics from '~/components/routes/Metrics'
 import MetricsLayout from '~/components/routes/Metrics.layout'
 import NewMetric from '~/components/routes/NewMetric'
@@ -16,6 +15,8 @@ import { toGlobalId } from './graphql'
 import { toast } from './hooks/use-toast'
 import environment from './relay'
 import supabase from './supabase'
+import MetricDetails from '~/components/routes/MetricDetails'
+import NewMetricDataPoint from '~/components/routes/NewDataPoint'
 
 const router = createBrowserRouter([
   {
@@ -98,6 +99,16 @@ const router = createBrowserRouter([
                 ),
               }
             },
+          },
+
+          {
+            element: <DialogLayout />,
+            children: [
+              {
+                path: ':metricId/new-data',
+                element: <NewMetricDataPoint />,
+              },
+            ],
           },
         ],
       },
