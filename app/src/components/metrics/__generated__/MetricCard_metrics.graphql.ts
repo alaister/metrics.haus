@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<7d71626f7b80fbed3ddeaa6790aeaa57>>
+ * @generated SignedSource<<4e16b33c683b60b6defa2500c4ad331b>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -14,6 +14,7 @@ export type MetricCard_metrics$data = {
   readonly createdAt: string;
   readonly id: string;
   readonly name: string;
+  readonly nodeId: string;
   readonly " $fragmentType": "MetricCard_metrics";
 };
 export type MetricCard_metrics$key = {
@@ -27,6 +28,13 @@ const node: ReaderFragment = {
   "metadata": null,
   "name": "MetricCard_metrics",
   "selections": [
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "nodeId",
+      "storageKey": null
+    },
     {
       "alias": null,
       "args": null,
@@ -53,6 +61,6 @@ const node: ReaderFragment = {
   "abstractKey": null
 };
 
-(node as any).hash = "b4b33d27aa9f4deec066cee049a01306";
+(node as any).hash = "5cdae9d2288c97a0ab665797d1bfa726";
 
 export default node;

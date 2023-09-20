@@ -8,7 +8,7 @@ const NewMetric = () => {
     <div>
       <MetricForm
         onSuccess={() => {
-          navigate('/metrics')
+          navigate('/')
         }}
       />
     </div>
