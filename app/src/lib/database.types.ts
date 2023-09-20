@@ -38,50 +38,100 @@ export interface Database {
         Row: {
           created_at: string
           id: string
+          interval: Database["public"]["Enums"]["metric_interval"]
           name: string
-          team_id: string | null
+          team_id: string
           updated_at: string
         }
         Insert: {
           created_at?: string
           id?: string
+          interval: Database["public"]["Enums"]["metric_interval"]
           name: string
-          team_id?: string | null
+          team_id: string
           updated_at?: string
         }
         Update: {
           created_at?: string
           id?: string
+          interval?: Database["public"]["Enums"]["metric_interval"]
           name?: string
-          team_id?: string | null
+          team_id?: string
           updated_at?: string
         }
         Relationships: [
           {
-            foreignKeyName: 'metrics_team_id_fkey'
-            columns: ['team_id']
-            referencedRelation: 'teams'
-            referencedColumns: ['id']
-          },
+            foreignKeyName: "metrics_team_id_fkey"
+            columns: ["team_id"]
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          }
         ]
       }
       metrics_data_points: {
         Row: {
           metric_id: string
+          reported_by: string
           time: string
           value: number
         }
         Insert: {
           metric_id: string
+          reported_by?: string
           time: string
           value: number
         }
         Update: {
           metric_id?: string
+          reported_by?: string
           time?: string
           value?: number
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "metrics_data_points_metric_id_fkey"
+            columns: ["metric_id"]
+            referencedRelation: "metrics"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "metrics_data_points_reported_by_fkey"
+            columns: ["reported_by"]
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      metrics_owners: {
+        Row: {
+          created_at: string
+          metric_id: string
+          profile_id: string
+        }
+        Insert: {
+          created_at?: string
+          metric_id: string
+          profile_id: string
+        }
+        Update: {
+          created_at?: string
+          metric_id?: string
+          profile_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "metrics_owners_metric_id_fkey"
+            columns: ["metric_id"]
+            referencedRelation: "metrics"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "metrics_owners_profile_id_fkey"
+            columns: ["profile_id"]
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       profiles: {
         Row: {
@@ -104,48 +154,45 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'profiles_id_fkey'
-            columns: ['id']
-            referencedRelation: 'users'
-            referencedColumns: ['id']
-          },
+            foreignKeyName: "profiles_id_fkey"
+            columns: ["id"]
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
         ]
       }
       team_members: {
         Row: {
           created_at: string
-          id: string
+          profile_id: string
           team_id: string
           updated_at: string
-          user_id: string
         }
         Insert: {
           created_at?: string
-          id?: string
+          profile_id: string
           team_id: string
           updated_at?: string
-          user_id: string
         }
         Update: {
           created_at?: string
-          id?: string
+          profile_id?: string
           team_id?: string
           updated_at?: string
-          user_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: 'team_members_team_id_fkey'
-            columns: ['team_id']
-            referencedRelation: 'teams'
-            referencedColumns: ['id']
+            foreignKeyName: "team_members_profile_id_fkey"
+            columns: ["profile_id"]
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'team_members_user_id_fkey'
-            columns: ['user_id']
-            referencedRelation: 'users'
-            referencedColumns: ['id']
-          },
+            foreignKeyName: "team_members_team_id_fkey"
+            columns: ["team_id"]
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          }
         ]
       }
       teams: {
@@ -153,18 +200,21 @@ export interface Database {
           created_at: string
           id: string
           name: string
+          sso_provider_id: string | null
           updated_at: string
         }
         Insert: {
           created_at?: string
           id?: string
           name: string
+          sso_provider_id?: string | null
           updated_at?: string
         }
         Update: {
           created_at?: string
           id?: string
           name?: string
+          sso_provider_id?: string | null
           updated_at?: string
         }
         Relationships: []
@@ -500,6 +550,12 @@ export interface Database {
         Args: Record<PropertyKey, never>
         Returns: Json
       }
+      get_user_stats: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          num_data_points_created: number
+        }[]
+      }
       hypertable_compression_stats: {
         Args: {
           hypertable: unknown
@@ -701,51 +757,6 @@ export interface Database {
             Args: {
               bucket_width: unknown
               ts: string
-            }
-            Returns: string
-          }
-        | {
-            Args: {
-              bucket_width: unknown
-              ts: string
-            }
-            Returns: string
-          }
-        | {
-            Args: {
-              bucket_width: unknown
-              ts: string
-            }
-            Returns: string
-          }
-        | {
-            Args: {
-              bucket_width: unknown
-              ts: string
-              origin: string
-            }
-            Returns: string
-          }
-        | {
-            Args: {
-              bucket_width: unknown
-              ts: string
-              origin: string
-            }
-            Returns: string
-          }
-        | {
-            Args: {
-              bucket_width: unknown
-              ts: string
-              origin: string
-            }
-            Returns: string
-          }
-        | {
-            Args: {
-              bucket_width: unknown
-              ts: string
               offset: unknown
             }
             Returns: string
@@ -821,34 +832,52 @@ export interface Database {
             }
             Returns: number
           }
+        | {
+            Args: {
+              bucket_width: unknown
+              ts: string
+            }
+            Returns: string
+          }
+        | {
+            Args: {
+              bucket_width: unknown
+              ts: string
+            }
+            Returns: string
+          }
+        | {
+            Args: {
+              bucket_width: unknown
+              ts: string
+            }
+            Returns: string
+          }
+        | {
+            Args: {
+              bucket_width: unknown
+              ts: string
+              origin: string
+            }
+            Returns: string
+          }
+        | {
+            Args: {
+              bucket_width: unknown
+              ts: string
+              origin: string
+            }
+            Returns: string
+          }
+        | {
+            Args: {
+              bucket_width: unknown
+              ts: string
+              origin: string
+            }
+            Returns: string
+          }
       time_bucket_gapfill:
-        | {
-            Args: {
-              bucket_width: number
-              ts: number
-              start?: number
-              finish?: number
-            }
-            Returns: number
-          }
-        | {
-            Args: {
-              bucket_width: number
-              ts: number
-              start?: number
-              finish?: number
-            }
-            Returns: number
-          }
-        | {
-            Args: {
-              bucket_width: number
-              ts: number
-              start?: number
-              finish?: number
-            }
-            Returns: number
-          }
         | {
             Args: {
               bucket_width: unknown
@@ -857,6 +886,33 @@ export interface Database {
               finish?: string
             }
             Returns: string
+          }
+        | {
+            Args: {
+              bucket_width: number
+              ts: number
+              start?: number
+              finish?: number
+            }
+            Returns: number
+          }
+        | {
+            Args: {
+              bucket_width: number
+              ts: number
+              start?: number
+              finish?: number
+            }
+            Returns: number
+          }
+        | {
+            Args: {
+              bucket_width: number
+              ts: number
+              start?: number
+              finish?: number
+            }
+            Returns: number
           }
         | {
             Args: {
@@ -900,7 +956,7 @@ export interface Database {
       }
     }
     Enums: {
-      [_ in never]: never
+      metric_interval: "minute" | "hour" | "day" | "week" | "month"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -944,11 +1000,11 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'buckets_owner_fkey'
-            columns: ['owner']
-            referencedRelation: 'users'
-            referencedColumns: ['id']
-          },
+            foreignKeyName: "buckets_owner_fkey"
+            columns: ["owner"]
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
         ]
       }
       migrations: {
@@ -1011,11 +1067,11 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'objects_bucketId_fkey'
-            columns: ['bucket_id']
-            referencedRelation: 'buckets'
-            referencedColumns: ['id']
-          },
+            foreignKeyName: "objects_bucketId_fkey"
+            columns: ["bucket_id"]
+            referencedRelation: "buckets"
+            referencedColumns: ["id"]
+          }
         ]
       }
     }
@@ -1086,3 +1142,4 @@ export interface Database {
     }
   }
 }
+
