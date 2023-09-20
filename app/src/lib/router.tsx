@@ -1,37 +1,19 @@
-import { AlertCircle } from 'lucide-react'
-import { Suspense, lazy } from 'react'
-import { ErrorBoundary } from 'react-error-boundary'
+import { loadQuery } from 'react-relay'
 import { createBrowserRouter, redirect } from 'react-router-dom'
 import AuthLayout from '~/components/layout/AuthLayout'
 import DialogLayout from '~/components/layout/DialogLayout'
 import RootLayout from '~/components/layout/RootLayout'
-import SkeletonList from '~/components/loading/SkeletonList'
-import { MetricCardSkeleton } from '~/components/metrics/MetricCard'
+import QueryPageShell from '~/components/loading/QueryPageShell'
 import ErrorPage from '~/components/routes/ErrorPage'
-import { Alert, AlertTitle } from '~/components/ui/Alert'
+import Index from '~/components/routes/Index'
+import Metrics from '~/components/routes/Metrics'
+import MetricsLayout from '~/components/routes/Metrics.layout'
+import NewMetric from '~/components/routes/NewMetric'
+import SignIn from '~/components/routes/SignIn'
+import * as MetricsData from '../components/routes/Metrics.data'
 import { toast } from './hooks/use-toast'
+import environment from './relay'
 import supabase from './supabase'
-
-const Index = lazy(() => import('../components/routes/Index'))
-const Metrics = lazy(() => import('../components/routes/Metrics'))
-const NewMetric = lazy(() => import('../components/routes/NewMetric'))
-const SignIn = lazy(() => import('../components/routes/SignIn'))
-
-function loaderFromAsyncImport(importer: () => Promise<unknown>) {
-  return async () => {
-    const mod = await importer()
-    if (
-      typeof mod === 'object' &&
-      mod !== null &&
-      'loader' in mod &&
-      typeof mod.loader === 'function'
-    ) {
-      return await mod.loader()
-    }
-
-    return null
-  }
-}
 
 const router = createBrowserRouter([
   {
@@ -52,7 +34,6 @@ const router = createBrowserRouter([
       const {
         data: { session },
       } = await supabase.auth.getSession()
-      console.log('session:', session)
       if (!session) {
         return redirect('/sign-in')
       }
@@ -62,36 +43,31 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Index /> },
       {
-        path: 'metrics',
-        element: (
-          <ErrorBoundary
-            fallback={
-              <Alert variant="destructive" className="col-span-3">
-                <AlertCircle className="h-4 w-4" />
-                <AlertTitle>Something went wrong</AlertTitle>
-                {/* <AlertDescription>{error?.message}</AlertDescription> */}
-              </Alert>
-            }
-          >
-            <Suspense
-              fallback={
-                <SkeletonList count={3} skeleton={MetricCardSkeleton} />
-              }
-            >
-              <Metrics />
-            </Suspense>
-          </ErrorBoundary>
-        ),
-        loader: loaderFromAsyncImport(
-          () => import('../components/routes/Metrics'),
-        ),
+        element: <MetricsLayout />,
         children: [
           {
-            element: <DialogLayout />,
+            path: 'metrics',
+            element: (
+              <QueryPageShell
+                pageComponent={Metrics}
+                fallback={MetricsData.fallback}
+                query={MetricsData.query}
+              />
+            ),
+            loader: async () => {
+              return {
+                initialQueryRef: loadQuery(environment, MetricsData.query, {}),
+              }
+            },
             children: [
               {
-                path: 'new',
-                element: <NewMetric />,
+                element: <DialogLayout />,
+                children: [
+                  {
+                    path: 'new',
+                    element: <NewMetric />,
+                  },
+                ],
               },
             ],
           },

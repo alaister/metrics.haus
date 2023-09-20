@@ -1,9 +1,26 @@
-import { Suspense } from 'react'
-import { Outlet } from 'react-router-dom'
+import { Suspense, useEffect } from 'react'
+import { Outlet, useNavigate } from 'react-router-dom'
 import Footer from '~/components/layout/Footer'
 import Header from '~/components/layout/Header'
+import supabase from '~/lib/supabase'
 
 const RootLayout = () => {
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!session) {
+        navigate('/sign-in')
+      }
+    })
+
+    return () => {
+      subscription.unsubscribe()
+    }
+  }, [navigate])
+
   return (
     <div className="flex flex-col relative items-stretch min-h-screen-dvh font-sans">
       <Header />
