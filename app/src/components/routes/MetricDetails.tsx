@@ -21,7 +21,7 @@ const MetricDetails = ({ queryRef }: MetricDetailsProps) => {
           </h1>
 
           <Button variant="outline" asChild>
-            <Link to="metrics/new">
+            <Link to={`new-data`}>
               <Plus className="w-4 h-4" />
               <span>Add Data Point</span>
             </Link>

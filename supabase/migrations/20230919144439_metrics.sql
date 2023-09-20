@@ -45,16 +45,29 @@ create table
         time TIMESTAMPTZ not null,
         metric_id uuid not null,
         value double precision not null,
-        reported_by uuid not null references public.profiles ("id") on delete set null on update cascade
+        reported_by uuid not null default auth.uid() references public.profiles ("id") on delete set null on update cascade,
+        PRIMARY KEY(metric_id, time)
     );
 
 select
     create_hypertable ('metrics_data_points', 'time');
 
+    revoke
+update,
+insert on public.metrics_data_points
+from
+    public,
+    anon,
+    authenticated;
+
+grant
+insert (time, metric_id, value), delete on public.metrics_data_points to public,
+authenticated;
+
 alter table public.metrics_data_points enable row level security;
 
-create policy "user can see data points from accessible metrics" on public.metrics_data_points for
-select
+create policy "user can manage data points from accessible metrics" on public.metrics_data_points for
+all
     using (
         exists (
             select
