@@ -1,14 +1,13 @@
-import * as React from 'react'
-import { DateTime } from 'luxon'
 import { Calendar as CalendarIcon } from 'lucide-react'
-
+import { DateTime } from 'luxon'
+import { ChangeEventHandler, useState } from 'react'
+import { SelectSingleEventHandler } from 'react-day-picker'
+import { cn } from '~/lib/utils'
 import { Button } from './Button'
 import { Calendar } from './Calendar'
-import { Popover, PopoverContent, PopoverTrigger } from './Popover'
-import { SelectSingleEventHandler } from 'react-day-picker'
-import { Label } from './Label'
 import { Input } from './Input'
-import { cn } from '~/lib/utils'
+import { Label } from './Label'
+import { Popover, PopoverContent, PopoverTrigger } from './Popover'
 
 interface DateTimePickerProps {
   date: Date
@@ -16,7 +15,7 @@ interface DateTimePickerProps {
 }
 
 export function DateTimePicker({ date, setDate }: DateTimePickerProps) {
-  const [selectedDateTime, setSelectedDateTime] = React.useState<DateTime>(
+  const [selectedDateTime, setSelectedDateTime] = useState<DateTime>(
     DateTime.fromJSDate(date),
   )
 
@@ -31,7 +30,7 @@ export function DateTimePicker({ date, setDate }: DateTimePickerProps) {
     setDate(modifiedDay.toJSDate())
   }
 
-  const handleTimeChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+  const handleTimeChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const { value } = e.target
     const hours = Number.parseInt(value.split(':')[0] || '00', 10)
     const minutes = Number.parseInt(value.split(':')[1] || '00', 10)
