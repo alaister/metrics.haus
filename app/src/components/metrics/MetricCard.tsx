@@ -1,9 +1,11 @@
 import { useFragment } from 'react-relay'
 import { graphql } from 'relay-runtime'
 import { MetricCard_metrics$key } from './__generated__/MetricCard_metrics.graphql'
+import { Link } from 'react-router-dom'
 
 const MetricCardFragment = graphql`
   fragment MetricCard_metrics on Metrics {
+    nodeId
     id
     name
     createdAt
@@ -17,7 +19,11 @@ export interface MetricCardProps {
 const MetricCard = ({ metric }: MetricCardProps) => {
   const data = useFragment(MetricCardFragment, metric)
 
-  return <div className="rounded-lg border shadow">hello from {data.name}</div>
+  return (
+    <Link to={`/metrics/${data.nodeId}`}>
+      <div className="rounded-lg border shadow p-4">hello from {data.name}</div>
+    </Link>
+  )
 }
 
 export const MetricCardSkeleton = () => {
