@@ -1,37 +1,15 @@
 import { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { toast } from '~/lib/hooks/use-toast'
 import supabase from '~/lib/supabase'
 import TeamSelector from '../teams/TeamSelector'
 import { Notifications } from '../notifications'
 import { UserAvatar } from '../UserAvatar'
-import { Button } from '../ui/Button'
 
 const Header = () => {
-  const [isLoading, setIsLoading] = useState(false)
   const [userStats, setUserStats] = useState<{
     num_data_points_created?: number
   }>({})
-  const navigate = useNavigate()
-
-  const signOut = async () => {
-    setIsLoading(true)
-
-    const { error } = await supabase.auth.signOut({ scope: 'local' })
-    if (error) {
-      toast({
-        variant: 'destructive',
-        title: 'Something went wrong',
-        description: error.message,
-      })
-      setIsLoading(false)
-      return
-    }
-
-    setIsLoading(false)
-    navigate('/sign-in', { replace: true })
-  }
-
   useEffect(() => {
     supabase
       .rpc('get_user_stats')
@@ -59,7 +37,7 @@ const Header = () => {
           </h1>
           <TeamSelector />
         </div>
-          Points: {userStats.num_data_points_created ?? '...'}
+        Points: {userStats.num_data_points_created ?? '...'}
         <div className="flex pr-6 gap-3">
           <Notifications />
           <UserAvatar />
