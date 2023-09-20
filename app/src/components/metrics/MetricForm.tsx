@@ -165,6 +165,7 @@ const MetricForm = ({ onSuccess }: MetricFormProps) => {
                     <SelectItem value="day">Day</SelectItem>
                     <SelectItem value="week">Week</SelectItem>
                     <SelectItem value="month">Month</SelectItem>
+                    <SelectItem value="year">Year</SelectItem>
                   </SelectContent>
                 </Select>
               </FormControl>
@@ -176,9 +177,15 @@ const MetricForm = ({ onSuccess }: MetricFormProps) => {
           control={form.control}
           name="members"
           render={({ field }) => (
-            <TeamMembersSelector
-              onValueChange={field.onChange}
-            ></TeamMembersSelector>
+            <FormItem>
+              <FormLabel>Metric Owners</FormLabel>
+              <FormControl>
+                <TeamMembersSelector
+                  onValueChange={field.onChange}
+                ></TeamMembersSelector>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
           )}
         />
         <Button
