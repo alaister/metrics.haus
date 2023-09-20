@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<dd55245b607620e396f1c9b0d9e33e6a>>
+ * @generated SignedSource<<3730cd8a145ad94d6426344b6e98ac49>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -165,6 +165,72 @@ return {
                 "kind": "ScalarField",
                 "name": "createdAt",
                 "storageKey": null
+              },
+              {
+                "alias": "dataPoints",
+                "args": null,
+                "concreteType": "MetricsDataPointsConnection",
+                "kind": "LinkedField",
+                "name": "metricsDataPointsCollection",
+                "plural": false,
+                "selections": [
+                  {
+                    "alias": null,
+                    "args": null,
+                    "kind": "ScalarField",
+                    "name": "totalCount",
+                    "storageKey": null
+                  }
+                ],
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "MetricsDataPointsConnection",
+                "kind": "LinkedField",
+                "name": "metricsDataPointsCollection",
+                "plural": false,
+                "selections": [
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "MetricsDataPointsEdge",
+                    "kind": "LinkedField",
+                    "name": "edges",
+                    "plural": true,
+                    "selections": [
+                      {
+                        "alias": null,
+                        "args": null,
+                        "concreteType": "MetricsDataPoints",
+                        "kind": "LinkedField",
+                        "name": "node",
+                        "plural": false,
+                        "selections": [
+                          (v5/*: any*/),
+                          {
+                            "alias": null,
+                            "args": null,
+                            "kind": "ScalarField",
+                            "name": "time",
+                            "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
+                            "kind": "ScalarField",
+                            "name": "value",
+                            "storageKey": null
+                          }
+                        ],
+                        "storageKey": null
+                      }
+                    ],
+                    "storageKey": null
+                  }
+                ],
+                "storageKey": null
               }
             ],
             "storageKey": null
@@ -196,12 +262,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "e886e6a3b14797be9639035cdd148ca6",
+    "cacheID": "24a431b5c4e000d86978a36ae44a25fc",
     "id": null,
     "metadata": {},
     "name": "MetricForm_Mutation",
     "operationKind": "mutation",
-    "text": "mutation MetricForm_Mutation(\n  $input: MetricsInsertInput!\n) {\n  insertIntoMetricsCollection(objects: [$input]) {\n    affectedCount\n    records {\n      id\n      nodeId\n      ...MetricCard_metrics\n    }\n  }\n}\n\nfragment MetricCard_metrics on Metrics {\n  id\n  name\n  createdAt\n}\n"
+    "text": "mutation MetricForm_Mutation(\n  $input: MetricsInsertInput!\n) {\n  insertIntoMetricsCollection(objects: [$input]) {\n    affectedCount\n    records {\n      id\n      nodeId\n      ...MetricCard_metrics\n    }\n  }\n}\n\nfragment LineChart_metrics on Metrics {\n  metricsDataPointsCollection {\n    edges {\n      node {\n        nodeId\n        time\n        value\n      }\n    }\n  }\n}\n\nfragment MetricCard_metrics on Metrics {\n  id\n  name\n  createdAt\n  dataPoints: metricsDataPointsCollection {\n    totalCount\n  }\n  ...LineChart_metrics\n}\n"
   }
 };
 })();

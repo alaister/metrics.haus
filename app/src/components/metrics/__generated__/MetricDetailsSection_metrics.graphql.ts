@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<a7eef012daa22ea9cdbd8918c3cf849e>>
+ * @generated SignedSource<<46cd0319b260a1f18b5077fc5a2bbc61>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,48 +10,24 @@
 
 import { Fragment, ReaderFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
-export type MetricCard_metrics$data = {
-  readonly createdAt: string;
+export type MetricDetailsSection_metrics$data = {
   readonly dataPoints: {
     readonly totalCount: number;
   } | null;
-  readonly id: string;
-  readonly name: string;
   readonly " $fragmentSpreads": FragmentRefs<"LineChart_metrics">;
-  readonly " $fragmentType": "MetricCard_metrics";
+  readonly " $fragmentType": "MetricDetailsSection_metrics";
 };
-export type MetricCard_metrics$key = {
-  readonly " $data"?: MetricCard_metrics$data;
-  readonly " $fragmentSpreads": FragmentRefs<"MetricCard_metrics">;
+export type MetricDetailsSection_metrics$key = {
+  readonly " $data"?: MetricDetailsSection_metrics$data;
+  readonly " $fragmentSpreads": FragmentRefs<"MetricDetailsSection_metrics">;
 };
 
 const node: ReaderFragment = {
   "argumentDefinitions": [],
   "kind": "Fragment",
   "metadata": null,
-  "name": "MetricCard_metrics",
+  "name": "MetricDetailsSection_metrics",
   "selections": [
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "id",
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "name",
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "createdAt",
-      "storageKey": null
-    },
     {
       "alias": "dataPoints",
       "args": null,
@@ -80,6 +56,6 @@ const node: ReaderFragment = {
   "abstractKey": null
 };
 
-(node as any).hash = "24d9ece3e35f342c0a2ddad7a34b586b";
+(node as any).hash = "3a55fc22e838eee0c3c183465cc5f8a7";
 
 export default node;

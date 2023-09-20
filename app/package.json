@@ -34,6 +34,7 @@
     "react-redux": "^8.1.2",
     "react-relay": "^15.0.0",
     "react-router-dom": "^6.16.0",
+    "recharts": "2.8.0",
     "react-select": "^5.7.4",
     "relay-runtime": "^15.0.0",
     "tailwind-merge": "^1.14.0",

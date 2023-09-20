@@ -162,6 +162,37 @@ type Metrics implements Node {
   name: String!
   teamId: UUID!
   team: Teams!
+  metricsDataPointsCollection(
+    """
+    Query the first `n` records in the collection
+    """
+    first: Int
+
+    """
+    Query the last `n` records in the collection
+    """
+    last: Int
+
+    """
+    Query values in the collection before the provided cursor
+    """
+    before: Cursor
+
+    """
+    Query values in the collection after the provided cursor
+    """
+    after: Cursor
+
+    """
+    Filters to apply to the results set when querying from the collection
+    """
+    filter: MetricsDataPointsFilter
+
+    """
+    Sort order to apply to the collection
+    """
+    orderBy: [MetricsDataPointsOrderBy!]
+  ): MetricsDataPointsConnection
   metricsOwnersCollection(
     """
     Query the first `n` records in the collection
@@ -209,12 +240,18 @@ type MetricsDataPoints implements Node {
   metricId: UUID!
   value: Float!
   reportedBy: UUID!
+  metric: Metrics!
   profiles: Profiles!
 }
 
 type MetricsDataPointsConnection {
   edges: [MetricsDataPointsEdge!]!
   pageInfo: PageInfo!
+
+  """
+  The total number of records matching the `filter` criteria
+  """
+  totalCount: Int!
 }
 
 type MetricsDataPointsDeleteResponse {
@@ -699,7 +736,6 @@ type Profiles implements Node {
     """
     orderBy: [TeamMembersOrderBy!]
   ): TeamMembersConnection
-
   metricsDataPointsCollection(
     """
     Query the first `n` records in the collection
@@ -731,7 +767,6 @@ type Profiles implements Node {
     """
     orderBy: [MetricsDataPointsOrderBy!]
   ): MetricsDataPointsConnection
-
   metricsOwnersCollection(
     """
     Query the first `n` records in the collection
@@ -1061,7 +1096,6 @@ type TeamMembers implements Node {
   updatedAt: Datetime!
   profile: Profiles!
   team: Teams!
-  profile: Profiles!
 }
 
 type TeamMembersConnection {

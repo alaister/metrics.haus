@@ -7,6 +7,7 @@ export const query = graphql`
       ... on Metrics {
         id
         name
+        ...MetricDetailsSection_metrics
       }
     }
   }
