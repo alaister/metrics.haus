@@ -15,6 +15,13 @@ import {
 import { Input } from '~/components/ui/Input'
 import { useToast } from '~/lib/hooks/use-toast'
 import { MetricForm_Mutation } from './__generated__/MetricForm_Mutation.graphql'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '~/components/ui/Select'
 
 const MetricInsertMutation = graphql`
   mutation MetricForm_Mutation($input: MetricsInsertInput!) {
@@ -24,6 +31,8 @@ const MetricInsertMutation = graphql`
         nodeId
         id
         name
+        interval
+        teamId
       }
     }
   }
@@ -31,6 +40,7 @@ const MetricInsertMutation = graphql`
 
 const formSchema = z.object({
   name: z.string().min(1, "Can't be empty"),
+  interval: z.enum(['minute', 'hour', 'day', 'week', 'month']),
 })
 
 const MetricForm = () => {
@@ -50,6 +60,8 @@ const MetricForm = () => {
       variables: {
         input: {
           name: values.name,
+          interval: values.interval,
+          teamId: '6ff9e003-6488-4ef6-959d-6abe1eb72135',
         },
       },
       onError(error) {
@@ -64,7 +76,7 @@ const MetricForm = () => {
           title: 'Metric created successfully',
         })
 
-        form.reset({ name: '' })
+        form.reset({ name: '', interval: 'week' })
       },
     })
   }
@@ -83,6 +95,32 @@ const MetricForm = () => {
               <FormLabel>Name</FormLabel>
               <FormControl>
                 <Input placeholder="MRR" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="interval"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Interval</FormLabel>
+              <FormControl>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Interval" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="day">Day</SelectItem>
+                    <SelectItem value="week">Week</SelectItem>
+                    <SelectItem value="month">Month</SelectItem>
+                  </SelectContent>
+                </Select>
               </FormControl>
               <FormMessage />
             </FormItem>
