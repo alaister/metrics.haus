@@ -3,16 +3,8 @@ import SkeletonList from '../loading/SkeletonList'
 import { MetricCardSkeleton } from '../metrics/MetricCard'
 
 export const query = graphql`
-  query Metrics_Query {
-    metricsCollection {
-      edges {
-        cursor
-        node {
-          nodeId
-          ...MetricCard_metrics
-        }
-      }
-    }
+  query Metrics_Query($cursor: Cursor, $count: Int) {
+    ...MetricsFragment_query @arguments(cursor: $cursor, count: $count)
   }
 `
 
