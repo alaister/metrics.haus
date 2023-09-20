@@ -14,7 +14,7 @@ export const teamSlice = createSlice({
   initialState,
   reducers: {
     setSelectedTeamId: (state, action: PayloadAction<string>) => {
-      state.selectedTeamId += action.payload
+      state.selectedTeamId = action.payload
     },
   },
 })
