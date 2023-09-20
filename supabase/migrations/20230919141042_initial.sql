@@ -11,7 +11,8 @@ create table
         "id" uuid not null primary key references auth.users ("id") on delete cascade on update cascade,
         "created_at" timestamp with time zone not null default now(),
         "updated_at" timestamp with time zone not null default now(),
-        name text not null
+        "name" text not null,
+        "avatar_path" text
     );
 
 -- Teams
@@ -21,7 +22,7 @@ create table
         "created_at" timestamp with time zone not null default now(),
         "updated_at" timestamp with time zone not null default now(),
         name text not null,
-        sso_provider_id text 
+        sso_provider_id text
     );
 
 -- Team members
