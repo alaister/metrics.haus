@@ -21,6 +21,7 @@ import {
   SelectValue,
 } from '~/components/ui/Select'
 import { useToast } from '~/lib/hooks/use-toast'
+import { useAppSelector } from '~/stores'
 import { MetricForm_Mutation } from './__generated__/MetricForm_Mutation.graphql'
 
 const MetricInsertMutation = graphql`
@@ -49,6 +50,8 @@ export interface MetricFormProps {
 }
 
 const MetricForm = ({ onSuccess }: MetricFormProps) => {
+  const selectedTeamId = useAppSelector((state) => state.team.selectedTeamId)
+
   const { toast } = useToast()
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -72,7 +75,7 @@ const MetricForm = ({ onSuccess }: MetricFormProps) => {
         input: {
           name: values.name,
           interval: values.interval,
-          teamId: '35524f16-7feb-4e74-9de9-72e0717d27da',
+          teamId: selectedTeamId,
         },
         connections: [connectionID],
       },
