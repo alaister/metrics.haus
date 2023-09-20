@@ -3,7 +3,7 @@ export function toGlobalId(
   tableName: string,
   schemaName = 'public',
 ) {
-  return btoa(JSON.stringify([schemaName, tableName, id]))
+  return btoa(JSON.stringify([schemaName, tableName, id]).replace(/,/g, ', '))
 }
 
 export function fromGlobalId(globalId: string): {
