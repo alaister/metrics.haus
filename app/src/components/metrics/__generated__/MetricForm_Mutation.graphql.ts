@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<874624054d64e79808d063a701f06f9f>>
+ * @generated SignedSource<<af88325e180cae5c5323e848e20dfba4>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -24,6 +24,7 @@ export type MetricForm_Mutation$data = {
   readonly insertIntoMetricsCollection: {
     readonly affectedCount: number;
     readonly records: ReadonlyArray<{
+      readonly id: string;
       readonly nodeId: string;
       readonly " $fragmentSpreads": FragmentRefs<"MetricCard_metrics">;
     }>;
@@ -69,6 +70,13 @@ v4 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
+  "name": "id",
+  "storageKey": null
+},
+v5 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
   "name": "nodeId",
   "storageKey": null
 };
@@ -100,6 +108,7 @@ return {
             "plural": true,
             "selections": [
               (v4/*: any*/),
+              (v5/*: any*/),
               {
                 "args": null,
                 "kind": "FragmentSpread",
@@ -142,13 +151,7 @@ return {
             "plural": true,
             "selections": [
               (v4/*: any*/),
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "id",
-                "storageKey": null
-              },
+              (v5/*: any*/),
               {
                 "alias": null,
                 "args": null,
@@ -187,7 +190,7 @@ return {
                         "name": "node",
                         "plural": false,
                         "selections": [
-                          (v4/*: any*/),
+                          (v5/*: any*/),
                           {
                             "alias": null,
                             "args": null,
@@ -241,16 +244,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "a86bbb5f30529bcdf1f391b0d38d5c93",
+    "cacheID": "7279b62631d771179978ab3202d2a0fc",
     "id": null,
     "metadata": {},
     "name": "MetricForm_Mutation",
     "operationKind": "mutation",
-    "text": "mutation MetricForm_Mutation(\n  $input: MetricsInsertInput!\n) {\n  insertIntoMetricsCollection(objects: [$input]) {\n    affectedCount\n    records {\n      nodeId\n      ...MetricCard_metrics\n    }\n  }\n}\n\nfragment LineChart_metrics on Metrics {\n  metricsDataPointsCollection {\n    edges {\n      node {\n        nodeId\n        time\n        value\n      }\n    }\n  }\n}\n\nfragment MetricCard_metrics on Metrics {\n  id\n  name\n  createdAt\n  ...LineChart_metrics\n}\n"
+    "text": "mutation MetricForm_Mutation(\n  $input: MetricsInsertInput!\n) {\n  insertIntoMetricsCollection(objects: [$input]) {\n    affectedCount\n    records {\n      id\n      nodeId\n      ...MetricCard_metrics\n    }\n  }\n}\n\nfragment LineChart_metrics on Metrics {\n  metricsDataPointsCollection {\n    edges {\n      node {\n        nodeId\n        time\n        value\n      }\n    }\n  }\n}\n\nfragment MetricCard_metrics on Metrics {\n  id\n  name\n  createdAt\n  ...LineChart_metrics\n}\n"
   }
 };
 })();
 
-(node as any).hash = "2b7cdd690fb9b0db20457117844506be";
+(node as any).hash = "1fddfe86230403c6586d714527a83df7";
 
 export default node;
