@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<01c0a0437be32e2eb067d80c5b35665e>>
+ * @generated SignedSource<<087f87fea564c93de4b9becf65a42056>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -207,12 +207,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "f05bd4ae9e4bc19d04fc32d92ade725b",
+    "cacheID": "0808cb4b1e4624187a2fe3f388c6225f",
     "id": null,
     "metadata": {},
     "name": "Metrics_Query",
     "operationKind": "query",
-    "text": "query Metrics_Query(\n  $cursor: Cursor\n  $count: Int\n) {\n  ...MetricsFragment_query_1G22uz\n}\n\nfragment MetricCard_metrics on Metrics {\n  nodeId\n  id\n  name\n  createdAt\n}\n\nfragment MetricsFragment_query_1G22uz on Query {\n  metricsCollection(after: $cursor, first: $count, orderBy: [{createdAt: DescNullsLast}]) {\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n    edges {\n      cursor\n      node {\n        nodeId\n        ...MetricCard_metrics\n        __typename\n      }\n    }\n  }\n}\n"
+    "text": "query Metrics_Query(\n  $cursor: Cursor\n  $count: Int\n) {\n  ...MetricsFragment_query_1G22uz\n}\n\nfragment MetricCard_metrics on Metrics {\n  id\n  name\n  createdAt\n}\n\nfragment MetricsFragment_query_1G22uz on Query {\n  metricsCollection(after: $cursor, first: $count, orderBy: [{createdAt: DescNullsLast}]) {\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n    edges {\n      cursor\n      node {\n        nodeId\n        ...MetricCard_metrics\n        __typename\n      }\n    }\n  }\n}\n"
   }
 };
 })();

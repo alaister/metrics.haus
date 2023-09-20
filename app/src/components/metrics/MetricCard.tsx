@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom'
 
 const MetricCardFragment = graphql`
   fragment MetricCard_metrics on Metrics {
-    nodeId
     id
     name
     createdAt
@@ -20,7 +19,7 @@ const MetricCard = ({ metric }: MetricCardProps) => {
   const data = useFragment(MetricCardFragment, metric)
 
   return (
-    <Link to={`/metrics/${data.nodeId}`}>
+    <Link to={`/metrics/${data.id}`}>
       <div className="rounded-lg border shadow p-4">hello from {data.name}</div>
     </Link>
   )
