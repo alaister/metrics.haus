@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<7625fddfa7c7af0cdc4b2e720ed48b5e>>
+ * @generated SignedSource<<ef595917418d0f54819b77dff24f7fc7>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -15,6 +15,7 @@ export type LineChart_metrics$data = {
     readonly edges: ReadonlyArray<{
       readonly node: {
         readonly id: string;
+        readonly replyTo: string | null;
         readonly timestamp: string;
       };
     }>;
@@ -132,6 +133,13 @@ const node: ReaderFragment = {
                   "kind": "ScalarField",
                   "name": "timestamp",
                   "storageKey": null
+                },
+                {
+                  "alias": null,
+                  "args": null,
+                  "kind": "ScalarField",
+                  "name": "replyTo",
+                  "storageKey": null
                 }
               ],
               "storageKey": null
@@ -147,6 +155,6 @@ const node: ReaderFragment = {
   "abstractKey": null
 };
 
-(node as any).hash = "65da5b28dca0418c064a02100f99511b";
+(node as any).hash = "6723429a621cb9a1a14ed3e584840867";
 
 export default node;

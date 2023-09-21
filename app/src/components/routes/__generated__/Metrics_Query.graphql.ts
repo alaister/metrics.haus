@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<a7ec5de51f8b677b7ff78670e3b2170e>>
+ * @generated SignedSource<<990baf4ad04be62527f59ff43cdfd384>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -277,6 +277,13 @@ return {
                                 "name": "timestamp",
                                 "storageKey": null
                               },
+                              {
+                                "alias": null,
+                                "args": null,
+                                "kind": "ScalarField",
+                                "name": "replyTo",
+                                "storageKey": null
+                              },
                               (v3/*: any*/)
                             ],
                             "storageKey": null
@@ -317,12 +324,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "6eb1637fdb739c001418c56bc7840c0a",
+    "cacheID": "fa97763216f916b4288e8a1445fe7bf1",
     "id": null,
     "metadata": {},
     "name": "Metrics_Query",
     "operationKind": "query",
-    "text": "query Metrics_Query(\n  $cursor: Cursor\n  $count: Int\n) {\n  ...MetricsFragment_query_1G22uz\n}\n\nfragment LineChart_metrics on Metrics {\n  metricsDataPointsCollection {\n    edges {\n      node {\n        nodeId\n        time\n        value\n      }\n    }\n  }\n  commentsCollection {\n    edges {\n      node {\n        id\n        timestamp\n        nodeId\n      }\n    }\n  }\n}\n\nfragment MetricCard_metrics on Metrics {\n  id\n  name\n  createdAt\n  dataPoints: metricsDataPointsCollection {\n    totalCount\n  }\n  ...LineChart_metrics\n}\n\nfragment MetricsFragment_query_1G22uz on Query {\n  metricsCollection(after: $cursor, first: $count, orderBy: [{createdAt: DescNullsLast}]) {\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n    edges {\n      cursor\n      node {\n        nodeId\n        ...MetricCard_metrics\n        __typename\n      }\n    }\n  }\n}\n"
+    "text": "query Metrics_Query(\n  $cursor: Cursor\n  $count: Int\n) {\n  ...MetricsFragment_query_1G22uz\n}\n\nfragment LineChart_metrics on Metrics {\n  metricsDataPointsCollection {\n    edges {\n      node {\n        nodeId\n        time\n        value\n      }\n    }\n  }\n  commentsCollection {\n    edges {\n      node {\n        id\n        timestamp\n        replyTo\n        nodeId\n      }\n    }\n  }\n}\n\nfragment MetricCard_metrics on Metrics {\n  id\n  name\n  createdAt\n  dataPoints: metricsDataPointsCollection {\n    totalCount\n  }\n  ...LineChart_metrics\n}\n\nfragment MetricsFragment_query_1G22uz on Query {\n  metricsCollection(after: $cursor, first: $count, orderBy: [{createdAt: DescNullsLast}]) {\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n    edges {\n      cursor\n      node {\n        nodeId\n        ...MetricCard_metrics\n        __typename\n      }\n    }\n  }\n}\n"
   }
 };
 })();

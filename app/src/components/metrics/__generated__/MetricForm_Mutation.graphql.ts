@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<85233f42955f8a09d6e1858c1c8f6949>>
+ * @generated SignedSource<<3bbe50618a29804020f2c54508a54951>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -264,6 +264,13 @@ return {
                             "name": "timestamp",
                             "storageKey": null
                           },
+                          {
+                            "alias": null,
+                            "args": null,
+                            "kind": "ScalarField",
+                            "name": "replyTo",
+                            "storageKey": null
+                          },
                           (v5/*: any*/)
                         ],
                         "storageKey": null
@@ -304,12 +311,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "ae18cca2c5f9dc7122aec987ded3d6bd",
+    "cacheID": "e4c65fe135bf2db093b6f8d9339d12c9",
     "id": null,
     "metadata": {},
     "name": "MetricForm_Mutation",
     "operationKind": "mutation",
-    "text": "mutation MetricForm_Mutation(\n  $input: MetricsInsertInput!\n) {\n  insertIntoMetricsCollection(objects: [$input]) {\n    affectedCount\n    records {\n      id\n      nodeId\n      ...MetricCard_metrics\n    }\n  }\n}\n\nfragment LineChart_metrics on Metrics {\n  metricsDataPointsCollection {\n    edges {\n      node {\n        nodeId\n        time\n        value\n      }\n    }\n  }\n  commentsCollection {\n    edges {\n      node {\n        id\n        timestamp\n        nodeId\n      }\n    }\n  }\n}\n\nfragment MetricCard_metrics on Metrics {\n  id\n  name\n  createdAt\n  dataPoints: metricsDataPointsCollection {\n    totalCount\n  }\n  ...LineChart_metrics\n}\n"
+    "text": "mutation MetricForm_Mutation(\n  $input: MetricsInsertInput!\n) {\n  insertIntoMetricsCollection(objects: [$input]) {\n    affectedCount\n    records {\n      id\n      nodeId\n      ...MetricCard_metrics\n    }\n  }\n}\n\nfragment LineChart_metrics on Metrics {\n  metricsDataPointsCollection {\n    edges {\n      node {\n        nodeId\n        time\n        value\n      }\n    }\n  }\n  commentsCollection {\n    edges {\n      node {\n        id\n        timestamp\n        replyTo\n        nodeId\n      }\n    }\n  }\n}\n\nfragment MetricCard_metrics on Metrics {\n  id\n  name\n  createdAt\n  dataPoints: metricsDataPointsCollection {\n    totalCount\n  }\n  ...LineChart_metrics\n}\n"
   }
 };
 })();

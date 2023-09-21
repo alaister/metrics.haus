@@ -45,6 +45,8 @@ const Comments = ({ commentsKey, openThread }: CommentsProps) => {
         new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
     )
 
+  console.log(openedAndSortedComments)
+
   return (
     <div>
       <ul className="space-y-2 divide-y divide-gray-100">
@@ -53,7 +55,7 @@ const Comments = ({ commentsKey, openThread }: CommentsProps) => {
             className="px-2 py-4 shadow rounded border border-gray-100"
             key={c.id}
           >
-            {c.timestamp} {c.message}
+            {c.message}
           </li>
         ))}
       </ul>

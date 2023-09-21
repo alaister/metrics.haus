@@ -38,6 +38,7 @@ const LineChartMetricsFragment = graphql`
         node {
           id
           timestamp
+          replyTo
         }
       }
     }
@@ -64,7 +65,9 @@ export function LineChart({
   const points =
     data.metricsDataPointsCollection?.edges.map((e) => e.node) ?? []
 
-  const comments = data.commentsCollection?.edges.map((e) => e.node) ?? []
+  const commentThreads = (
+    data.commentsCollection?.edges.map((e) => e.node) ?? []
+  ).filter((c) => !c.replyTo) // replies are not thread starts
 
   const isEmpty = points.length == 0
 
@@ -176,7 +179,7 @@ export function LineChart({
                 domain={['dataMin', 'dataMax']}
               />
             )}
-            {comments.map((t) => (
+            {commentThreads.map((t) => (
               <ReferenceDot
                 className="cursor-pointer"
                 key={t.id}
