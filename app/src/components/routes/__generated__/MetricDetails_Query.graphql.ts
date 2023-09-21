@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<afccc54c92ecfe8c07fde16fdf394898>>
+ * @generated SignedSource<<668525aae5da4d4a1787b68cd88e74f8>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -272,12 +272,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "50750953117dc17e55ca0f2b5c2d95e1",
+    "cacheID": "0158551bc10cfb9523face4a26be29d0",
     "id": null,
     "metadata": {},
     "name": "MetricDetails_Query",
     "operationKind": "query",
-    "text": "query MetricDetails_Query(\n  $nodeId: ID!\n) {\n  node(nodeId: $nodeId) {\n    __typename\n    nodeId\n    ... on Metrics {\n      id\n      name\n      ...MetricDetailsSection_metrics\n    }\n  }\n}\n\nfragment Comments_metrics on Metrics {\n  id\n  dataPoints: metricsDataPointsCollection {\n    totalCount\n  }\n  commentsCollection {\n    edges {\n      node {\n        id\n        profileId\n        message\n        replyTo\n        timestamp\n        createdAt\n        nodeId\n      }\n    }\n  }\n  ...LineChart_metrics\n}\n\nfragment LineChart_metrics on Metrics {\n  metricsDataPointsCollection {\n    edges {\n      node {\n        nodeId\n        time\n        value\n      }\n    }\n  }\n  commentsCollection {\n    edges {\n      node {\n        id\n        timestamp\n        nodeId\n      }\n    }\n  }\n}\n\nfragment MetricDetailsSection_metrics on Metrics {\n  id\n  dataPoints: metricsDataPointsCollection {\n    totalCount\n  }\n  commentsCollection {\n    edges {\n      node {\n        profileId\n        message\n        replyTo\n        nodeId\n      }\n    }\n  }\n  ...LineChart_metrics\n  ...Comments_metrics\n}\n"
+    "text": "query MetricDetails_Query(\n  $nodeId: ID!\n) {\n  node(nodeId: $nodeId) {\n    __typename\n    nodeId\n    ... on Metrics {\n      id\n      name\n      ...MetricDetailsSection_metrics\n    }\n  }\n}\n\nfragment Comments_metrics on Metrics {\n  id\n  dataPoints: metricsDataPointsCollection {\n    totalCount\n  }\n  commentsCollection {\n    edges {\n      node {\n        id\n        profileId\n        message\n        replyTo\n        timestamp\n        createdAt\n        nodeId\n      }\n    }\n  }\n}\n\nfragment LineChart_metrics on Metrics {\n  metricsDataPointsCollection {\n    edges {\n      node {\n        nodeId\n        time\n        value\n      }\n    }\n  }\n  commentsCollection {\n    edges {\n      node {\n        id\n        timestamp\n        nodeId\n      }\n    }\n  }\n}\n\nfragment MetricDetailsSection_metrics on Metrics {\n  id\n  dataPoints: metricsDataPointsCollection {\n    totalCount\n  }\n  commentsCollection {\n    edges {\n      node {\n        profileId\n        message\n        replyTo\n        nodeId\n      }\n    }\n  }\n  ...LineChart_metrics\n  ...Comments_metrics\n}\n"
   }
 };
 })();

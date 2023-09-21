@@ -20,7 +20,6 @@ const CommentsFragment = graphql`
         }
       }
     }
-    ...LineChart_metrics
   }
 `
 

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<e9da0b86adc109cf6d86883c7cbf93b3>>
+ * @generated SignedSource<<8422c08a2f4c63c6ee14b4f8abf97344>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -27,7 +27,6 @@ export type Comments_metrics$data = {
     readonly totalCount: number;
   } | null;
   readonly id: string;
-  readonly " $fragmentSpreads": FragmentRefs<"LineChart_metrics">;
   readonly " $fragmentType": "Comments_metrics";
 };
 export type Comments_metrics$key = {
@@ -136,11 +135,6 @@ return {
         }
       ],
       "storageKey": null
-    },
-    {
-      "args": null,
-      "kind": "FragmentSpread",
-      "name": "LineChart_metrics"
     }
   ],
   "type": "Metrics",
@@ -148,6 +142,6 @@ return {
 };
 })();
 
-(node as any).hash = "fe4a6d67f8b2c65a5cf201eb5675fd77";
+(node as any).hash = "9582b67b3693b142435aa38e51f959a9";
 
 export default node;
