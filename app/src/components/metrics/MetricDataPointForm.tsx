@@ -18,6 +18,7 @@ import { useToast } from '~/lib/hooks/use-toast'
 import { MetricDataPointForm_Mutation } from './__generated__/MetricDataPointForm_Mutation.graphql'
 import { DateTimePicker } from '../ui/DateTimePicker'
 import { useState } from 'react'
+import { emitUserEvent } from '~/lib/userEvents'
 
 const MetricDataPointInsertMutation = graphql`
   mutation MetricDataPointForm_Mutation($input: MetricsDataPointsInsertInput!) {
@@ -82,6 +83,8 @@ const MetricForm = ({ onSuccess, metricId }: MetricFormProps) => {
 
         setIsExploding(true)
         onSuccess?.()
+
+        emitUserEvent('add_data_point')
       },
     })
   }

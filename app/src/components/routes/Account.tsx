@@ -4,6 +4,7 @@ import { getAvatarUrl } from '~/lib/avatars'
 import supabase from '~/lib/supabase'
 import { useAppSelector } from '~/stores'
 import { Button } from '../ui/Button'
+import { emitUserEvent } from '~/lib/userEvents'
 
 const AccountPage = () => {
   const user = useAppSelector((state) => state.auth.user)
@@ -27,6 +28,7 @@ const AccountPage = () => {
     if (file) {
       setUploadedFile(file)
       reader.readAsDataURL(file)
+      emitUserEvent('change_avatar')
     }
   }
 

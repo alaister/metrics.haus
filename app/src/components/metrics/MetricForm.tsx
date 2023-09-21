@@ -25,6 +25,7 @@ import { useToast } from '~/lib/hooks/use-toast'
 import { useAppSelector } from '~/stores'
 import { MetricForm_Mutation } from './__generated__/MetricForm_Mutation.graphql'
 import { MetricForm_Owners_Mutation } from './__generated__/MetricForm_Owners_Mutation.graphql'
+import { emitUserEvent } from '~/lib/userEvents'
 
 const MetricInsertMutation = graphql`
   mutation MetricForm_Mutation(
@@ -106,6 +107,7 @@ const MetricForm = ({ onSuccess }: MetricFormProps) => {
           toast({ title: 'Metric created successfully' })
           form.reset({ name: '', interval: 'week', members: [] })
           onSuccess?.()
+          emitUserEvent('add_metric', values.name)
         }
 
         if (values.members && values.members.length > 0) {

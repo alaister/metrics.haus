@@ -1,7 +1,8 @@
-create type profile_event as enum('view_page', 'add_data_point');
+create type profile_event as enum('view_page', 'add_metric', 'add_data_point', 'update_avatar');
 
 create table
   public.user_events (
+    id uuid primary key default gen_random_uuid(),
     user_id uuid not null default auth.uid(),
     ts timestamp with time zone not null default now(),
     event text not null,

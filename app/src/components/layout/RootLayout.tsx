@@ -3,6 +3,7 @@ import { Outlet, useNavigate, useLocation } from 'react-router-dom'
 import Footer from '~/components/layout/Footer'
 import Header from '~/components/layout/Header'
 import supabase from '~/lib/supabase'
+import { emitUserEvent } from '~/lib/userEvents'
 
 const RootLayout = () => {
   const navigate = useNavigate()
@@ -23,18 +24,7 @@ const RootLayout = () => {
   }, [navigate])
 
   useEffect(() => {
-    supabase
-      .from('user_events')
-      .insert({
-        event: 'page_view',
-        value: location.pathname,
-      })
-      .then((resp) => {
-        const { error } = resp
-        if (error) {
-          console.error(error)
-        }
-      })
+    emitUserEvent('pageview', location.pathname)
   }, [location])
 
   return (
