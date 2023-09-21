@@ -28,7 +28,7 @@ const AccountPage = () => {
     if (file) {
       setUploadedFile(file)
       reader.readAsDataURL(file)
-      emitUserEvent('change_avatar')
+      emitUserEvent('update_avatar')
     }
   }
 

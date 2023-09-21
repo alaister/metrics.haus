@@ -1,11 +1,11 @@
-create type profile_event as enum('view_page', 'add_metric', 'add_data_point', 'update_avatar');
+create type user_event as enum('view_page', 'add_metric', 'add_data_point', 'update_avatar');
 
 create table
   public.user_events (
     id uuid primary key default gen_random_uuid(),
     user_id uuid not null default auth.uid(),
     ts timestamp with time zone not null default now(),
-    event text not null,
+    event user_event not null,
     value text null,
     meta jsonb,
     constraint profile_events_profile_id_fkey foreign key (user_id) references profiles (id) on update cascade on delete cascade
@@ -22,11 +22,20 @@ with check (
   auth.uid() = user_id
 );
 
+create policy "allow users to select of their own user_events"
+on public.user_events
+for select 
+using (
+  auth.uid() = user_id
+);
+
 revoke select, update, insert, delete on public.user_events from
   public,
   anon,
   authenticated;
 
 grant
-insert (event, value, meta) on public.user_events to public,
-authenticated;
+insert (event, value, meta) on public.user_events to authenticated;
+
+grant
+select on public.user_events to authenticated;

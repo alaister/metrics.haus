@@ -8,13 +8,12 @@ import { Notifications } from '../notifications'
 import TeamSelector from '../teams/TeamSelector'
 
 const Header = () => {
-  const [userStats, setUserStats] = useState<{
-    num_data_points_created?: number
-  }>({})
+  const [userPoints, setUserPoints] = useState(0)
   useEffect(() => {
+    // pretend this is graphql
     supabase
-      .rpc('get_user_stats')
-      .single()
+      .from('user_stats')
+      .select('*')
       .then((resp) => {
         const { data, error } = resp
         if (error) {
@@ -25,7 +24,24 @@ const Header = () => {
           })
           return
         }
-        setUserStats(data)
+
+        // thanks chatgpt
+        const stats: { [key: string]: number } = {}
+        for (const item of data) {
+          if (item.event && typeof item.count === 'number') {
+            stats[item.event] = item.count
+          }
+        }
+
+        console.log(stats)
+
+        // propriatary open source formula
+        const points =
+          (stats.num_add_data_point ?? 0) +
+          (stats.num_add_metric ?? 0) * 10 +
+          (stats.num_update_avatar ? 50 : 0)
+
+        setUserPoints(points)
       })
   }, [])
 
@@ -45,7 +61,7 @@ const Header = () => {
           <Notifications />
           <UserAvatar />
           <div className="flex items-center justify-center">
-            <span>{userStats.num_data_points_created ?? '0'} Points</span>
+            <span>{userPoints ?? '0'} Points</span>
           </div>
         </div>
       </div>
