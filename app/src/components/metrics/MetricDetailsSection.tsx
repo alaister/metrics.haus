@@ -49,12 +49,12 @@ const MetricDetailsSection = ({ metric }: MetricDetailsProps) => {
         />
       </div>
       <div className="mt-8 pr-8 pl-12">
-        {pendingCommentDate && (
+        {pendingCommentDate && !openedThread && (
           <div>
             <CommentsForm
               date={pendingCommentDate}
               metricId={data.id}
-              onSuccess={() => alert('success')}
+              onSuccess={() => setPendingCommentDate(null)}
             />
           </div>
         )}

@@ -1,6 +1,7 @@
 import { useFragment } from 'react-relay'
 import { graphql } from 'relay-runtime'
 import { Comments_metrics$key } from './__generated__/Comments_metrics.graphql'
+import CommentsForm from './CommentsForm'
 
 const CommentsFragment = graphql`
   fragment Comments_metrics on Metrics {
@@ -33,6 +34,10 @@ const Comments = ({ commentsKey, openThread }: CommentsProps) => {
 
   const comments = data.commentsCollection?.edges.map((c) => c.node) ?? []
 
+  const firstCommentOfThread = comments.find((c) => c.id == openThread)
+
+  if (!firstCommentOfThread) return null
+
   const openedAndSortedComments = comments
     .filter((c) => c.id == openThread || c.replyTo == openThread)
     .sort(
@@ -41,16 +46,23 @@ const Comments = ({ commentsKey, openThread }: CommentsProps) => {
     )
 
   return (
-    <ul className="space-y-2 divide-y divide-gray-100">
-      {openedAndSortedComments.map((c) => (
-        <li
-          className="px-2 py-4 shadow rounded border border-gray-100"
-          key={c.id}
-        >
-          {c.timestamp} {c.message}
-        </li>
-      ))}
-    </ul>
+    <div>
+      <ul className="space-y-2 divide-y divide-gray-100">
+        {openedAndSortedComments.map((c) => (
+          <li
+            className="px-2 py-4 shadow rounded border border-gray-100"
+            key={c.id}
+          >
+            {c.timestamp} {c.message}
+          </li>
+        ))}
+      </ul>
+      <CommentsForm
+        replyTo={openThread}
+        metricId={data.id}
+        date={new Date(firstCommentOfThread.timestamp)}
+      />
+    </div>
   )
 }
 export default Comments

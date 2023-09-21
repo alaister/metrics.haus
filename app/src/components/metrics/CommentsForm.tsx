@@ -16,7 +16,6 @@ import {
   FormLabel,
   FormMessage,
 } from '../ui/Form'
-import { Plus } from 'lucide-react'
 
 const CommentsInsertMutation = graphql`
   mutation CommentsFormInsert_Mutation(
@@ -43,11 +42,17 @@ const commentSchema = z.object({
 
 type CommentsFormProps = {
   date: Date
-  onSuccess: () => void
+  onSuccess?: () => void
   metricId: string
+  replyTo?: string
 }
 
-const CommentsForm = ({ date, onSuccess, metricId }: CommentsFormProps) => {
+const CommentsForm = ({
+  date,
+  onSuccess,
+  metricId,
+  replyTo,
+}: CommentsFormProps) => {
   const selectedTeamId = useAppSelector((state) => state.team.selectedTeamId)
 
   const { toast } = useToast()
@@ -83,6 +88,7 @@ const CommentsForm = ({ date, onSuccess, metricId }: CommentsFormProps) => {
           metricId,
           teamId: selectedTeamId,
           timestamp: date.toISOString(),
+          replyTo,
         },
         connections: [connectionID],
       },
