@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<1a815c3a895a169273b9ddc0b451bc0f>>
+ * @generated SignedSource<<7625fddfa7c7af0cdc4b2e720ed48b5e>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,6 +11,14 @@
 import { Fragment, ReaderFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type LineChart_metrics$data = {
+  readonly commentsCollection: {
+    readonly edges: ReadonlyArray<{
+      readonly node: {
+        readonly id: string;
+        readonly timestamp: string;
+      };
+    }>;
+  } | null;
   readonly metricsDataPointsCollection: {
     readonly edges: ReadonlyArray<{
       readonly node: {
@@ -86,12 +94,59 @@ const node: ReaderFragment = {
         }
       ],
       "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "concreteType": "CommentsConnection",
+      "kind": "LinkedField",
+      "name": "commentsCollection",
+      "plural": false,
+      "selections": [
+        {
+          "alias": null,
+          "args": null,
+          "concreteType": "CommentsEdge",
+          "kind": "LinkedField",
+          "name": "edges",
+          "plural": true,
+          "selections": [
+            {
+              "alias": null,
+              "args": null,
+              "concreteType": "Comments",
+              "kind": "LinkedField",
+              "name": "node",
+              "plural": false,
+              "selections": [
+                {
+                  "alias": null,
+                  "args": null,
+                  "kind": "ScalarField",
+                  "name": "id",
+                  "storageKey": null
+                },
+                {
+                  "alias": null,
+                  "args": null,
+                  "kind": "ScalarField",
+                  "name": "timestamp",
+                  "storageKey": null
+                }
+              ],
+              "storageKey": null
+            }
+          ],
+          "storageKey": null
+        }
+      ],
+      "storageKey": null
     }
   ],
   "type": "Metrics",
   "abstractKey": null
 };
 
-(node as any).hash = "2f0eb60802aa1c70ac1407985451fb01";
+(node as any).hash = "65da5b28dca0418c064a02100f99511b";
 
 export default node;

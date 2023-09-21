@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<5086238476b390e4022b5d18369f525c>>
+ * @generated SignedSource<<e9da0b86adc109cf6d86883c7cbf93b3>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -14,6 +14,8 @@ export type Comments_metrics$data = {
   readonly commentsCollection: {
     readonly edges: ReadonlyArray<{
       readonly node: {
+        readonly createdAt: string;
+        readonly id: string;
         readonly message: string;
         readonly profileId: string;
         readonly replyTo: string | null;
@@ -33,19 +35,21 @@ export type Comments_metrics$key = {
   readonly " $fragmentSpreads": FragmentRefs<"Comments_metrics">;
 };
 
-const node: ReaderFragment = {
+const node: ReaderFragment = (function(){
+var v0 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "id",
+  "storageKey": null
+};
+return {
   "argumentDefinitions": [],
   "kind": "Fragment",
   "metadata": null,
   "name": "Comments_metrics",
   "selections": [
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "id",
-      "storageKey": null
-    },
+    (v0/*: any*/),
     {
       "alias": "dataPoints",
       "args": null,
@@ -88,6 +92,7 @@ const node: ReaderFragment = {
               "name": "node",
               "plural": false,
               "selections": [
+                (v0/*: any*/),
                 {
                   "alias": null,
                   "args": null,
@@ -115,6 +120,13 @@ const node: ReaderFragment = {
                   "kind": "ScalarField",
                   "name": "timestamp",
                   "storageKey": null
+                },
+                {
+                  "alias": null,
+                  "args": null,
+                  "kind": "ScalarField",
+                  "name": "createdAt",
+                  "storageKey": null
                 }
               ],
               "storageKey": null
@@ -134,7 +146,8 @@ const node: ReaderFragment = {
   "type": "Metrics",
   "abstractKey": null
 };
+})();
 
-(node as any).hash = "4e090a3431fc8f0014bb6c3f7e0ba848";
+(node as any).hash = "fe4a6d67f8b2c65a5cf201eb5675fd77";
 
 export default node;

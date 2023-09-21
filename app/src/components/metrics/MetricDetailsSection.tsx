@@ -34,6 +34,7 @@ const MetricDetailsSection = ({ metric }: MetricDetailsProps) => {
   const [pendingCommentDate, setPendingCommentDate] = useState<null | Date>(
     null,
   )
+  const [openedThread, setOpenedThread] = useState('')
 
   const data = useFragment(MetricDetailsSectionFragment, metric)
 
@@ -44,6 +45,7 @@ const MetricDetailsSection = ({ metric }: MetricDetailsProps) => {
           dataPoints={data}
           handleCommentAddition={setPendingCommentDate}
           containerClassName="h-full"
+          handleCommentClick={setOpenedThread}
         />
       </div>
       <div className="mt-8 pr-8 pl-12">
@@ -56,7 +58,7 @@ const MetricDetailsSection = ({ metric }: MetricDetailsProps) => {
             />
           </div>
         )}
-        <Comments comments={data} />
+        <Comments openThread={openedThread} commentsKey={data} />
       </div>
     </>
   )

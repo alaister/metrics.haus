@@ -33,6 +33,14 @@ const LineChartMetricsFragment = graphql`
         }
       }
     }
+    commentsCollection {
+      edges {
+        node {
+          id
+          timestamp
+        }
+      }
+    }
   }
 `
 
@@ -40,26 +48,27 @@ export interface LineChartProps {
   dataPoints: LineChart_metrics$key
   preview?: boolean
   containerClassName?: string
-  comments?: any[]
   handleCommentAddition?: (timestamp: Date) => void
+  handleCommentClick?: (id: string) => void
 }
 
 export function LineChart({
   dataPoints,
   preview = false,
   containerClassName,
-  comments = [],
   handleCommentAddition = () => {},
+  handleCommentClick = () => {},
 }: LineChartProps) {
-  const data =
-    useFragment(
-      LineChartMetricsFragment,
-      dataPoints,
-    ).metricsDataPointsCollection?.edges.map((e) => e.node) ?? []
+  const data = useFragment(LineChartMetricsFragment, dataPoints)
 
-  const isEmpty = data.length == 0
+  const points =
+    data.metricsDataPointsCollection?.edges.map((e) => e.node) ?? []
 
-  const dataForChart = isEmpty ? getRandomData() : data
+  const comments = data.commentsCollection?.edges.map((e) => e.node) ?? []
+
+  const isEmpty = points.length == 0
+
+  const dataForChart = isEmpty ? getRandomData() : points
 
   const ticks = createTickDates(
     dataForChart.map((m) => new Date(m.time)),
@@ -175,8 +184,8 @@ export function LineChart({
                 stroke=""
                 fill="#333"
                 y={0.6}
-                x={t.timestamp.getTime()}
-                onClick={() => alert(t.comment + ' TODO')}
+                x={new Date(t.timestamp).getTime()}
+                onClick={() => handleCommentClick(t.id)}
               />
             ))}
             <Line dataKey="value" opacity={0} />
@@ -207,13 +216,6 @@ function CustomTooltip(props: Partial<TooltipProps>) {
       Add Comment
     </Button>
   )
-}
-
-type Thread = {
-  comment: string
-  user: string
-  timestamp: Date
-  id: string
 }
 
 function getRandomData() {

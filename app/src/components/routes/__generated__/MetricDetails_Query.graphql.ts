@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<2ac84ca49c5bef9736d1c59d48c65e32>>
+ * @generated SignedSource<<afccc54c92ecfe8c07fde16fdf394898>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -190,11 +190,19 @@ return {
                             "storageKey": null
                           },
                           (v2/*: any*/),
+                          (v3/*: any*/),
                           {
                             "alias": null,
                             "args": null,
                             "kind": "ScalarField",
                             "name": "timestamp",
+                            "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
+                            "kind": "ScalarField",
+                            "name": "createdAt",
                             "storageKey": null
                           }
                         ],
@@ -264,12 +272,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "b617bb5c889acac02060a28047234ee4",
+    "cacheID": "50750953117dc17e55ca0f2b5c2d95e1",
     "id": null,
     "metadata": {},
     "name": "MetricDetails_Query",
     "operationKind": "query",
-    "text": "query MetricDetails_Query(\n  $nodeId: ID!\n) {\n  node(nodeId: $nodeId) {\n    __typename\n    nodeId\n    ... on Metrics {\n      id\n      name\n      ...MetricDetailsSection_metrics\n    }\n  }\n}\n\nfragment Comments_metrics on Metrics {\n  id\n  dataPoints: metricsDataPointsCollection {\n    totalCount\n  }\n  commentsCollection {\n    edges {\n      node {\n        profileId\n        message\n        replyTo\n        timestamp\n        nodeId\n      }\n    }\n  }\n  ...LineChart_metrics\n}\n\nfragment LineChart_metrics on Metrics {\n  metricsDataPointsCollection {\n    edges {\n      node {\n        nodeId\n        time\n        value\n      }\n    }\n  }\n}\n\nfragment MetricDetailsSection_metrics on Metrics {\n  id\n  dataPoints: metricsDataPointsCollection {\n    totalCount\n  }\n  commentsCollection {\n    edges {\n      node {\n        profileId\n        message\n        replyTo\n        nodeId\n      }\n    }\n  }\n  ...LineChart_metrics\n  ...Comments_metrics\n}\n"
+    "text": "query MetricDetails_Query(\n  $nodeId: ID!\n) {\n  node(nodeId: $nodeId) {\n    __typename\n    nodeId\n    ... on Metrics {\n      id\n      name\n      ...MetricDetailsSection_metrics\n    }\n  }\n}\n\nfragment Comments_metrics on Metrics {\n  id\n  dataPoints: metricsDataPointsCollection {\n    totalCount\n  }\n  commentsCollection {\n    edges {\n      node {\n        id\n        profileId\n        message\n        replyTo\n        timestamp\n        createdAt\n        nodeId\n      }\n    }\n  }\n  ...LineChart_metrics\n}\n\nfragment LineChart_metrics on Metrics {\n  metricsDataPointsCollection {\n    edges {\n      node {\n        nodeId\n        time\n        value\n      }\n    }\n  }\n  commentsCollection {\n    edges {\n      node {\n        id\n        timestamp\n        nodeId\n      }\n    }\n  }\n}\n\nfragment MetricDetailsSection_metrics on Metrics {\n  id\n  dataPoints: metricsDataPointsCollection {\n    totalCount\n  }\n  commentsCollection {\n    edges {\n      node {\n        profileId\n        message\n        replyTo\n        nodeId\n      }\n    }\n  }\n  ...LineChart_metrics\n  ...Comments_metrics\n}\n"
   }
 };
 })();
