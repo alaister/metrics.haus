@@ -1,17 +1,28 @@
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 import { useFragment } from 'react-relay'
 import { LineChart } from './LineChart'
 import { graphql } from 'relay-runtime'
 import { MetricDetailsSection_metrics$key } from './__generated__/MetricDetailsSection_metrics.graphql'
-import { useAppSelector } from '~/stores'
-import { Input } from '../ui/Input'
+import CommentsForm from './CommentsForm'
+import Comments from './Comments'
 
 const MetricDetailsSectionFragment = graphql`
   fragment MetricDetailsSection_metrics on Metrics {
+    id
     dataPoints: metricsDataPointsCollection {
       totalCount
     }
+    commentsCollection {
+      edges {
+        node {
+          profileId
+          message
+          replyTo
+        }
+      }
+    }
     ...LineChart_metrics
+    ...Comments_metrics
   }
 `
 
@@ -23,19 +34,8 @@ const MetricDetailsSection = ({ metric }: MetricDetailsProps) => {
   const [pendingCommentDate, setPendingCommentDate] = useState<null | Date>(
     null,
   )
-  const [comment, setComment] = useState('')
-
-  const selectedTeamId = useAppSelector((state) => state.team.selectedTeamId)
 
   const data = useFragment(MetricDetailsSectionFragment, metric)
-
-  const inputRef = useRef<HTMLInputElement | null>(null)
-  if (pendingCommentDate) {
-    setTimeout(() => {
-      inputRef.current?.focus()
-      inputRef.current?.scrollIntoView()
-    }, 1)
-  }
 
   return (
     <>
@@ -49,13 +49,14 @@ const MetricDetailsSection = ({ metric }: MetricDetailsProps) => {
       <div className="mt-8 pr-8 pl-12">
         {pendingCommentDate && (
           <div>
-            <Input
-              ref={inputRef}
-              value={comment}
-              onChange={(e) => setComment(e.target.value)}
+            <CommentsForm
+              date={pendingCommentDate}
+              metricId={data.id}
+              onSuccess={() => alert('success')}
             />
           </div>
         )}
+        <Comments comments={data} />
       </div>
     </>
   )

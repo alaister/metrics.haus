@@ -7,7 +7,8 @@ create table
         "metric_id" uuid not null references public.metrics ("id") on delete cascade,
         "reply_to" uuid references public.comments ("id") on delete cascade,
         "team_id" uuid not null references public.teams ("id") on delete cascade,
-        "profile_id" uuid not null references public.profiles ("id")
+        "profile_id" uuid not null references public.profiles ("id") default auth.uid(),
+        "timestamp" timestamp with time zone not null
     );
 
 revoke
@@ -18,8 +19,11 @@ from
     anon,
     authenticated;
 
-grant insert (message, reply_to, metric_id),
+grant insert (message, reply_to, metric_id, team_id, timestamp),
 delete on public.comments to public,
+authenticated;
+
+grant update (message, timestamp) on public.comments to public,
 authenticated;
 
 alter table public.comments enable row level security;

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<61f7f98a927e21ac340bb2d1e4b0a2e8>>
+ * @generated SignedSource<<5086238476b390e4022b5d18369f525c>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,13 +10,14 @@
 
 import { Fragment, ReaderFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
-export type MetricDetailsSection_metrics$data = {
+export type Comments_metrics$data = {
   readonly commentsCollection: {
     readonly edges: ReadonlyArray<{
       readonly node: {
         readonly message: string;
         readonly profileId: string;
         readonly replyTo: string | null;
+        readonly timestamp: string;
       };
     }>;
   } | null;
@@ -24,19 +25,19 @@ export type MetricDetailsSection_metrics$data = {
     readonly totalCount: number;
   } | null;
   readonly id: string;
-  readonly " $fragmentSpreads": FragmentRefs<"Comments_metrics" | "LineChart_metrics">;
-  readonly " $fragmentType": "MetricDetailsSection_metrics";
+  readonly " $fragmentSpreads": FragmentRefs<"LineChart_metrics">;
+  readonly " $fragmentType": "Comments_metrics";
 };
-export type MetricDetailsSection_metrics$key = {
-  readonly " $data"?: MetricDetailsSection_metrics$data;
-  readonly " $fragmentSpreads": FragmentRefs<"MetricDetailsSection_metrics">;
+export type Comments_metrics$key = {
+  readonly " $data"?: Comments_metrics$data;
+  readonly " $fragmentSpreads": FragmentRefs<"Comments_metrics">;
 };
 
 const node: ReaderFragment = {
   "argumentDefinitions": [],
   "kind": "Fragment",
   "metadata": null,
-  "name": "MetricDetailsSection_metrics",
+  "name": "Comments_metrics",
   "selections": [
     {
       "alias": null,
@@ -107,6 +108,13 @@ const node: ReaderFragment = {
                   "kind": "ScalarField",
                   "name": "replyTo",
                   "storageKey": null
+                },
+                {
+                  "alias": null,
+                  "args": null,
+                  "kind": "ScalarField",
+                  "name": "timestamp",
+                  "storageKey": null
                 }
               ],
               "storageKey": null
@@ -121,17 +129,12 @@ const node: ReaderFragment = {
       "args": null,
       "kind": "FragmentSpread",
       "name": "LineChart_metrics"
-    },
-    {
-      "args": null,
-      "kind": "FragmentSpread",
-      "name": "Comments_metrics"
     }
   ],
   "type": "Metrics",
   "abstractKey": null
 };
 
-(node as any).hash = "5331ef436d7265d6b8f258116b7b87d0";
+(node as any).hash = "4e090a3431fc8f0014bb6c3f7e0ba848";
 
 export default node;

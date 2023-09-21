@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<2db9f7a1c9511d3c1ac94ccbcfc607f7>>
+ * @generated SignedSource<<2ac84ca49c5bef9736d1c59d48c65e32>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -147,6 +147,68 @@ return {
               {
                 "alias": null,
                 "args": null,
+                "concreteType": "CommentsConnection",
+                "kind": "LinkedField",
+                "name": "commentsCollection",
+                "plural": false,
+                "selections": [
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "CommentsEdge",
+                    "kind": "LinkedField",
+                    "name": "edges",
+                    "plural": true,
+                    "selections": [
+                      {
+                        "alias": null,
+                        "args": null,
+                        "concreteType": "Comments",
+                        "kind": "LinkedField",
+                        "name": "node",
+                        "plural": false,
+                        "selections": [
+                          {
+                            "alias": null,
+                            "args": null,
+                            "kind": "ScalarField",
+                            "name": "profileId",
+                            "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
+                            "kind": "ScalarField",
+                            "name": "message",
+                            "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
+                            "kind": "ScalarField",
+                            "name": "replyTo",
+                            "storageKey": null
+                          },
+                          (v2/*: any*/),
+                          {
+                            "alias": null,
+                            "args": null,
+                            "kind": "ScalarField",
+                            "name": "timestamp",
+                            "storageKey": null
+                          }
+                        ],
+                        "storageKey": null
+                      }
+                    ],
+                    "storageKey": null
+                  }
+                ],
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
                 "concreteType": "MetricsDataPointsConnection",
                 "kind": "LinkedField",
                 "name": "metricsDataPointsCollection",
@@ -202,12 +264,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "323301ec46ca66b85d2d2df9ca0241dc",
+    "cacheID": "b617bb5c889acac02060a28047234ee4",
     "id": null,
     "metadata": {},
     "name": "MetricDetails_Query",
     "operationKind": "query",
-    "text": "query MetricDetails_Query(\n  $nodeId: ID!\n) {\n  node(nodeId: $nodeId) {\n    __typename\n    nodeId\n    ... on Metrics {\n      id\n      name\n      ...MetricDetailsSection_metrics\n    }\n  }\n}\n\nfragment LineChart_metrics on Metrics {\n  metricsDataPointsCollection {\n    edges {\n      node {\n        nodeId\n        time\n        value\n      }\n    }\n  }\n}\n\nfragment MetricDetailsSection_metrics on Metrics {\n  dataPoints: metricsDataPointsCollection {\n    totalCount\n  }\n  ...LineChart_metrics\n}\n"
+    "text": "query MetricDetails_Query(\n  $nodeId: ID!\n) {\n  node(nodeId: $nodeId) {\n    __typename\n    nodeId\n    ... on Metrics {\n      id\n      name\n      ...MetricDetailsSection_metrics\n    }\n  }\n}\n\nfragment Comments_metrics on Metrics {\n  id\n  dataPoints: metricsDataPointsCollection {\n    totalCount\n  }\n  commentsCollection {\n    edges {\n      node {\n        profileId\n        message\n        replyTo\n        timestamp\n        nodeId\n      }\n    }\n  }\n  ...LineChart_metrics\n}\n\nfragment LineChart_metrics on Metrics {\n  metricsDataPointsCollection {\n    edges {\n      node {\n        nodeId\n        time\n        value\n      }\n    }\n  }\n}\n\nfragment MetricDetailsSection_metrics on Metrics {\n  id\n  dataPoints: metricsDataPointsCollection {\n    totalCount\n  }\n  commentsCollection {\n    edges {\n      node {\n        profileId\n        message\n        replyTo\n        nodeId\n      }\n    }\n  }\n  ...LineChart_metrics\n  ...Comments_metrics\n}\n"
   }
 };
 })();

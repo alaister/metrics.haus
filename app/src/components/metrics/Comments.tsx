@@ -1,40 +1,38 @@
-import { graphql, useMutation, ConnectionHandler } from 'relay-runtime'
-import { z } from 'zod'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { CommentsInsertInput } from './__generated__/CommentsInsert_Mutation.graphql'
+import { useFragment } from 'react-relay'
+import { graphql } from 'relay-runtime'
+import { Comments_metrics$key } from './__generated__/Comments_metrics.graphql'
 
-const CommentsInsertMutation = graphql`
-  mutation CommentsInsert_Mutation(
-    $input: CommentsInsertInput!
-    $connections: [ID!]!
-  ) {
-    insertIntoCommentsCollection(objects: [$input]) {
-      affectedCount
-      records
-        @prependNode(connections: $connections, edgeTypeName: "MetricsEdge") {
-        teamId
-        metricId
-        message
-        replyTo
-        profileId
+const CommentsFragment = graphql`
+  fragment Comments_metrics on Metrics {
+    id
+    dataPoints: metricsDataPointsCollection {
+      totalCount
+    }
+    commentsCollection {
+      edges {
+        node {
+          profileId
+          message
+          replyTo
+          timestamp
+        }
       }
     }
+    ...LineChart_metrics
   }
 `
-const commentSchema = z.object({
-  comment: z.string().min(1, "Can't be empty"),
-})
 
-const Comments = () => {
-  const form = useForm<z.infer<typeof commentSchema>>({
-    resolver: zodResolver(commentSchema),
-    defaultValues: {
-      comment: '',
-    },
-  })
-
-  const [mutate] = useMutation<CommentsInsertInput>(CommentsInsertMutation)
+export interface CommentsProps {
+  comments: Comments_metrics$key
 }
 
+const Comments = ({ comments }: CommentsProps) => {
+  const data = useFragment(CommentsFragment, comments)
+
+  return (
+    <ul>
+      {data.commentsCollection?.edges.map((c) => <span>{c.node.message}</span>)}
+    </ul>
+  )
+}
 export default Comments
