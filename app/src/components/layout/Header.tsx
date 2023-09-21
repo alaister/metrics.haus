@@ -33,8 +33,6 @@ const Header = () => {
           }
         }
 
-        console.log(stats)
-
         // propriatary open source formula
         const points =
           (stats.num_add_data_point ?? 0) +
