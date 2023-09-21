@@ -1,31 +1,33 @@
-import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { toast } from '~/lib/hooks/use-toast'
 import supabase from '~/lib/supabase'
+import { UserAvatar } from '../UserAvatar'
+import { CmdKDialog } from '../cmdk/CmdKDialog'
+import { Notifications } from '../notifications'
 import TeamSelector from '../teams/TeamSelector'
-import { Button } from '../ui/Button'
 
 const Header = () => {
-  const [isLoading, setIsLoading] = useState(false)
-  const navigate = useNavigate()
-
-  const signOut = async () => {
-    setIsLoading(true)
-
-    const { error } = await supabase.auth.signOut({ scope: 'local' })
-    if (error) {
-      toast({
-        variant: 'destructive',
-        title: 'Something went wrong',
-        description: error.message,
+  const [userStats, setUserStats] = useState<{
+    num_data_points_created?: number
+  }>({})
+  useEffect(() => {
+    supabase
+      .rpc('get_user_stats')
+      .single()
+      .then((resp) => {
+        const { data, error } = resp
+        if (error) {
+          toast({
+            variant: 'destructive',
+            title: 'Something went wrong',
+            description: error.message,
+          })
+          return
+        }
+        setUserStats(data)
       })
-      setIsLoading(false)
-      return
-    }
-
-    setIsLoading(false)
-    navigate('/sign-in', { replace: true })
-  }
+  }, [])
 
   return (
     <header className="sticky top-0 border-b bg-white z-10">
@@ -34,18 +36,18 @@ const Header = () => {
           <h1 className="font-medium">
             <Link to="/">metrics.haus</Link>
           </h1>
-
           <TeamSelector />
         </div>
 
-        <Button
-          variant="ghost"
-          onClick={signOut}
-          isLoading={isLoading}
-          disabled={isLoading}
-        >
-          Sign Out
-        </Button>
+        <CmdKDialog />
+
+        <div className="flex pr-6 gap-3">
+          <Notifications />
+          <UserAvatar />
+          <div className="flex items-center justify-center">
+            <span>{userStats.num_data_points_created ?? '0'} Points</span>
+          </div>
+        </div>
       </div>
     </header>
   )

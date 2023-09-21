@@ -4,9 +4,12 @@ import AuthLayout from '~/components/layout/AuthLayout'
 import DialogLayout from '~/components/layout/DialogLayout'
 import RootLayout from '~/components/layout/RootLayout'
 import QueryPageShell from '~/components/loading/QueryPageShell'
+import AccountPage from '~/components/routes/Account'
 import ErrorPage from '~/components/routes/ErrorPage'
+import MetricDetails from '~/components/routes/MetricDetails'
 import Metrics from '~/components/routes/Metrics'
 import MetricsLayout from '~/components/routes/Metrics.layout'
+import NewMetricDataPoint from '~/components/routes/NewDataPoint'
 import NewMetric from '~/components/routes/NewMetric'
 import SignIn from '~/components/routes/SignIn'
 import * as MetricDetailsData from '../components/routes/MetricDetails.data'
@@ -15,8 +18,6 @@ import { toGlobalId } from './graphql'
 import { toast } from './hooks/use-toast'
 import environment from './relay'
 import supabase from './supabase'
-import MetricDetails from '~/components/routes/MetricDetails'
-import NewMetricDataPoint from '~/components/routes/NewDataPoint'
 
 const router = createBrowserRouter([
   {
@@ -64,7 +65,6 @@ const router = createBrowserRouter([
           },
         ],
       },
-
       {
         path: 'metrics',
         children: [
@@ -79,38 +79,46 @@ const router = createBrowserRouter([
           },
           {
             path: ':metricId',
-            element: (
-              <QueryPageShell
-                pageComponent={MetricDetails}
-                fallback={MetricDetailsData.fallback}
-                query={MetricDetailsData.query}
-              />
-            ),
-            loader: async ({ params }) => {
-              if (!params.metricId) return null
-
-              const nodeId = toGlobalId(params.metricId, 'metrics')
-
-              return {
-                initialQueryRef: loadQuery(
-                  environment,
-                  MetricDetailsData.query,
-                  { nodeId },
-                ),
-              }
-            },
-          },
-
-          {
-            element: <DialogLayout />,
             children: [
               {
-                path: ':metricId/new-data',
-                element: <NewMetricDataPoint />,
+                index: true,
+                element: (
+                  <QueryPageShell
+                    pageComponent={MetricDetails}
+                    fallback={MetricDetailsData.fallback}
+                    query={MetricDetailsData.query}
+                  />
+                ),
+                loader: async ({ params }) => {
+                  if (!params.metricId) return null
+
+                  const nodeId = toGlobalId(params.metricId, 'metrics')
+
+                  return {
+                    initialQueryRef: loadQuery(
+                      environment,
+                      MetricDetailsData.query,
+                      { nodeId },
+                    ),
+                  }
+                },
+              },
+              {
+                element: <DialogLayout />,
+                children: [
+                  {
+                    path: 'new-data',
+                    element: <NewMetricDataPoint />,
+                  },
+                ],
               },
             ],
           },
         ],
+      },
+      {
+        path: 'account',
+        element: <AccountPage />,
       },
     ],
   },
@@ -132,7 +140,6 @@ const router = createBrowserRouter([
       const {
         data: { session },
       } = await supabase.auth.getSession()
-      console.log('session13:', session)
       if (session) {
         return redirect('/')
       }

@@ -113,7 +113,7 @@ export function LineChart({
               fill="url(#colorPv)"
             />
 
-            {!preview && (
+            {!preview && !isEmpty && (
               <Tooltip
                 content={
                   <CustomTooltip

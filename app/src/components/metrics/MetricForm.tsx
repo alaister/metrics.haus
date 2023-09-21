@@ -3,8 +3,8 @@ import { Save } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { ConnectionHandler, graphql, useMutation } from 'react-relay'
 import { z } from 'zod'
-import { Button } from '~/components/ui/Button'
 import TeamMembersSelector from '~/components/members/TeamMembersSelector'
+import { Button } from '~/components/ui/Button'
 import {
   Form,
   FormControl,
@@ -25,6 +25,7 @@ import { useToast } from '~/lib/hooks/use-toast'
 import { useAppSelector } from '~/stores'
 import { MetricForm_Mutation } from './__generated__/MetricForm_Mutation.graphql'
 import { MetricForm_Owners_Mutation } from './__generated__/MetricForm_Owners_Mutation.graphql'
+import { emitUserEvent } from '~/lib/userEvents'
 
 const MetricInsertMutation = graphql`
   mutation MetricForm_Mutation(
@@ -54,7 +55,7 @@ const MetricOwnersInsertMutation = graphql`
 const formSchema = z.object({
   name: z.string().min(1, "Can't be empty"),
   interval: z.enum(['minute', 'hour', 'day', 'week', 'month']),
-  members: z.string().array(),
+  members: z.optional(z.string().array()),
 })
 
 export interface MetricFormProps {
@@ -102,27 +103,36 @@ const MetricForm = ({ onSuccess }: MetricFormProps) => {
         })
       },
       onCompleted(response) {
-        const metricId = response.insertIntoMetricsCollection!.records[0].id
-        mutateOwners({
-          variables: {
-            input: values.members.map((x) => ({
-              metricId,
-              profileId: x,
-            })),
-          },
-          onError(error) {
-            toast({
-              variant: 'destructive',
-              title: 'Something went wrong',
-              description: error.message,
-            })
-          },
-          onCompleted() {
-            toast({ title: 'Metric created successfully' })
-            form.reset({ name: '', interval: 'week', members: [] })
-            onSuccess?.()
-          },
-        })
+        function onDone() {
+          toast({ title: 'Metric created successfully' })
+          form.reset({ name: '', interval: 'week', members: [] })
+          onSuccess?.()
+          emitUserEvent('add_metric', values.name)
+        }
+
+        if (values.members && values.members.length > 0) {
+          const metricId = response.insertIntoMetricsCollection!.records[0].id
+          mutateOwners({
+            variables: {
+              input: values.members.map((x) => ({
+                metricId,
+                profileId: x,
+              })),
+            },
+            onError(error) {
+              toast({
+                variant: 'destructive',
+                title: 'Something went wrong',
+                description: error.message,
+              })
+            },
+            onCompleted() {
+              onDone()
+            },
+          })
+        } else {
+          onDone()
+        }
       },
     })
   }
@@ -173,21 +183,26 @@ const MetricForm = ({ onSuccess }: MetricFormProps) => {
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="members"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Metric Owners</FormLabel>
-              <FormControl>
-                <TeamMembersSelector
-                  onValueChange={field.onChange}
-                ></TeamMembersSelector>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+
+        {selectedTeamId !== null && (
+          <FormField
+            control={form.control}
+            name="members"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Metric Owners</FormLabel>
+                <FormControl>
+                  <TeamMembersSelector
+                    onValueChange={field.onChange}
+                    selectedTeamId={selectedTeamId}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
+
         <Button
           type="submit"
           className="self-end"
