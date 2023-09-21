@@ -33,7 +33,7 @@ const Header = () => {
           }
         }
 
-        // propriatary open source formula
+        // proprietary open source formula
         const points =
           (stats.num_add_data_point ?? 0) +
           (stats.num_add_metric ?? 0) * 10 +
