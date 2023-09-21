@@ -1,4 +1,6 @@
-"""A high precision floating point value represented as a string"""
+"""
+A high precision floating point value represented as a string
+"""
 scalar BigFloat
 
 """
@@ -15,7 +17,9 @@ input BigFloatFilter {
   neq: BigFloat
 }
 
-"""An arbitrary size integer represented as a string"""
+"""
+An arbitrary size integer represented as a string
+"""
 scalar BigInt
 
 """
@@ -41,7 +45,9 @@ input BooleanFilter {
 }
 
 type Comments implements Node {
-  """Globally Unique Record Identifier"""
+  """
+  Globally Unique Record Identifier
+  """
   nodeId: ID!
   id: UUID!
   createdAt: Datetime!
@@ -57,22 +63,34 @@ type Comments implements Node {
   team: Teams!
   profile: Profiles!
   commentsCollection(
-    """Query the first `n` records in the collection"""
+    """
+    Query the first `n` records in the collection
+    """
     first: Int
 
-    """Query the last `n` records in the collection"""
+    """
+    Query the last `n` records in the collection
+    """
     last: Int
 
-    """Query values in the collection before the provided cursor"""
+    """
+    Query values in the collection before the provided cursor
+    """
     before: Cursor
 
-    """Query values in the collection after the provided cursor"""
+    """
+    Query values in the collection after the provided cursor
+    """
     after: Cursor
 
-    """Filters to apply to the results set when querying from the collection"""
+    """
+    Filters to apply to the results set when querying from the collection
+    """
     filter: CommentsFilter
 
-    """Sort order to apply to the collection"""
+    """
+    Sort order to apply to the collection
+    """
     orderBy: [CommentsOrderBy!]
   ): CommentsConnection
 }
@@ -83,10 +101,14 @@ type CommentsConnection {
 }
 
 type CommentsDeleteResponse {
-  """Count of the records impacted by the mutation"""
+  """
+  Count of the records impacted by the mutation
+  """
   affectedCount: Int!
 
-  """Array of records impacted by the mutation"""
+  """
+  Array of records impacted by the mutation
+  """
   records: [Comments!]!
 }
 
@@ -117,10 +139,14 @@ input CommentsInsertInput {
 }
 
 type CommentsInsertResponse {
-  """Count of the records impacted by the mutation"""
+  """
+  Count of the records impacted by the mutation
+  """
   affectedCount: Int!
 
-  """Array of records impacted by the mutation"""
+  """
+  Array of records impacted by the mutation
+  """
   records: [Comments!]!
 }
 
@@ -142,10 +168,14 @@ input CommentsUpdateInput {
 }
 
 type CommentsUpdateResponse {
-  """Count of the records impacted by the mutation"""
+  """
+  Count of the records impacted by the mutation
+  """
   affectedCount: Int!
 
-  """Array of records impacted by the mutation"""
+  """
+  Array of records impacted by the mutation
+  """
   records: [Comments!]!
 }
 
@@ -154,7 +184,9 @@ An opaque string using for tracking a position in results during pagination
 """
 scalar Cursor
 
-"""A date wihout time information"""
+"""
+A date wihout time information
+"""
 scalar Date
 
 """
@@ -171,7 +203,9 @@ input DateFilter {
   neq: Date
 }
 
-"""A date and time"""
+"""
+A date and time
+"""
 scalar Datetime
 
 """
@@ -228,7 +262,9 @@ input IntFilter {
   neq: Int
 }
 
-"""A Javascript Object Notation value serialized as a string"""
+"""
+A Javascript Object Notation value serialized as a string
+"""
 scalar JSON
 
 enum MetricInterval {
@@ -250,7 +286,9 @@ input MetricIntervalFilter {
 }
 
 type Metrics implements Node {
-  """Globally Unique Record Identifier"""
+  """
+  Globally Unique Record Identifier
+  """
   nodeId: ID!
   id: UUID!
   createdAt: Datetime!
@@ -260,60 +298,96 @@ type Metrics implements Node {
   teamId: UUID!
   team: Teams!
   commentsCollection(
-    """Query the first `n` records in the collection"""
+    """
+    Query the first `n` records in the collection
+    """
     first: Int
 
-    """Query the last `n` records in the collection"""
+    """
+    Query the last `n` records in the collection
+    """
     last: Int
 
-    """Query values in the collection before the provided cursor"""
+    """
+    Query values in the collection before the provided cursor
+    """
     before: Cursor
 
-    """Query values in the collection after the provided cursor"""
+    """
+    Query values in the collection after the provided cursor
+    """
     after: Cursor
 
-    """Filters to apply to the results set when querying from the collection"""
+    """
+    Filters to apply to the results set when querying from the collection
+    """
     filter: CommentsFilter
 
-    """Sort order to apply to the collection"""
+    """
+    Sort order to apply to the collection
+    """
     orderBy: [CommentsOrderBy!]
   ): CommentsConnection
   metricsDataPointsCollection(
-    """Query the first `n` records in the collection"""
+    """
+    Query the first `n` records in the collection
+    """
     first: Int
 
-    """Query the last `n` records in the collection"""
+    """
+    Query the last `n` records in the collection
+    """
     last: Int
 
-    """Query values in the collection before the provided cursor"""
+    """
+    Query values in the collection before the provided cursor
+    """
     before: Cursor
 
-    """Query values in the collection after the provided cursor"""
+    """
+    Query values in the collection after the provided cursor
+    """
     after: Cursor
 
-    """Filters to apply to the results set when querying from the collection"""
+    """
+    Filters to apply to the results set when querying from the collection
+    """
     filter: MetricsDataPointsFilter
 
-    """Sort order to apply to the collection"""
+    """
+    Sort order to apply to the collection
+    """
     orderBy: [MetricsDataPointsOrderBy!]
   ): MetricsDataPointsConnection
   metricsOwnersCollection(
-    """Query the first `n` records in the collection"""
+    """
+    Query the first `n` records in the collection
+    """
     first: Int
 
-    """Query the last `n` records in the collection"""
+    """
+    Query the last `n` records in the collection
+    """
     last: Int
 
-    """Query values in the collection before the provided cursor"""
+    """
+    Query values in the collection before the provided cursor
+    """
     before: Cursor
 
-    """Query values in the collection after the provided cursor"""
+    """
+    Query values in the collection after the provided cursor
+    """
     after: Cursor
 
-    """Filters to apply to the results set when querying from the collection"""
+    """
+    Filters to apply to the results set when querying from the collection
+    """
     filter: MetricsOwnersFilter
 
-    """Sort order to apply to the collection"""
+    """
+    Sort order to apply to the collection
+    """
     orderBy: [MetricsOwnersOrderBy!]
   ): MetricsOwnersConnection
 }
@@ -324,7 +398,9 @@ type MetricsConnection {
 }
 
 type MetricsDataPoints implements Node {
-  """Globally Unique Record Identifier"""
+  """
+  Globally Unique Record Identifier
+  """
   nodeId: ID!
   time: Datetime!
   metricId: UUID!
@@ -338,15 +414,21 @@ type MetricsDataPointsConnection {
   edges: [MetricsDataPointsEdge!]!
   pageInfo: PageInfo!
 
-  """The total number of records matching the `filter` criteria"""
+  """
+  The total number of records matching the `filter` criteria
+  """
   totalCount: Int!
 }
 
 type MetricsDataPointsDeleteResponse {
-  """Count of the records impacted by the mutation"""
+  """
+  Count of the records impacted by the mutation
+  """
   affectedCount: Int!
 
-  """Array of records impacted by the mutation"""
+  """
+  Array of records impacted by the mutation
+  """
   records: [MetricsDataPoints!]!
 }
 
@@ -370,10 +452,14 @@ input MetricsDataPointsInsertInput {
 }
 
 type MetricsDataPointsInsertResponse {
-  """Count of the records impacted by the mutation"""
+  """
+  Count of the records impacted by the mutation
+  """
   affectedCount: Int!
 
-  """Array of records impacted by the mutation"""
+  """
+  Array of records impacted by the mutation
+  """
   records: [MetricsDataPoints!]!
 }
 
@@ -385,10 +471,14 @@ input MetricsDataPointsOrderBy {
 }
 
 type MetricsDeleteResponse {
-  """Count of the records impacted by the mutation"""
+  """
+  Count of the records impacted by the mutation
+  """
   affectedCount: Int!
 
-  """Array of records impacted by the mutation"""
+  """
+  Array of records impacted by the mutation
+  """
   records: [Metrics!]!
 }
 
@@ -414,10 +504,14 @@ input MetricsInsertInput {
 }
 
 type MetricsInsertResponse {
-  """Count of the records impacted by the mutation"""
+  """
+  Count of the records impacted by the mutation
+  """
   affectedCount: Int!
 
-  """Array of records impacted by the mutation"""
+  """
+  Array of records impacted by the mutation
+  """
   records: [Metrics!]!
 }
 
@@ -431,7 +525,9 @@ input MetricsOrderBy {
 }
 
 type MetricsOwners implements Node {
-  """Globally Unique Record Identifier"""
+  """
+  Globally Unique Record Identifier
+  """
   nodeId: ID!
   metricId: UUID!
   profileId: UUID!
@@ -446,10 +542,14 @@ type MetricsOwnersConnection {
 }
 
 type MetricsOwnersDeleteResponse {
-  """Count of the records impacted by the mutation"""
+  """
+  Count of the records impacted by the mutation
+  """
   affectedCount: Int!
 
-  """Array of records impacted by the mutation"""
+  """
+  Array of records impacted by the mutation
+  """
   records: [MetricsOwners!]!
 }
 
@@ -472,10 +572,14 @@ input MetricsOwnersInsertInput {
 }
 
 type MetricsOwnersInsertResponse {
-  """Count of the records impacted by the mutation"""
+  """
+  Count of the records impacted by the mutation
+  """
   affectedCount: Int!
 
-  """Array of records impacted by the mutation"""
+  """
+  Array of records impacted by the mutation
+  """
   records: [MetricsOwners!]!
 }
 
@@ -492,10 +596,14 @@ input MetricsOwnersUpdateInput {
 }
 
 type MetricsOwnersUpdateResponse {
-  """Count of the records impacted by the mutation"""
+  """
+  Count of the records impacted by the mutation
+  """
   affectedCount: Int!
 
-  """Array of records impacted by the mutation"""
+  """
+  Array of records impacted by the mutation
+  """
   records: [MetricsOwners!]!
 }
 
@@ -505,18 +613,28 @@ input MetricsUpdateInput {
 }
 
 type MetricsUpdateResponse {
-  """Count of the records impacted by the mutation"""
+  """
+  Count of the records impacted by the mutation
+  """
   affectedCount: Int!
 
-  """Array of records impacted by the mutation"""
+  """
+  Array of records impacted by the mutation
+  """
   records: [Metrics!]!
 }
 
-"""The root type for creating and mutating data"""
+"""
+The root type for creating and mutating data
+"""
 type Mutation {
-  """Deletes zero or more records from the `Comments` collection"""
+  """
+  Deletes zero or more records from the `Comments` collection
+  """
   deleteFromCommentsCollection(
-    """Restricts the mutation's impact to records matching the criteria"""
+    """
+    Restricts the mutation's impact to records matching the criteria
+    """
     filter: CommentsFilter
 
     """
@@ -525,9 +643,13 @@ type Mutation {
     atMost: Int! = 1
   ): CommentsDeleteResponse!
 
-  """Deletes zero or more records from the `Metrics` collection"""
+  """
+  Deletes zero or more records from the `Metrics` collection
+  """
   deleteFromMetricsCollection(
-    """Restricts the mutation's impact to records matching the criteria"""
+    """
+    Restricts the mutation's impact to records matching the criteria
+    """
     filter: MetricsFilter
 
     """
@@ -536,9 +658,13 @@ type Mutation {
     atMost: Int! = 1
   ): MetricsDeleteResponse!
 
-  """Deletes zero or more records from the `MetricsDataPoints` collection"""
+  """
+  Deletes zero or more records from the `MetricsDataPoints` collection
+  """
   deleteFromMetricsDataPointsCollection(
-    """Restricts the mutation's impact to records matching the criteria"""
+    """
+    Restricts the mutation's impact to records matching the criteria
+    """
     filter: MetricsDataPointsFilter
 
     """
@@ -547,9 +673,13 @@ type Mutation {
     atMost: Int! = 1
   ): MetricsDataPointsDeleteResponse!
 
-  """Deletes zero or more records from the `MetricsOwners` collection"""
+  """
+  Deletes zero or more records from the `MetricsOwners` collection
+  """
   deleteFromMetricsOwnersCollection(
-    """Restricts the mutation's impact to records matching the criteria"""
+    """
+    Restricts the mutation's impact to records matching the criteria
+    """
     filter: MetricsOwnersFilter
 
     """
@@ -558,9 +688,13 @@ type Mutation {
     atMost: Int! = 1
   ): MetricsOwnersDeleteResponse!
 
-  """Deletes zero or more records from the `TeamMembers` collection"""
+  """
+  Deletes zero or more records from the `TeamMembers` collection
+  """
   deleteFromTeamMembersCollection(
-    """Restricts the mutation's impact to records matching the criteria"""
+    """
+    Restricts the mutation's impact to records matching the criteria
+    """
     filter: TeamMembersFilter
 
     """
@@ -569,9 +703,13 @@ type Mutation {
     atMost: Int! = 1
   ): TeamMembersDeleteResponse!
 
-  """Deletes zero or more records from the `Teams` collection"""
+  """
+  Deletes zero or more records from the `Teams` collection
+  """
   deleteFromTeamsCollection(
-    """Restricts the mutation's impact to records matching the criteria"""
+    """
+    Restricts the mutation's impact to records matching the criteria
+    """
     filter: TeamsFilter
 
     """
@@ -580,29 +718,51 @@ type Mutation {
     atMost: Int! = 1
   ): TeamsDeleteResponse!
 
-  """Adds one or more `Comments` records to the collection"""
-  insertIntoCommentsCollection(objects: [CommentsInsertInput!]!): CommentsInsertResponse
+  """
+  Adds one or more `Comments` records to the collection
+  """
+  insertIntoCommentsCollection(
+    objects: [CommentsInsertInput!]!
+  ): CommentsInsertResponse
 
-  """Adds one or more `Metrics` records to the collection"""
-  insertIntoMetricsCollection(objects: [MetricsInsertInput!]!): MetricsInsertResponse
+  """
+  Adds one or more `Metrics` records to the collection
+  """
+  insertIntoMetricsCollection(
+    objects: [MetricsInsertInput!]!
+  ): MetricsInsertResponse
 
-  """Adds one or more `MetricsDataPoints` records to the collection"""
-  insertIntoMetricsDataPointsCollection(objects: [MetricsDataPointsInsertInput!]!): MetricsDataPointsInsertResponse
+  """
+  Adds one or more `MetricsDataPoints` records to the collection
+  """
+  insertIntoMetricsDataPointsCollection(
+    objects: [MetricsDataPointsInsertInput!]!
+  ): MetricsDataPointsInsertResponse
 
-  """Adds one or more `MetricsOwners` records to the collection"""
-  insertIntoMetricsOwnersCollection(objects: [MetricsOwnersInsertInput!]!): MetricsOwnersInsertResponse
+  """
+  Adds one or more `MetricsOwners` records to the collection
+  """
+  insertIntoMetricsOwnersCollection(
+    objects: [MetricsOwnersInsertInput!]!
+  ): MetricsOwnersInsertResponse
 
-  """Adds one or more `Teams` records to the collection"""
+  """
+  Adds one or more `Teams` records to the collection
+  """
   insertIntoTeamsCollection(objects: [TeamsInsertInput!]!): TeamsInsertResponse
 
-  """Updates zero or more records in the `Comments` collection"""
+  """
+  Updates zero or more records in the `Comments` collection
+  """
   updateCommentsCollection(
     """
     Fields that are set will be updated for all records matching the `filter`
     """
     set: CommentsUpdateInput!
 
-    """Restricts the mutation's impact to records matching the criteria"""
+    """
+    Restricts the mutation's impact to records matching the criteria
+    """
     filter: CommentsFilter
 
     """
@@ -611,14 +771,18 @@ type Mutation {
     atMost: Int! = 1
   ): CommentsUpdateResponse!
 
-  """Updates zero or more records in the `Metrics` collection"""
+  """
+  Updates zero or more records in the `Metrics` collection
+  """
   updateMetricsCollection(
     """
     Fields that are set will be updated for all records matching the `filter`
     """
     set: MetricsUpdateInput!
 
-    """Restricts the mutation's impact to records matching the criteria"""
+    """
+    Restricts the mutation's impact to records matching the criteria
+    """
     filter: MetricsFilter
 
     """
@@ -627,14 +791,18 @@ type Mutation {
     atMost: Int! = 1
   ): MetricsUpdateResponse!
 
-  """Updates zero or more records in the `MetricsOwners` collection"""
+  """
+  Updates zero or more records in the `MetricsOwners` collection
+  """
   updateMetricsOwnersCollection(
     """
     Fields that are set will be updated for all records matching the `filter`
     """
     set: MetricsOwnersUpdateInput!
 
-    """Restricts the mutation's impact to records matching the criteria"""
+    """
+    Restricts the mutation's impact to records matching the criteria
+    """
     filter: MetricsOwnersFilter
 
     """
@@ -643,14 +811,18 @@ type Mutation {
     atMost: Int! = 1
   ): MetricsOwnersUpdateResponse!
 
-  """Updates zero or more records in the `Profiles` collection"""
+  """
+  Updates zero or more records in the `Profiles` collection
+  """
   updateProfilesCollection(
     """
     Fields that are set will be updated for all records matching the `filter`
     """
     set: ProfilesUpdateInput!
 
-    """Restricts the mutation's impact to records matching the criteria"""
+    """
+    Restricts the mutation's impact to records matching the criteria
+    """
     filter: ProfilesFilter
 
     """
@@ -659,14 +831,18 @@ type Mutation {
     atMost: Int! = 1
   ): ProfilesUpdateResponse!
 
-  """Updates zero or more records in the `Teams` collection"""
+  """
+  Updates zero or more records in the `Teams` collection
+  """
   updateTeamsCollection(
     """
     Fields that are set will be updated for all records matching the `filter`
     """
     set: TeamsUpdateInput!
 
-    """Restricts the mutation's impact to records matching the criteria"""
+    """
+    Restricts the mutation's impact to records matching the criteria
+    """
     filter: TeamsFilter
 
     """
@@ -677,11 +853,15 @@ type Mutation {
 }
 
 interface Node {
-  """Retrieves a record by `ID`"""
+  """
+  Retrieves a record by `ID`
+  """
   nodeId: ID!
 }
 
-"""Any type not handled by the type system"""
+"""
+Any type not handled by the type system
+"""
 scalar Opaque
 
 """
@@ -692,18 +872,28 @@ input OpaqueFilter {
   is: FilterIs
 }
 
-"""Defines a per-field sorting order"""
+"""
+Defines a per-field sorting order
+"""
 enum OrderByDirection {
-  """Ascending order, nulls first"""
+  """
+  Ascending order, nulls first
+  """
   AscNullsFirst
 
-  """Ascending order, nulls last"""
+  """
+  Ascending order, nulls last
+  """
   AscNullsLast
 
-  """Descending order, nulls first"""
+  """
+  Descending order, nulls first
+  """
   DescNullsFirst
 
-  """Descending order, nulls last"""
+  """
+  Descending order, nulls last
+  """
   DescNullsLast
 }
 
@@ -715,86 +905,136 @@ type PageInfo {
 }
 
 type Profiles implements Node {
-  """Globally Unique Record Identifier"""
+  """
+  Globally Unique Record Identifier
+  """
   nodeId: ID!
   id: UUID!
   createdAt: Datetime!
   updatedAt: Datetime!
   name: String!
   teamMembersCollection(
-    """Query the first `n` records in the collection"""
+    """
+    Query the first `n` records in the collection
+    """
     first: Int
 
-    """Query the last `n` records in the collection"""
+    """
+    Query the last `n` records in the collection
+    """
     last: Int
 
-    """Query values in the collection before the provided cursor"""
+    """
+    Query values in the collection before the provided cursor
+    """
     before: Cursor
 
-    """Query values in the collection after the provided cursor"""
+    """
+    Query values in the collection after the provided cursor
+    """
     after: Cursor
 
-    """Filters to apply to the results set when querying from the collection"""
+    """
+    Filters to apply to the results set when querying from the collection
+    """
     filter: TeamMembersFilter
 
-    """Sort order to apply to the collection"""
+    """
+    Sort order to apply to the collection
+    """
     orderBy: [TeamMembersOrderBy!]
   ): TeamMembersConnection
   metricsDataPointsCollection(
-    """Query the first `n` records in the collection"""
+    """
+    Query the first `n` records in the collection
+    """
     first: Int
 
-    """Query the last `n` records in the collection"""
+    """
+    Query the last `n` records in the collection
+    """
     last: Int
 
-    """Query values in the collection before the provided cursor"""
+    """
+    Query values in the collection before the provided cursor
+    """
     before: Cursor
 
-    """Query values in the collection after the provided cursor"""
+    """
+    Query values in the collection after the provided cursor
+    """
     after: Cursor
 
-    """Filters to apply to the results set when querying from the collection"""
+    """
+    Filters to apply to the results set when querying from the collection
+    """
     filter: MetricsDataPointsFilter
 
-    """Sort order to apply to the collection"""
+    """
+    Sort order to apply to the collection
+    """
     orderBy: [MetricsDataPointsOrderBy!]
   ): MetricsDataPointsConnection
   metricsOwnersCollection(
-    """Query the first `n` records in the collection"""
+    """
+    Query the first `n` records in the collection
+    """
     first: Int
 
-    """Query the last `n` records in the collection"""
+    """
+    Query the last `n` records in the collection
+    """
     last: Int
 
-    """Query values in the collection before the provided cursor"""
+    """
+    Query values in the collection before the provided cursor
+    """
     before: Cursor
 
-    """Query values in the collection after the provided cursor"""
+    """
+    Query values in the collection after the provided cursor
+    """
     after: Cursor
 
-    """Filters to apply to the results set when querying from the collection"""
+    """
+    Filters to apply to the results set when querying from the collection
+    """
     filter: MetricsOwnersFilter
 
-    """Sort order to apply to the collection"""
+    """
+    Sort order to apply to the collection
+    """
     orderBy: [MetricsOwnersOrderBy!]
   ): MetricsOwnersConnection
   commentsCollection(
-    """Query the first `n` records in the collection"""
+    """
+    Query the first `n` records in the collection
+    """
     first: Int
 
-    """Query the last `n` records in the collection"""
+    """
+    Query the last `n` records in the collection
+    """
     last: Int
 
-    """Query values in the collection before the provided cursor"""
+    """
+    Query values in the collection before the provided cursor
+    """
     before: Cursor
 
-    """Query values in the collection after the provided cursor"""
+    """
+    Query values in the collection after the provided cursor
+    """
     after: Cursor
 
-    """Filters to apply to the results set when querying from the collection"""
+    """
+    Filters to apply to the results set when querying from the collection
+    """
     filter: CommentsFilter
 
-    """Sort order to apply to the collection"""
+    """
+    Sort order to apply to the collection
+    """
     orderBy: [CommentsOrderBy!]
   ): CommentsConnection
 }
@@ -829,165 +1069,273 @@ input ProfilesUpdateInput {
 }
 
 type ProfilesUpdateResponse {
-  """Count of the records impacted by the mutation"""
+  """
+  Count of the records impacted by the mutation
+  """
   affectedCount: Int!
 
-  """Array of records impacted by the mutation"""
+  """
+  Array of records impacted by the mutation
+  """
   records: [Profiles!]!
 }
 
-"""The root type for querying data"""
+"""
+The root type for querying data
+"""
 type Query {
-  """A pagable collection of type `Comments`"""
+  """
+  A pagable collection of type `Comments`
+  """
   commentsCollection(
-    """Query the first `n` records in the collection"""
+    """
+    Query the first `n` records in the collection
+    """
     first: Int
 
-    """Query the last `n` records in the collection"""
+    """
+    Query the last `n` records in the collection
+    """
     last: Int
 
-    """Query values in the collection before the provided cursor"""
+    """
+    Query values in the collection before the provided cursor
+    """
     before: Cursor
 
-    """Query values in the collection after the provided cursor"""
+    """
+    Query values in the collection after the provided cursor
+    """
     after: Cursor
 
-    """Filters to apply to the results set when querying from the collection"""
+    """
+    Filters to apply to the results set when querying from the collection
+    """
     filter: CommentsFilter
 
-    """Sort order to apply to the collection"""
+    """
+    Sort order to apply to the collection
+    """
     orderBy: [CommentsOrderBy!]
   ): CommentsConnection
 
-  """A pagable collection of type `Metrics`"""
+  """
+  A pagable collection of type `Metrics`
+  """
   metricsCollection(
-    """Query the first `n` records in the collection"""
+    """
+    Query the first `n` records in the collection
+    """
     first: Int
 
-    """Query the last `n` records in the collection"""
+    """
+    Query the last `n` records in the collection
+    """
     last: Int
 
-    """Query values in the collection before the provided cursor"""
+    """
+    Query values in the collection before the provided cursor
+    """
     before: Cursor
 
-    """Query values in the collection after the provided cursor"""
+    """
+    Query values in the collection after the provided cursor
+    """
     after: Cursor
 
-    """Filters to apply to the results set when querying from the collection"""
+    """
+    Filters to apply to the results set when querying from the collection
+    """
     filter: MetricsFilter
 
-    """Sort order to apply to the collection"""
+    """
+    Sort order to apply to the collection
+    """
     orderBy: [MetricsOrderBy!]
   ): MetricsConnection
 
-  """A pagable collection of type `MetricsDataPoints`"""
+  """
+  A pagable collection of type `MetricsDataPoints`
+  """
   metricsDataPointsCollection(
-    """Query the first `n` records in the collection"""
+    """
+    Query the first `n` records in the collection
+    """
     first: Int
 
-    """Query the last `n` records in the collection"""
+    """
+    Query the last `n` records in the collection
+    """
     last: Int
 
-    """Query values in the collection before the provided cursor"""
+    """
+    Query values in the collection before the provided cursor
+    """
     before: Cursor
 
-    """Query values in the collection after the provided cursor"""
+    """
+    Query values in the collection after the provided cursor
+    """
     after: Cursor
 
-    """Filters to apply to the results set when querying from the collection"""
+    """
+    Filters to apply to the results set when querying from the collection
+    """
     filter: MetricsDataPointsFilter
 
-    """Sort order to apply to the collection"""
+    """
+    Sort order to apply to the collection
+    """
     orderBy: [MetricsDataPointsOrderBy!]
   ): MetricsDataPointsConnection
 
-  """A pagable collection of type `MetricsOwners`"""
+  """
+  A pagable collection of type `MetricsOwners`
+  """
   metricsOwnersCollection(
-    """Query the first `n` records in the collection"""
+    """
+    Query the first `n` records in the collection
+    """
     first: Int
 
-    """Query the last `n` records in the collection"""
+    """
+    Query the last `n` records in the collection
+    """
     last: Int
 
-    """Query values in the collection before the provided cursor"""
+    """
+    Query values in the collection before the provided cursor
+    """
     before: Cursor
 
-    """Query values in the collection after the provided cursor"""
+    """
+    Query values in the collection after the provided cursor
+    """
     after: Cursor
 
-    """Filters to apply to the results set when querying from the collection"""
+    """
+    Filters to apply to the results set when querying from the collection
+    """
     filter: MetricsOwnersFilter
 
-    """Sort order to apply to the collection"""
+    """
+    Sort order to apply to the collection
+    """
     orderBy: [MetricsOwnersOrderBy!]
   ): MetricsOwnersConnection
 
-  """Retrieve a record by its `ID`"""
+  """
+  Retrieve a record by its `ID`
+  """
   node(
-    """The record's `ID`"""
+    """
+    The record's `ID`
+    """
     nodeId: ID!
   ): Node
 
-  """A pagable collection of type `Profiles`"""
+  """
+  A pagable collection of type `Profiles`
+  """
   profilesCollection(
-    """Query the first `n` records in the collection"""
+    """
+    Query the first `n` records in the collection
+    """
     first: Int
 
-    """Query the last `n` records in the collection"""
+    """
+    Query the last `n` records in the collection
+    """
     last: Int
 
-    """Query values in the collection before the provided cursor"""
+    """
+    Query values in the collection before the provided cursor
+    """
     before: Cursor
 
-    """Query values in the collection after the provided cursor"""
+    """
+    Query values in the collection after the provided cursor
+    """
     after: Cursor
 
-    """Filters to apply to the results set when querying from the collection"""
+    """
+    Filters to apply to the results set when querying from the collection
+    """
     filter: ProfilesFilter
 
-    """Sort order to apply to the collection"""
+    """
+    Sort order to apply to the collection
+    """
     orderBy: [ProfilesOrderBy!]
   ): ProfilesConnection
 
-  """A pagable collection of type `TeamMembers`"""
+  """
+  A pagable collection of type `TeamMembers`
+  """
   teamMembersCollection(
-    """Query the first `n` records in the collection"""
+    """
+    Query the first `n` records in the collection
+    """
     first: Int
 
-    """Query the last `n` records in the collection"""
+    """
+    Query the last `n` records in the collection
+    """
     last: Int
 
-    """Query values in the collection before the provided cursor"""
+    """
+    Query values in the collection before the provided cursor
+    """
     before: Cursor
 
-    """Query values in the collection after the provided cursor"""
+    """
+    Query values in the collection after the provided cursor
+    """
     after: Cursor
 
-    """Filters to apply to the results set when querying from the collection"""
+    """
+    Filters to apply to the results set when querying from the collection
+    """
     filter: TeamMembersFilter
 
-    """Sort order to apply to the collection"""
+    """
+    Sort order to apply to the collection
+    """
     orderBy: [TeamMembersOrderBy!]
   ): TeamMembersConnection
 
-  """A pagable collection of type `Teams`"""
+  """
+  A pagable collection of type `Teams`
+  """
   teamsCollection(
-    """Query the first `n` records in the collection"""
+    """
+    Query the first `n` records in the collection
+    """
     first: Int
 
-    """Query the last `n` records in the collection"""
+    """
+    Query the last `n` records in the collection
+    """
     last: Int
 
-    """Query values in the collection before the provided cursor"""
+    """
+    Query values in the collection before the provided cursor
+    """
     before: Cursor
 
-    """Query values in the collection after the provided cursor"""
+    """
+    Query values in the collection after the provided cursor
+    """
     after: Cursor
 
-    """Filters to apply to the results set when querying from the collection"""
+    """
+    Filters to apply to the results set when querying from the collection
+    """
     filter: TeamsFilter
 
-    """Sort order to apply to the collection"""
+    """
+    Sort order to apply to the collection
+    """
     orderBy: [TeamsOrderBy!]
   ): TeamsConnection
 }
@@ -1012,7 +1360,9 @@ input StringFilter {
 }
 
 type TeamMembers implements Node {
-  """Globally Unique Record Identifier"""
+  """
+  Globally Unique Record Identifier
+  """
   nodeId: ID!
   teamId: UUID!
   profileId: UUID!
@@ -1028,10 +1378,14 @@ type TeamMembersConnection {
 }
 
 type TeamMembersDeleteResponse {
-  """Count of the records impacted by the mutation"""
+  """
+  Count of the records impacted by the mutation
+  """
   affectedCount: Int!
 
-  """Array of records impacted by the mutation"""
+  """
+  Array of records impacted by the mutation
+  """
   records: [TeamMembers!]!
 }
 
@@ -1056,7 +1410,9 @@ input TeamMembersOrderBy {
 }
 
 type Teams implements Node {
-  """Globally Unique Record Identifier"""
+  """
+  Globally Unique Record Identifier
+  """
   nodeId: ID!
   id: UUID!
   createdAt: Datetime!
@@ -1064,60 +1420,96 @@ type Teams implements Node {
   name: String!
   ssoProviderId: String
   teamMembersCollection(
-    """Query the first `n` records in the collection"""
+    """
+    Query the first `n` records in the collection
+    """
     first: Int
 
-    """Query the last `n` records in the collection"""
+    """
+    Query the last `n` records in the collection
+    """
     last: Int
 
-    """Query values in the collection before the provided cursor"""
+    """
+    Query values in the collection before the provided cursor
+    """
     before: Cursor
 
-    """Query values in the collection after the provided cursor"""
+    """
+    Query values in the collection after the provided cursor
+    """
     after: Cursor
 
-    """Filters to apply to the results set when querying from the collection"""
+    """
+    Filters to apply to the results set when querying from the collection
+    """
     filter: TeamMembersFilter
 
-    """Sort order to apply to the collection"""
+    """
+    Sort order to apply to the collection
+    """
     orderBy: [TeamMembersOrderBy!]
   ): TeamMembersConnection
   metricsCollection(
-    """Query the first `n` records in the collection"""
+    """
+    Query the first `n` records in the collection
+    """
     first: Int
 
-    """Query the last `n` records in the collection"""
+    """
+    Query the last `n` records in the collection
+    """
     last: Int
 
-    """Query values in the collection before the provided cursor"""
+    """
+    Query values in the collection before the provided cursor
+    """
     before: Cursor
 
-    """Query values in the collection after the provided cursor"""
+    """
+    Query values in the collection after the provided cursor
+    """
     after: Cursor
 
-    """Filters to apply to the results set when querying from the collection"""
+    """
+    Filters to apply to the results set when querying from the collection
+    """
     filter: MetricsFilter
 
-    """Sort order to apply to the collection"""
+    """
+    Sort order to apply to the collection
+    """
     orderBy: [MetricsOrderBy!]
   ): MetricsConnection
   commentsCollection(
-    """Query the first `n` records in the collection"""
+    """
+    Query the first `n` records in the collection
+    """
     first: Int
 
-    """Query the last `n` records in the collection"""
+    """
+    Query the last `n` records in the collection
+    """
     last: Int
 
-    """Query values in the collection before the provided cursor"""
+    """
+    Query values in the collection before the provided cursor
+    """
     before: Cursor
 
-    """Query values in the collection after the provided cursor"""
+    """
+    Query values in the collection after the provided cursor
+    """
     after: Cursor
 
-    """Filters to apply to the results set when querying from the collection"""
+    """
+    Filters to apply to the results set when querying from the collection
+    """
     filter: CommentsFilter
 
-    """Sort order to apply to the collection"""
+    """
+    Sort order to apply to the collection
+    """
     orderBy: [CommentsOrderBy!]
   ): CommentsConnection
 }
@@ -1128,10 +1520,14 @@ type TeamsConnection {
 }
 
 type TeamsDeleteResponse {
-  """Count of the records impacted by the mutation"""
+  """
+  Count of the records impacted by the mutation
+  """
   affectedCount: Int!
 
-  """Array of records impacted by the mutation"""
+  """
+  Array of records impacted by the mutation
+  """
   records: [Teams!]!
 }
 
@@ -1158,10 +1554,14 @@ input TeamsInsertInput {
 }
 
 type TeamsInsertResponse {
-  """Count of the records impacted by the mutation"""
+  """
+  Count of the records impacted by the mutation
+  """
   affectedCount: Int!
 
-  """Array of records impacted by the mutation"""
+  """
+  Array of records impacted by the mutation
+  """
   records: [Teams!]!
 }
 
@@ -1178,14 +1578,20 @@ input TeamsUpdateInput {
 }
 
 type TeamsUpdateResponse {
-  """Count of the records impacted by the mutation"""
+  """
+  Count of the records impacted by the mutation
+  """
   affectedCount: Int!
 
-  """Array of records impacted by the mutation"""
+  """
+  Array of records impacted by the mutation
+  """
   records: [Teams!]!
 }
 
-"""A time without date information"""
+"""
+A time without date information
+"""
 scalar Time
 
 """
@@ -1202,7 +1608,9 @@ input TimeFilter {
   neq: Time
 }
 
-"""A universally unique identifier"""
+"""
+A universally unique identifier
+"""
 scalar UUID
 
 """
@@ -1214,4 +1622,3 @@ input UUIDFilter {
   is: FilterIs
   neq: UUID
 }
-
