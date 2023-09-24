@@ -24,7 +24,7 @@ const RootLayout = () => {
   }, [navigate])
 
   useEffect(() => {
-    emitUserEvent('pageview', location.pathname)
+    emitUserEvent('view_page', location.pathname)
   }, [location])
 
   return (

@@ -2,12 +2,14 @@ import { Save } from 'lucide-react'
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react'
 import { getAvatarUrl } from '~/lib/avatars'
 import supabase from '~/lib/supabase'
-import { useAppSelector } from '~/stores'
+import { useAppDispatch, useAppSelector } from '~/stores'
 import { Button } from '../ui/Button'
 import { emitUserEvent } from '~/lib/userEvents'
+import { refreshPoints } from '~/stores/points-slice'
 
 const AccountPage = () => {
   const user = useAppSelector((state) => state.auth.user)
+  const dispatch = useAppDispatch()
   const uploadButtonRef = useRef<HTMLInputElement>(null)
 
   const [uploadedFile, setUploadedFile] = useState<File>()
@@ -28,7 +30,9 @@ const AccountPage = () => {
     if (file) {
       setUploadedFile(file)
       reader.readAsDataURL(file)
-      emitUserEvent('change_avatar')
+      emitUserEvent('update_avatar').then(() => {
+        dispatch(refreshPoints(true))
+      })
     }
   }
 
