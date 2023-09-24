@@ -19,6 +19,8 @@ import { MetricDataPointForm_Mutation } from './__generated__/MetricDataPointFor
 import { DateTimePicker } from '../ui/DateTimePicker'
 import { useState } from 'react'
 import { emitUserEvent } from '~/lib/userEvents'
+import { refreshPoints } from '~/stores/points-slice'
+import { useAppDispatch } from '~/stores'
 
 const MetricDataPointInsertMutation = graphql`
   mutation MetricDataPointForm_Mutation($input: MetricsDataPointsInsertInput!) {
@@ -40,6 +42,8 @@ export interface MetricFormProps {
 
 const MetricForm = ({ onSuccess, metricId }: MetricFormProps) => {
   const { toast } = useToast()
+
+  const dispatch = useAppDispatch()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -84,7 +88,9 @@ const MetricForm = ({ onSuccess, metricId }: MetricFormProps) => {
         setIsExploding(true)
         onSuccess?.()
 
-        emitUserEvent('add_data_point')
+        emitUserEvent('add_data_point').then(() => {
+          dispatch(refreshPoints(true))
+        })
       },
     })
   }

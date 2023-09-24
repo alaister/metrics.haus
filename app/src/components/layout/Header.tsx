@@ -1,47 +1,14 @@
-import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { toast } from '~/lib/hooks/use-toast'
-import supabase from '~/lib/supabase'
 import { UserAvatar } from '../UserAvatar'
 import { CmdKDialog } from '../cmdk/CmdKDialog'
 import { Notifications } from '../notifications'
 import TeamSelector from '../teams/TeamSelector'
+import { useAppSelector } from '~/stores'
+import ConfettiExplosion from 'react-confetti-explosion'
 
 const Header = () => {
-  const [userPoints, setUserPoints] = useState(0)
-  useEffect(() => {
-    // pretend this is graphql
-    supabase
-      .from('user_stats')
-      .select('*')
-      .then((resp) => {
-        const { data, error } = resp
-        if (error) {
-          toast({
-            variant: 'destructive',
-            title: 'Something went wrong',
-            description: error.message,
-          })
-          return
-        }
-
-        // thanks chatgpt
-        const stats: { [key: string]: number } = {}
-        for (const item of data) {
-          if (item.event && typeof item.count === 'number') {
-            stats[item.event] = item.count
-          }
-        }
-
-        // proprietary open source formula
-        const points =
-          (stats.num_add_data_point ?? 0) +
-          (stats.num_add_metric ?? 0) * 10 +
-          (stats.num_update_avatar ? 50 : 0)
-
-        setUserPoints(points)
-      })
-  }, [])
+  const points = useAppSelector((state) => state.points.points)
+  const isExploding = useAppSelector((state) => state.points.confetti)
 
   return (
     <header className="sticky top-0 border-b bg-white z-10">
@@ -59,7 +26,16 @@ const Header = () => {
           <Notifications />
           <UserAvatar />
           <div className="flex items-center justify-center">
-            <span>{userPoints ?? '0'} Points</span>
+            {isExploding && (
+              <ConfettiExplosion
+                force={0.4}
+                duration={1900}
+                particleCount={30}
+                width={400}
+                zIndex={1000}
+              />
+            )}
+            <span>{points ?? '0'} Points</span>
           </div>
         </div>
       </div>

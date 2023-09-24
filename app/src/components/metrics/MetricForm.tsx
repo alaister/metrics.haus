@@ -22,10 +22,11 @@ import {
   SelectValue,
 } from '~/components/ui/Select'
 import { useToast } from '~/lib/hooks/use-toast'
-import { useAppSelector } from '~/stores'
+import { useAppDispatch, useAppSelector } from '~/stores'
 import { MetricForm_Mutation } from './__generated__/MetricForm_Mutation.graphql'
 import { MetricForm_Owners_Mutation } from './__generated__/MetricForm_Owners_Mutation.graphql'
 import { emitUserEvent } from '~/lib/userEvents'
+import { refreshPoints } from '~/stores/points-slice'
 
 const MetricInsertMutation = graphql`
   mutation MetricForm_Mutation(
@@ -64,6 +65,7 @@ export interface MetricFormProps {
 
 const MetricForm = ({ onSuccess }: MetricFormProps) => {
   const selectedTeamId = useAppSelector((state) => state.team.selectedTeamId)
+  const dispatch = useAppDispatch()
 
   const { toast } = useToast()
 
@@ -107,7 +109,9 @@ const MetricForm = ({ onSuccess }: MetricFormProps) => {
           toast({ title: 'Metric created successfully' })
           form.reset({ name: '', interval: 'week', members: [] })
           onSuccess?.()
-          emitUserEvent('add_metric', values.name)
+          emitUserEvent('add_metric', values.name).then(() => {
+            dispatch(refreshPoints(true))
+          })
         }
 
         if (values.members && values.members.length > 0) {
