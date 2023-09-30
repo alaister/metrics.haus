@@ -22,7 +22,7 @@ const appLayoutRoute = new Route({
       data: { session },
     } = await supabase.auth.getSession()
     if (!session) {
-      throw redirect({ to: '/sign-in' })
+      throw redirect({ to: '/sign-in', replace: true })
     }
   },
   component: AppLayout,

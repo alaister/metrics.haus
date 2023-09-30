@@ -22,7 +22,7 @@ const authLayoutRoute = new Route({
       data: { session },
     } = await supabase.auth.getSession()
     if (session) {
-      throw redirect({ to: '/' })
+      throw redirect({ to: '/', replace: true })
     }
   },
   component: AuthLayout,
