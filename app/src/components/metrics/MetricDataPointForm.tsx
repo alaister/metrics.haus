@@ -1,9 +1,10 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Save } from 'lucide-react'
-import { useForm } from 'react-hook-form'
-import { graphql, useMutation } from 'react-relay'
-import { z } from 'zod'
+import { useState } from 'react'
 import ConfettiExplosion from 'react-confetti-explosion'
+import { useForm } from 'react-hook-form'
+import { ConnectionHandler, graphql, useMutation } from 'react-relay'
+import { z } from 'zod'
 import { Button } from '~/components/ui/Button'
 import {
   Form,
@@ -15,17 +16,29 @@ import {
 } from '~/components/ui/Form'
 import { Input } from '~/components/ui/Input'
 import { useToast } from '~/lib/hooks/use-toast'
-import { MetricDataPointForm_Mutation } from './__generated__/MetricDataPointForm_Mutation.graphql'
-import { DateTimePicker } from '../ui/DateTimePicker'
-import { useState } from 'react'
 import { emitUserEvent } from '~/lib/userEvents'
-import { refreshPoints } from '~/stores/points-slice'
 import { useAppDispatch } from '~/stores'
+import { refreshPoints } from '~/stores/points-slice'
+import { DateTimePicker } from '../ui/DateTimePicker'
+import { MetricDataPointForm_Mutation } from './__generated__/MetricDataPointForm_Mutation.graphql'
+import { toGlobalId } from '~/lib/graphql'
 
 const MetricDataPointInsertMutation = graphql`
-  mutation MetricDataPointForm_Mutation($input: MetricsDataPointsInsertInput!) {
+  mutation MetricDataPointForm_Mutation(
+    $input: MetricsDataPointsInsertInput!
+    $connections: [ID!]!
+  ) {
     insertIntoMetricsDataPointsCollection(objects: [$input]) {
       affectedCount
+      records
+        @appendNode(
+          connections: $connections
+          edgeTypeName: "MetricsDataPoints"
+        ) {
+        nodeId
+        time
+        value
+      }
     }
   }
 `
@@ -60,6 +73,12 @@ const MetricForm = ({ onSuccess, metricId }: MetricFormProps) => {
   const [isExploding, setIsExploding] = useState(false)
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    const connectionID = ConnectionHandler.getConnectionID(
+      toGlobalId(metricId, 'metrics'),
+      'MetricDataPoints_metrics_metricsDataPointsCollection',
+      { orderBy: [{ time: 'AscNullsLast' }] },
+    )
+
     mutate({
       variables: {
         input: {
@@ -67,6 +86,7 @@ const MetricForm = ({ onSuccess, metricId }: MetricFormProps) => {
           time: values.timestamp,
           value: values.value,
         },
+        connections: [connectionID],
       },
       onError(error) {
         toast({

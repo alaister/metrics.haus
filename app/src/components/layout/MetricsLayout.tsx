@@ -1,5 +1,5 @@
+import { Link, Outlet } from '@tanstack/react-router'
 import { Plus } from 'lucide-react'
-import { Link, Outlet } from 'react-router-dom'
 import { Button } from '../ui/Button'
 
 const MetricsLayout = () => {
@@ -11,7 +11,10 @@ const MetricsLayout = () => {
         </h1>
 
         <Button variant="outline" asChild>
-          <Link to="metrics/new">
+          <Link
+            search={{ showNewMetricModal: true }}
+            mask={{ to: '/metrics/new' }}
+          >
             <Plus className="w-4 h-4" />
             <span>New Metric</span>
           </Link>

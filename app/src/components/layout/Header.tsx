@@ -1,10 +1,11 @@
-import { Link } from 'react-router-dom'
+import { Link } from '@tanstack/react-router'
+import ConfettiExplosion from 'react-confetti-explosion'
+import { useAppSelector } from '~/stores'
 import { UserAvatar } from '../UserAvatar'
 import { CmdKDialog } from '../cmdk/CmdKDialog'
 import { Notifications } from '../notifications'
 import TeamSelector from '../teams/TeamSelector'
-import { useAppSelector } from '~/stores'
-import ConfettiExplosion from 'react-confetti-explosion'
+import { Suspense } from 'react'
 
 const Header = () => {
   const points = useAppSelector((state) => state.points.points)
@@ -17,7 +18,9 @@ const Header = () => {
           <h1 className="font-medium">
             <Link to="/">metrics.haus</Link>
           </h1>
-          <TeamSelector />
+          <Suspense>
+            <TeamSelector />
+          </Suspense>
         </div>
 
         <CmdKDialog />

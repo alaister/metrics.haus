@@ -1,5 +1,5 @@
+import { Link, Outlet } from '@tanstack/react-router'
 import { Suspense } from 'react'
-import { Link, Outlet } from 'react-router-dom'
 import Footer from '~/components/layout/Footer'
 
 const AuthLayout = () => {
