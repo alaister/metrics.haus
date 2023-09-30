@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<60f96f45fe2f1d1330bb00daa2388683>>
+ * @generated SignedSource<<e009513203adea4fe213bfed9835e09e>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -8,76 +8,65 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest, Mutation } from 'relay-runtime';
+import { ConcreteRequest, Query } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
-export type MetricInterval = "day" | "hour" | "minute" | "month" | "week" | "%future added value";
-export type MetricsInsertInput = {
-  interval?: MetricInterval | null;
-  name?: string | null;
-  teamId?: string | null;
+export type metricsDetailsRoute_Query$variables = {
+  nodeId: string;
 };
-export type MetricForm_Mutation$variables = {
-  connections: ReadonlyArray<string>;
-  input: MetricsInsertInput;
-};
-export type MetricForm_Mutation$data = {
-  readonly insertIntoMetricsCollection: {
-    readonly affectedCount: number;
-    readonly records: ReadonlyArray<{
-      readonly id: string;
-      readonly nodeId: string;
-      readonly " $fragmentSpreads": FragmentRefs<"MetricCard_metrics">;
-    }>;
+export type metricsDetailsRoute_Query$data = {
+  readonly node: {
+    readonly id?: string;
+    readonly name?: string;
+    readonly nodeId: string;
+    readonly " $fragmentSpreads": FragmentRefs<"MetricDetailsSection_metrics">;
   } | null;
 };
-export type MetricForm_Mutation = {
-  response: MetricForm_Mutation$data;
-  variables: MetricForm_Mutation$variables;
+export type metricsDetailsRoute_Query = {
+  response: metricsDetailsRoute_Query$data;
+  variables: metricsDetailsRoute_Query$variables;
 };
 
 const node: ConcreteRequest = (function(){
-var v0 = {
-  "defaultValue": null,
-  "kind": "LocalArgument",
-  "name": "connections"
-},
-v1 = {
-  "defaultValue": null,
-  "kind": "LocalArgument",
-  "name": "input"
-},
-v2 = [
+var v0 = [
   {
-    "items": [
-      {
-        "kind": "Variable",
-        "name": "objects.0",
-        "variableName": "input"
-      }
-    ],
-    "kind": "ListValue",
-    "name": "objects"
+    "defaultValue": null,
+    "kind": "LocalArgument",
+    "name": "nodeId"
   }
 ],
-v3 = {
+v1 = [
+  {
+    "kind": "Variable",
+    "name": "nodeId",
+    "variableName": "nodeId"
+  }
+],
+v2 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "affectedCount",
+  "name": "nodeId",
   "storageKey": null
 },
-v4 = {
+v3 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "id",
   "storageKey": null
 },
+v4 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "name",
+  "storageKey": null
+},
 v5 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "nodeId",
+  "name": "__typename",
   "storageKey": null
 },
 v6 = [
@@ -98,90 +87,62 @@ v6 = [
 ];
 return {
   "fragment": {
-    "argumentDefinitions": [
-      (v0/*: any*/),
-      (v1/*: any*/)
-    ],
+    "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "MetricForm_Mutation",
+    "name": "metricsDetailsRoute_Query",
     "selections": [
       {
         "alias": null,
-        "args": (v2/*: any*/),
-        "concreteType": "MetricsInsertResponse",
+        "args": (v1/*: any*/),
+        "concreteType": null,
         "kind": "LinkedField",
-        "name": "insertIntoMetricsCollection",
+        "name": "node",
         "plural": false,
         "selections": [
-          (v3/*: any*/),
+          (v2/*: any*/),
           {
-            "alias": null,
-            "args": null,
-            "concreteType": "Metrics",
-            "kind": "LinkedField",
-            "name": "records",
-            "plural": true,
+            "kind": "InlineFragment",
             "selections": [
+              (v3/*: any*/),
               (v4/*: any*/),
-              (v5/*: any*/),
               {
                 "args": null,
                 "kind": "FragmentSpread",
-                "name": "MetricCard_metrics"
+                "name": "MetricDetailsSection_metrics"
               }
             ],
-            "storageKey": null
+            "type": "Metrics",
+            "abstractKey": null
           }
         ],
         "storageKey": null
       }
     ],
-    "type": "Mutation",
+    "type": "Query",
     "abstractKey": null
   },
   "kind": "Request",
   "operation": {
-    "argumentDefinitions": [
-      (v1/*: any*/),
-      (v0/*: any*/)
-    ],
+    "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "MetricForm_Mutation",
+    "name": "metricsDetailsRoute_Query",
     "selections": [
       {
         "alias": null,
-        "args": (v2/*: any*/),
-        "concreteType": "MetricsInsertResponse",
+        "args": (v1/*: any*/),
+        "concreteType": null,
         "kind": "LinkedField",
-        "name": "insertIntoMetricsCollection",
+        "name": "node",
         "plural": false,
         "selections": [
-          (v3/*: any*/),
+          (v5/*: any*/),
+          (v2/*: any*/),
           {
-            "alias": null,
-            "args": null,
-            "concreteType": "Metrics",
-            "kind": "LinkedField",
-            "name": "records",
-            "plural": true,
+            "kind": "InlineFragment",
             "selections": [
+              (v3/*: any*/),
               (v4/*: any*/),
-              (v5/*: any*/),
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "name",
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "createdAt",
-                "storageKey": null
-              },
               {
                 "alias": "dataPoints",
                 "args": null,
@@ -224,7 +185,7 @@ return {
                         "name": "node",
                         "plural": false,
                         "selections": [
-                          (v5/*: any*/),
+                          (v2/*: any*/),
                           {
                             "alias": null,
                             "args": null,
@@ -239,13 +200,7 @@ return {
                             "name": "value",
                             "storageKey": null
                           },
-                          {
-                            "alias": null,
-                            "args": null,
-                            "kind": "ScalarField",
-                            "name": "__typename",
-                            "storageKey": null
-                          }
+                          (v5/*: any*/)
                         ],
                         "storageKey": null
                       },
@@ -299,28 +254,8 @@ return {
                 "name": "metricsDataPointsCollection"
               }
             ],
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "filters": null,
-            "handle": "prependNode",
-            "key": "",
-            "kind": "LinkedHandle",
-            "name": "records",
-            "handleArgs": [
-              {
-                "kind": "Variable",
-                "name": "connections",
-                "variableName": "connections"
-              },
-              {
-                "kind": "Literal",
-                "name": "edgeTypeName",
-                "value": "MetricsEdge"
-              }
-            ]
+            "type": "Metrics",
+            "abstractKey": null
           }
         ],
         "storageKey": null
@@ -328,16 +263,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "0534aad32b1bff5658d3c71536ddad39",
+    "cacheID": "0b25b62475f98c2e27e76cc32e2133c2",
     "id": null,
     "metadata": {},
-    "name": "MetricForm_Mutation",
-    "operationKind": "mutation",
-    "text": "mutation MetricForm_Mutation(\n  $input: MetricsInsertInput!\n) {\n  insertIntoMetricsCollection(objects: [$input]) {\n    affectedCount\n    records {\n      id\n      nodeId\n      ...MetricCard_metrics\n    }\n  }\n}\n\nfragment LineChart_metrics on Metrics {\n  metricsDataPointsCollection(first: 100, orderBy: [{time: AscNullsLast}]) {\n    edges {\n      node {\n        nodeId\n        time\n        value\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n  nodeId\n}\n\nfragment MetricCard_metrics on Metrics {\n  id\n  name\n  createdAt\n  dataPoints: metricsDataPointsCollection {\n    totalCount\n  }\n  ...LineChart_metrics\n}\n"
+    "name": "metricsDetailsRoute_Query",
+    "operationKind": "query",
+    "text": "query metricsDetailsRoute_Query(\n  $nodeId: ID!\n) {\n  node(nodeId: $nodeId) {\n    __typename\n    nodeId\n    ... on Metrics {\n      id\n      name\n      ...MetricDetailsSection_metrics\n    }\n  }\n}\n\nfragment LineChart_metrics on Metrics {\n  metricsDataPointsCollection(first: 100, orderBy: [{time: AscNullsLast}]) {\n    edges {\n      node {\n        nodeId\n        time\n        value\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n  nodeId\n}\n\nfragment MetricDetailsSection_metrics on Metrics {\n  dataPoints: metricsDataPointsCollection {\n    totalCount\n  }\n  ...LineChart_metrics\n}\n"
   }
 };
 })();
 
-(node as any).hash = "1fddfe86230403c6586d714527a83df7";
+(node as any).hash = "6d516a6ddf49f401fdcecccf2b8c08ba";
 
 export default node;

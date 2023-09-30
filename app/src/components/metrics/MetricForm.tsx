@@ -22,11 +22,11 @@ import {
   SelectValue,
 } from '~/components/ui/Select'
 import { useToast } from '~/lib/hooks/use-toast'
+import { emitUserEvent } from '~/lib/userEvents'
 import { useAppDispatch, useAppSelector } from '~/stores'
+import { refreshPoints } from '~/stores/points-slice'
 import { MetricForm_Mutation } from './__generated__/MetricForm_Mutation.graphql'
 import { MetricForm_Owners_Mutation } from './__generated__/MetricForm_Owners_Mutation.graphql'
-import { emitUserEvent } from '~/lib/userEvents'
-import { refreshPoints } from '~/stores/points-slice'
 
 const MetricInsertMutation = graphql`
   mutation MetricForm_Mutation(

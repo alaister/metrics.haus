@@ -1,158 +1,40 @@
-import { loadQuery } from 'react-relay'
-import { createBrowserRouter, redirect } from 'react-router-dom'
-import AuthLayout from '~/components/layout/AuthLayout'
-import DialogLayout from '~/components/layout/DialogLayout'
-import RootLayout from '~/components/layout/RootLayout'
-import QueryPageShell from '~/components/loading/QueryPageShell'
-import AccountPage from '~/components/routes/Account'
-import ErrorPage from '~/components/routes/ErrorPage'
-import MetricDetails from '~/components/routes/MetricDetails'
-import Metrics from '~/components/routes/Metrics'
-import MetricsLayout from '~/components/routes/Metrics.layout'
-import NewMetricDataPoint from '~/components/routes/NewDataPoint'
-import NewMetric from '~/components/routes/NewMetric'
-import SignIn from '~/components/routes/SignIn'
-import * as MetricDetailsData from '../components/routes/MetricDetails.data'
-import * as MetricsData from '../components/routes/Metrics.data'
-import { toGlobalId } from './graphql'
-import { toast } from './hooks/use-toast'
-import environment from './relay'
-import supabase from './supabase'
+import { Route, Router } from '@tanstack/react-router'
+import accountRoute from '~/components/routes/accounts/account-route'
+import appLayoutRoute from '~/components/routes/app-layout-route'
+import authLayoutRoute from '~/components/routes/auth-layout-route'
+import indexRoute from '~/components/routes/index-route'
+import metricsDetailsRoute from '~/components/routes/metrics/metrics-details-route'
+import metricsLayoutRoute from '~/components/routes/metrics/metrics-layout-route'
+import rootRoute from '~/components/routes/root-route'
+import signInRoute from '~/components/routes/sign-in-route'
 
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <RootLayout />,
-    errorElement: <ErrorPage />,
-    loader: async () => {
-      const { error } = await supabase.auth.initialize()
-      if (error) {
-        toast({
-          variant: 'destructive',
-          title: 'Something went wrong',
-          description: error.message,
-        })
-        return redirect('/sign-in')
-      }
+// dummy routes used for route masking
+const newMetricDummyRoute = new Route({
+  getParentRoute: () => metricsLayoutRoute,
+  path: '/metrics/new',
+})
 
-      const {
-        data: { session },
-      } = await supabase.auth.getSession()
-      if (!session) {
-        return redirect('/sign-in')
-      }
+const newMetricDataPointDummyRoute = new Route({
+  getParentRoute: () => metricsDetailsRoute,
+  path: 'data-points/new',
+})
 
-      return null
-    },
-    children: [
-      {
-        element: <MetricsLayout />,
-        children: [
-          {
-            path: '/',
-            element: (
-              <QueryPageShell
-                pageComponent={Metrics}
-                fallback={MetricsData.fallback}
-                query={MetricsData.query}
-              />
-            ),
-            loader: async () => {
-              return {
-                initialQueryRef: loadQuery(environment, MetricsData.query, {}),
-              }
-            },
-          },
-        ],
-      },
-      {
-        path: 'metrics',
-        children: [
-          {
-            element: <DialogLayout />,
-            children: [
-              {
-                path: 'new',
-                element: <NewMetric />,
-              },
-            ],
-          },
-          {
-            path: ':metricId',
-            children: [
-              {
-                index: true,
-                element: (
-                  <QueryPageShell
-                    pageComponent={MetricDetails}
-                    fallback={MetricDetailsData.fallback}
-                    query={MetricDetailsData.query}
-                  />
-                ),
-                loader: async ({ params }) => {
-                  if (!params.metricId) return null
-
-                  const nodeId = toGlobalId(params.metricId, 'metrics')
-
-                  return {
-                    initialQueryRef: loadQuery(
-                      environment,
-                      MetricDetailsData.query,
-                      { nodeId },
-                    ),
-                  }
-                },
-              },
-              {
-                element: <DialogLayout />,
-                children: [
-                  {
-                    path: 'new-data',
-                    element: <NewMetricDataPoint />,
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-      },
-      {
-        path: 'account',
-        element: <AccountPage />,
-      },
-    ],
-  },
-  {
-    path: '/',
-    element: <AuthLayout />,
-    errorElement: <ErrorPage />,
-    loader: async () => {
-      const { error } = await supabase.auth.initialize()
-      if (error) {
-        toast({
-          variant: 'destructive',
-          title: 'Something went wrong',
-          description: error.message,
-        })
-        return
-      }
-
-      const {
-        data: { session },
-      } = await supabase.auth.getSession()
-      if (session) {
-        return redirect('/')
-      }
-
-      return null
-    },
-    children: [
-      {
-        path: 'sign-in',
-        element: <SignIn />,
-      },
-    ],
-  },
+const routeTree = rootRoute.addChildren([
+  authLayoutRoute.addChildren([signInRoute]),
+  appLayoutRoute.addChildren([
+    accountRoute,
+    metricsLayoutRoute.addChildren([indexRoute, newMetricDummyRoute]),
+    metricsDetailsRoute.addChildren([newMetricDataPointDummyRoute]),
+  ]),
 ])
+
+const router = new Router({ routeTree })
+
+// Register your router for maximum type safety
+declare module '@tanstack/react-router' {
+  interface Register {
+    router: typeof router
+  }
+}
 
 export default router

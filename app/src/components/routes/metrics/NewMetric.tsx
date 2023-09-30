@@ -1,5 +1,5 @@
-import { useNavigate } from 'react-router-dom'
-import MetricForm from '../metrics/MetricForm'
+import { useNavigate } from '@tanstack/react-router'
+import MetricForm from '~/components/metrics/MetricForm'
 
 const NewMetric = () => {
   const navigate = useNavigate()
@@ -8,7 +8,9 @@ const NewMetric = () => {
     <div>
       <MetricForm
         onSuccess={() => {
-          navigate('/')
+          navigate({
+            to: '/',
+          })
         }}
       />
     </div>

@@ -1,22 +1,22 @@
+import { subDays } from 'date-fns'
+import { useState } from 'react'
 import { useFragment } from 'react-relay'
 import {
-  ResponsiveContainer,
-  XAxis,
-  YAxis,
-  AreaChart,
   Area,
+  AreaChart,
+  Line,
   LineChart as RechartsLineChart,
   ReferenceDot,
+  ResponsiveContainer,
   Tooltip,
-  Line,
+  XAxis,
+  YAxis,
 } from 'recharts'
-import { useState } from 'react'
-import { createTickDates, timestampToLabel } from './chart-helper'
-import { Button } from '../ui/Button'
 import { graphql } from 'relay-runtime'
-import { LineChart_metrics$key } from './__generated__/LineChart_metrics.graphql'
-import { subDays } from 'date-fns'
 import { cn } from '~/lib/utils'
+import { createTickDates, timestampToLabel } from '../../lib/chart-helpers'
+import { Button } from '../ui/Button'
+import { LineChart_metrics$key } from './__generated__/LineChart_metrics.graphql'
 
 const MAX_TICKS = 5
 
@@ -24,8 +24,17 @@ const CHART_COLOR = '#82ca9d'
 const EMPTY_CHART_COLOR = '#eee'
 
 const LineChartMetricsFragment = graphql`
-  fragment LineChart_metrics on Metrics {
-    metricsDataPointsCollection {
+  fragment LineChart_metrics on Metrics
+  @argumentDefinitions(
+    cursor: { type: "Cursor" }
+    count: { type: "Int", defaultValue: 100 }
+  )
+  @refetchable(queryName: "MetricsDataPointsPagination_Query") {
+    metricsDataPointsCollection(
+      after: $cursor
+      first: $count
+      orderBy: [{ time: AscNullsLast }]
+    ) @connection(key: "MetricDataPoints_metrics_metricsDataPointsCollection") {
       edges {
         node {
           nodeId

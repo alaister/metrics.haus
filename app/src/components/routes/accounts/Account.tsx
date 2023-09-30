@@ -1,10 +1,10 @@
 import { Save } from 'lucide-react'
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react'
+import { Button } from '~/components/ui/Button'
 import { getAvatarUrl } from '~/lib/avatars'
 import supabase from '~/lib/supabase'
-import { useAppDispatch, useAppSelector } from '~/stores'
-import { Button } from '../ui/Button'
 import { emitUserEvent } from '~/lib/userEvents'
+import { useAppDispatch, useAppSelector } from '~/stores'
 import { refreshPoints } from '~/stores/points-slice'
 
 const AccountPage = () => {

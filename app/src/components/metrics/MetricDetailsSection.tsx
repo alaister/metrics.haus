@@ -1,6 +1,6 @@
 import { useFragment } from 'react-relay'
-import { LineChart } from './LineChart'
 import { graphql } from 'relay-runtime'
+import { LineChart } from './LineChart'
 import { MetricDetailsSection_metrics$key } from './__generated__/MetricDetailsSection_metrics.graphql'
 
 const MetricDetailsSectionFragment = graphql`

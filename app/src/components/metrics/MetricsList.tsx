@@ -1,17 +1,10 @@
-import {
-  PreloadedQuery,
-  graphql,
-  usePaginationFragment,
-  usePreloadedQuery,
-} from 'react-relay'
-import { Outlet } from 'react-router-dom'
-import MetricCard from '../metrics/MetricCard'
-import { query } from './Metrics.data'
-import { MetricsFragment_query$key } from './__generated__/MetricsFragment_query.graphql'
-import { MetricsPagination_Query } from './__generated__/MetricsPagination_Query.graphql'
+import { usePaginationFragment } from 'react-relay'
+import { graphql } from 'relay-runtime'
+import MetricCard from './MetricCard'
+import { MetricsList_query$key } from './__generated__/MetricsList_query.graphql'
 
 const MetricsFragment = graphql`
-  fragment MetricsFragment_query on Query
+  fragment MetricsList_query on Query
   @argumentDefinitions(
     cursor: { type: "Cursor" }
     count: { type: "Int", defaultValue: 100 }
@@ -38,10 +31,10 @@ const MetricsFragment = graphql`
 `
 
 export interface MetricsListProps {
-  query: MetricsFragment_query$key
+  queryFragment: MetricsList_query$key
 }
 
-const MetricsList = ({ query }: MetricsListProps) => {
+const MetricsList = ({ queryFragment }: MetricsListProps) => {
   const {
     data,
     // loadNext,
@@ -51,7 +44,7 @@ const MetricsList = ({ query }: MetricsListProps) => {
     // isLoadingNext,
     // isLoadingPrevious,
     // refetch,
-  } = usePaginationFragment(MetricsFragment, query)
+  } = usePaginationFragment(MetricsFragment, queryFragment)
   const metrics = data.metricsCollection?.edges ?? []
 
   return (
@@ -64,21 +57,4 @@ const MetricsList = ({ query }: MetricsListProps) => {
   )
 }
 
-export interface MetricsProps {
-  queryRef: PreloadedQuery<MetricsPagination_Query>
-}
-
-const Metrics = ({ queryRef }: MetricsProps) => {
-  const data = usePreloadedQuery(query, queryRef)
-
-  return (
-    <>
-      <MetricsList query={data} />
-
-      {/* Outlet for dialogs */}
-      <Outlet />
-    </>
-  )
-}
-
-export default Metrics
+export default MetricsList
