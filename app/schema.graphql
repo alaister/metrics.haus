@@ -163,6 +163,7 @@ type Metrics implements Node {
   description: String
   unitShort: String
   icon: String
+  archived: Boolean
   teamId: UUID!
   team: Teams!
   metricsDataPointsCollection(
@@ -333,6 +334,7 @@ input MetricsFilter {
   description: StringFilter
   unitShort: StringFilter
   icon: StringFilter
+  archived: BooleanFilter
   teamId: UUIDFilter
   nodeId: IDFilter
 }
@@ -367,6 +369,7 @@ input MetricsOrderBy {
   description: OrderByDirection
   unitShort: OrderByDirection
   icon: OrderByDirection
+  archived: OrderByDirection
   teamId: OrderByDirection
 }
 
@@ -459,6 +462,7 @@ input MetricsUpdateInput {
   description: String
   unitShort: String
   icon: String
+  archived: Boolean
 }
 
 type MetricsUpdateResponse {

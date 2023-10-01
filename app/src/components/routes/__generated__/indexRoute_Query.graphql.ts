@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<8eb4cc29a0e062781d21c2863bb61d7c>>
+ * @generated SignedSource<<af524f31436138dc7f6c411e3813d489>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -38,6 +38,15 @@ v2 = [
     "kind": "Variable",
     "name": "after",
     "variableName": "cursor"
+  },
+  {
+    "kind": "Literal",
+    "name": "filter",
+    "value": {
+      "archived": {
+        "eq": false
+      }
+    }
   },
   {
     "kind": "Variable",
@@ -118,10 +127,7 @@ v10 = {
   "kind": "ScalarField",
   "name": "__typename",
   "storageKey": null
-},
-v11 = [
-  "orderBy"
-];
+};
 return {
   "fragment": {
     "argumentDefinitions": [
@@ -342,7 +348,9 @@ return {
                   {
                     "alias": null,
                     "args": (v9/*: any*/),
-                    "filters": (v11/*: any*/),
+                    "filters": [
+                      "orderBy"
+                    ],
                     "handle": "connection",
                     "key": "MetricDataPoints_metrics_metricsDataPointsCollection",
                     "kind": "LinkedHandle",
@@ -361,7 +369,10 @@ return {
       {
         "alias": null,
         "args": (v2/*: any*/),
-        "filters": (v11/*: any*/),
+        "filters": [
+          "orderBy",
+          "filter"
+        ],
         "handle": "connection",
         "key": "Metrics_query_metricsCollection",
         "kind": "LinkedHandle",
@@ -370,12 +381,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "85ad868af5abe4b0f52dc690264ec259",
+    "cacheID": "775200afd57c0c01ed88ae3a66e5d155",
     "id": null,
     "metadata": {},
     "name": "indexRoute_Query",
     "operationKind": "query",
-    "text": "query indexRoute_Query(\n  $cursor: Cursor\n  $count: Int\n) {\n  ...MetricsList_query_1G22uz\n}\n\nfragment LineChart_metrics on Metrics {\n  metricsDataPointsCollection(first: 100, orderBy: [{time: AscNullsLast}]) {\n    edges {\n      node {\n        nodeId\n        time\n        value\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n  nodeId\n}\n\nfragment MetricCard_metrics on Metrics {\n  id\n  name\n  icon\n  unitShort\n  createdAt\n  dataPoints: metricsDataPointsCollection(orderBy: [{time: AscNullsFirst}]) {\n    totalCount\n    edges {\n      node {\n        time\n        value\n        nodeId\n      }\n    }\n  }\n  ...LineChart_metrics\n}\n\nfragment MetricsList_query_1G22uz on Query {\n  metricsCollection(after: $cursor, first: $count, orderBy: [{createdAt: DescNullsLast}]) {\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n    edges {\n      cursor\n      node {\n        nodeId\n        ...MetricCard_metrics\n        __typename\n      }\n    }\n  }\n}\n"
+    "text": "query indexRoute_Query(\n  $cursor: Cursor\n  $count: Int\n) {\n  ...MetricsList_query_1G22uz\n}\n\nfragment LineChart_metrics on Metrics {\n  metricsDataPointsCollection(first: 100, orderBy: [{time: AscNullsLast}]) {\n    edges {\n      node {\n        nodeId\n        time\n        value\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n  nodeId\n}\n\nfragment MetricCard_metrics on Metrics {\n  id\n  name\n  icon\n  unitShort\n  createdAt\n  dataPoints: metricsDataPointsCollection(orderBy: [{time: AscNullsFirst}]) {\n    totalCount\n    edges {\n      node {\n        time\n        value\n        nodeId\n      }\n    }\n  }\n  ...LineChart_metrics\n}\n\nfragment MetricsList_query_1G22uz on Query {\n  metricsCollection(after: $cursor, first: $count, orderBy: [{createdAt: DescNullsLast}], filter: {archived: {eq: false}}) {\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n    edges {\n      cursor\n      node {\n        nodeId\n        ...MetricCard_metrics\n        __typename\n      }\n    }\n  }\n}\n"
   }
 };
 })();
