@@ -3,7 +3,7 @@ import { graphql } from 'relay-runtime'
 import { LineChart } from './LineChart'
 import { MetricDetailsSection_metrics$key } from './__generated__/MetricDetailsSection_metrics.graphql'
 import GrowthBadge from './GrowthBadge'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs'
 import DataPointsTable from './DataPointsTable'
 
 const MetricDetailsSectionFragment = graphql`

@@ -6,7 +6,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '../ui/table'
+} from '../ui/Table'
 import { Button } from '../ui/Button'
 import { graphql } from 'relay-runtime'
 import { useMutation } from 'react-relay'
