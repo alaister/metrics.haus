@@ -6,6 +6,7 @@ import GrowthBadge from './GrowthBadge'
 
 const MetricDetailsSectionFragment = graphql`
   fragment MetricDetailsSection_metrics on Metrics {
+    unitShort
     dataPoints: metricsDataPointsCollection {
       totalCount
       edges {
@@ -35,7 +36,7 @@ const MetricDetailsSection = ({ metric }: MetricDetailsProps) => {
       {dataPoints.length > 0 && (
         <div className="flex gap-x-4">
           <span className="text-2xl font-bold">
-            {metric.unitShort || '-'}
+            {data.unitShort || '-'}
             {lastDataPoint?.value || '-'}
           </span>
           <GrowthBadge dataPoints={dataPoints} />
