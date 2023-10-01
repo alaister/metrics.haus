@@ -10,6 +10,9 @@ create table
         "updated_at" timestamp with time zone not null default now(),
         interval metric_interval not null,
         name text not null,
+        description text,
+        unit_short varchar(3),
+        icon text,
         team_id uuid not null references public.teams ("id") on delete cascade on update cascade
     );
 
@@ -35,8 +38,8 @@ from
     authenticated;
 
 grant
-update (name, interval),
-insert (name, interval, team_id) on public.metrics to public,
+update (name, interval, unit_short, description, icon),
+insert (name, interval, team_id, unit_short, description, icon) on public.metrics to public,
 authenticated;
 
 create table

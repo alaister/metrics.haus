@@ -4,14 +4,25 @@ import { useFragment } from 'react-relay'
 import { graphql } from 'relay-runtime'
 import { LineChart } from './LineChart'
 import { MetricCard_metrics$key } from './__generated__/MetricCard_metrics.graphql'
+import GrowthBadge from './GrowthBadge'
 
 const MetricCardFragment = graphql`
   fragment MetricCard_metrics on Metrics {
     id
     name
+    icon
+    unitShort
     createdAt
-    dataPoints: metricsDataPointsCollection {
+    dataPoints: metricsDataPointsCollection(
+      orderBy: [{ time: AscNullsFirst }]
+    ) {
       totalCount
+      edges {
+        node {
+          time
+          value
+        }
+      }
     }
     ...LineChart_metrics
   }
@@ -26,6 +37,10 @@ const MetricCard = memo(function MetricCard({ metric }: MetricCardProps) {
 
   const hasNoDataPoints = data.dataPoints?.totalCount === 0
 
+  const dataPoints = data.dataPoints?.edges.map((edge) => edge.node) || []
+
+  const lastDataPoint = dataPoints[dataPoints.length - 1]
+
   return (
     <Link
       to="/metrics/$metricId"
@@ -34,8 +49,23 @@ const MetricCard = memo(function MetricCard({ metric }: MetricCardProps) {
     >
       <div className="rounded-lg border shadow pt-4 cursor-pointer">
         <div className="px-4 pb-4 border-b">
-          <label>{data.name}</label>
+          <div className="flex justify-between">
+            <label className="tracking-tight text-sm font-medium">
+              {data.name}
+            </label>
+            <GrowthBadge dataPoints={dataPoints} />
+          </div>
+
+          <div>
+            <div>
+              <span className="text-2xl font-bold">
+                {data.unitShort || ''}
+                {lastDataPoint?.value || '-'}
+              </span>
+            </div>
+          </div>
         </div>
+
         <div className="overflow-hidden relative">
           {hasNoDataPoints && (
             <div className="z-20 bg-white/20 flex items-center justify-center -inset-0 w-full h-full absolute">

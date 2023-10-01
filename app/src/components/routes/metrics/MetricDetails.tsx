@@ -22,11 +22,13 @@ const MetricDetails: (typeof metricsDetailsRoute)['options']['component'] = ({
   return (
     <>
       <div>
-        <div className="flex flex-col gap-8">
+        <div className="flex flex-col gap-6">
           <div className="flex justify-between items-center">
-            <h1 className="text-4xl font-bold leading-none tracking-tight">
-              {data.node?.name}
-            </h1>
+            <div>
+              <h2 className="tracking-tight text-xl font-medium">
+                {data.node?.name}
+              </h2>
+            </div>
 
             <div className="flex gap-1">
               <Button variant="outline" asChild>
@@ -40,10 +42,6 @@ const MetricDetails: (typeof metricsDetailsRoute)['options']['component'] = ({
                   <Plus className="w-4 h-4" />
                   <span>Add Data Point</span>
                 </Link>
-              </Button>
-              <Button variant="outline">
-                <Plus className="w-4 h-4" />
-                <span>Send a notification</span>
               </Button>
             </div>
           </div>
