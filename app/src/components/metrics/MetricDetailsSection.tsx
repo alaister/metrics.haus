@@ -3,9 +3,12 @@ import { graphql } from 'relay-runtime'
 import { LineChart } from './LineChart'
 import { MetricDetailsSection_metrics$key } from './__generated__/MetricDetailsSection_metrics.graphql'
 import GrowthBadge from './GrowthBadge'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs'
+import DataPointsTable from './DataPointsTable'
 
 const MetricDetailsSectionFragment = graphql`
   fragment MetricDetailsSection_metrics on Metrics {
+    id
     unitShort
     dataPoints: metricsDataPointsCollection {
       totalCount
@@ -43,9 +46,20 @@ const MetricDetailsSection = ({ metric }: MetricDetailsProps) => {
         </div>
       )}
 
-      <div className="w-full h-[250px] md:h-[500px]">
-        <LineChart dataPoints={data} containerClassName="h-full" />
-      </div>
+      <Tabs defaultValue="graph">
+        <TabsList>
+          <TabsTrigger value="graph">Graph</TabsTrigger>
+          <TabsTrigger value="table">Table</TabsTrigger>
+        </TabsList>
+        <TabsContent value="graph">
+          <div className="w-full h-[250px] md:h-[500px]">
+            <LineChart dataPoints={data} containerClassName="h-full" />
+          </div>
+        </TabsContent>
+        <TabsContent value="table">
+          <DataPointsTable dataPoints={dataPoints} metricId={data.id} />
+        </TabsContent>
+      </Tabs>
     </div>
   )
 }

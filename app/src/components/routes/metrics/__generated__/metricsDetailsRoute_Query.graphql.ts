@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<729324ba595b3737cbd6acfe5d87e513>>
+ * @generated SignedSource<<0e714c12e23bf391bdf8ef63c0e52eb7>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -320,12 +320,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "63a64b3853eceda510112c11e1e1b7c2",
+    "cacheID": "85ddea9126bb779bbed9b9bf4e30c5cf",
     "id": null,
     "metadata": {},
     "name": "metricsDetailsRoute_Query",
     "operationKind": "query",
-    "text": "query metricsDetailsRoute_Query(\n  $nodeId: ID!\n) {\n  node(nodeId: $nodeId) {\n    __typename\n    nodeId\n    ... on Metrics {\n      id\n      name\n      icon\n      unitShort\n      description\n      ...MetricDetailsSection_metrics\n    }\n  }\n}\n\nfragment LineChart_metrics on Metrics {\n  metricsDataPointsCollection(first: 100, orderBy: [{time: AscNullsLast}]) {\n    edges {\n      node {\n        nodeId\n        time\n        value\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n  nodeId\n}\n\nfragment MetricDetailsSection_metrics on Metrics {\n  unitShort\n  dataPoints: metricsDataPointsCollection {\n    totalCount\n    edges {\n      node {\n        time\n        value\n        nodeId\n      }\n    }\n  }\n  ...LineChart_metrics\n}\n"
+    "text": "query metricsDetailsRoute_Query(\n  $nodeId: ID!\n) {\n  node(nodeId: $nodeId) {\n    __typename\n    nodeId\n    ... on Metrics {\n      id\n      name\n      icon\n      unitShort\n      description\n      ...MetricDetailsSection_metrics\n    }\n  }\n}\n\nfragment LineChart_metrics on Metrics {\n  metricsDataPointsCollection(first: 100, orderBy: [{time: AscNullsLast}]) {\n    edges {\n      node {\n        nodeId\n        time\n        value\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n  nodeId\n}\n\nfragment MetricDetailsSection_metrics on Metrics {\n  id\n  unitShort\n  dataPoints: metricsDataPointsCollection {\n    totalCount\n    edges {\n      node {\n        time\n        value\n        nodeId\n      }\n    }\n  }\n  ...LineChart_metrics\n}\n"
   }
 };
 })();
