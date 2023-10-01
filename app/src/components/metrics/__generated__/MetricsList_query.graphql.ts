@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<4430d0aa01bf9fec7d1024d296c2964c>>
+ * @generated SignedSource<<277b55d3cfc0244900aff3f14b953078>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -78,6 +78,15 @@ return {
     {
       "alias": "metricsCollection",
       "args": [
+        {
+          "kind": "Literal",
+          "name": "filter",
+          "value": {
+            "archived": {
+              "eq": false
+            }
+          }
+        },
         {
           "kind": "Literal",
           "name": "orderBy",
@@ -167,7 +176,7 @@ return {
           "storageKey": null
         }
       ],
-      "storageKey": "__Metrics_query_metricsCollection_connection(orderBy:[{\"createdAt\":\"DescNullsLast\"}])"
+      "storageKey": "__Metrics_query_metricsCollection_connection(filter:{\"archived\":{\"eq\":false}},orderBy:[{\"createdAt\":\"DescNullsLast\"}])"
     }
   ],
   "type": "Query",
@@ -175,6 +184,6 @@ return {
 };
 })();
 
-(node as any).hash = "9b6626bf941af89584c30d259aaba347";
+(node as any).hash = "8c36a260d6266a2aaae8de8aefb76c2d";
 
 export default node;

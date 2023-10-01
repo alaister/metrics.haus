@@ -13,6 +13,7 @@ create table
         description text,
         unit_short varchar(3),
         icon text,
+        archived boolean default false,
         team_id uuid not null references public.teams ("id") on delete cascade on update cascade
     );
 
@@ -38,7 +39,7 @@ from
     authenticated;
 
 grant
-update (name, interval, unit_short, description, icon),
+update (name, interval, unit_short, description, icon, archived),
 insert (name, interval, team_id, unit_short, description, icon) on public.metrics to public,
 authenticated;
 

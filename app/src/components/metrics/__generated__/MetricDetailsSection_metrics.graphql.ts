@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<3f93779e12b7323d21dae93521fc6bea>>
+ * @generated SignedSource<<76714911b7b50f013157158144d73e33>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -20,6 +20,7 @@ export type MetricDetailsSection_metrics$data = {
     }>;
     readonly totalCount: number;
   } | null;
+  readonly id: string;
   readonly unitShort: string | null;
   readonly " $fragmentSpreads": FragmentRefs<"LineChart_metrics">;
   readonly " $fragmentType": "MetricDetailsSection_metrics";
@@ -35,6 +36,13 @@ const node: ReaderFragment = {
   "metadata": null,
   "name": "MetricDetailsSection_metrics",
   "selections": [
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "id",
+      "storageKey": null
+    },
     {
       "alias": null,
       "args": null,
@@ -106,6 +114,6 @@ const node: ReaderFragment = {
   "abstractKey": null
 };
 
-(node as any).hash = "1a237da51ece1cc288cce3622840cce4";
+(node as any).hash = "007894add975ac3adaf3fa4493064600";
 
 export default node;
