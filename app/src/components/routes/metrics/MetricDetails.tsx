@@ -6,6 +6,7 @@ import { Button } from '~/components/ui/Button'
 import { Dialog, DialogContent } from '~/components/ui/Dialog'
 import NewMetricDataPoint from './NewDataPoint'
 import metricsDetailsRoute, { query } from './metrics-details-route'
+import IntervalPicker from '~/components/common/IntervalPicker'
 
 const MetricDetails: (typeof metricsDetailsRoute)['options']['component'] = ({
   useParams,
@@ -30,7 +31,7 @@ const MetricDetails: (typeof metricsDetailsRoute)['options']['component'] = ({
               </h2>
             </div>
 
-            <div className="flex gap-1">
+            <div className="flex gap-4">
               <Button variant="outline" asChild>
                 <Link
                   search={{ showNewDataPointModal: true }}
@@ -40,9 +41,11 @@ const MetricDetails: (typeof metricsDetailsRoute)['options']['component'] = ({
                   }}
                 >
                   <Plus className="w-4 h-4" />
-                  <span>Add Data Point</span>
+                  <span>Data Point</span>
                 </Link>
               </Button>
+
+              <IntervalPicker />
             </div>
           </div>
 
