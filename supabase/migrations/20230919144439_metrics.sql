@@ -54,7 +54,7 @@ create table
         time TIMESTAMPTZ not null,
         metric_id uuid not null references public.metrics ("id") on delete cascade on update cascade,
         value double precision not null,
-        reported_by uuid not null default auth.uid () references public.profiles ("id") on delete set null on update cascade,
+        reported_by uuid null default auth.uid () references public.profiles ("id") on delete set null on update cascade,
         primary key (metric_id, time)
     );
 

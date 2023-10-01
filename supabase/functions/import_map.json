@@ -1,0 +1,5 @@
+{
+    "imports": {
+      "papaparse": "https://cdn.jsdelivr.net/npm/papaparse@5.3.0/papaparse.min.js"
+    }
+  }
