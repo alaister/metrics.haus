@@ -5,6 +5,10 @@ import authLayoutRoute from '~/components/routes/auth-layout-route'
 import indexRoute from '~/components/routes/index-route'
 import metricsDetailsRoute from '~/components/routes/metrics/metrics-details-route'
 import metricsLayoutRoute from '~/components/routes/metrics/metrics-layout-route'
+import importLayoutRoute from '~/components/routes/import/imports-layout-route'
+import importsRoute from '~/components/routes/import/imports-route'
+import importNewRoute from '~/components/routes/import/imports-new-route'
+import importDetailsRoute from '~/components/routes/import/imports-details-route'
 import rootRoute from '~/components/routes/root-route'
 import signInRoute from '~/components/routes/sign-in-route'
 
@@ -19,12 +23,23 @@ const newMetricDataPointDummyRoute = new Route({
   path: 'data-points/new',
 })
 
+const newImportDummyRoute = new Route({
+  getParentRoute: () => importLayoutRoute,
+  path: 'imports/new',
+})
+
 const routeTree = rootRoute.addChildren([
   authLayoutRoute.addChildren([signInRoute]),
   appLayoutRoute.addChildren([
     accountRoute,
     metricsLayoutRoute.addChildren([indexRoute, newMetricDummyRoute]),
     metricsDetailsRoute.addChildren([newMetricDataPointDummyRoute]),
+    importLayoutRoute.addChildren([
+      importNewRoute,
+      newImportDummyRoute,
+      importDetailsRoute,
+      importsRoute,
+    ]),
   ]),
 ])
 

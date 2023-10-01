@@ -1,4 +1,4 @@
-create type user_event as enum('view_page', 'add_metric', 'add_data_point', 'update_avatar');
+create type user_event as enum('view_page', 'add_metric', 'add_data_point', 'update_avatar', 'import');
 
 create table
   public.user_events (
