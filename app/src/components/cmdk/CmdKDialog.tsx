@@ -1,5 +1,4 @@
-import * as React from 'react'
-import { Calculator, Calendar, Smile } from 'lucide-react'
+import { LineChart } from 'lucide-react'
 
 import {
   CommandDialog,
@@ -11,15 +10,44 @@ import {
 } from '../ui/Command'
 import { Button } from '../ui/Button'
 import debounce from 'lodash.debounce'
+import { useCallback, useEffect, useState } from 'react'
+import supabase from '~/lib/supabase'
+import { useAppSelector } from '~/stores'
+import { useNavigate } from '@tanstack/react-router'
+import { Database } from '~/lib/database.types'
 
 export function CmdKDialog() {
-  const [open, setOpen] = React.useState(false)
-  const [searchTerm, setSearchTerm] = React.useState('')
+  const [open, setOpen] = useState(false)
+  const [searchTerm, setSearchTerm] = useState('')
+  const [searching, setSearching] = useState(false)
+  const navigate = useNavigate()
 
-  const debounceFn = React.useCallback(debounce(handleDebounceFn, 350), [])
+  const selectedTeamId = useAppSelector((state) => state.team.selectedTeamId)
 
-  function handleDebounceFn(inputValue: string) {
-    console.log(inputValue)
+  const debounceFn = useCallback(debounce(handleDebounceFn, 350), [
+    selectedTeamId,
+  ])
+
+  const [metrics, setMetrics] = useState<
+    Database['public']['Tables']['metrics']['Row'][]
+  >([])
+
+  async function handleDebounceFn(inputValue: string) {
+    if (inputValue.length) {
+      setSearching(true)
+      const { data: metricsBySearchTerm } = await supabase
+        .from('metrics')
+        .select('*')
+        .eq('team_id', selectedTeamId!)
+        .eq('archived', false)
+        .ilike('name', `%${inputValue}%`)
+        .limit(5)
+
+      setMetrics(metricsBySearchTerm!)
+      setSearching(false)
+    } else {
+      setMetrics([])
+    }
   }
 
   function handleChange(val: string) {
@@ -27,7 +55,7 @@ export function CmdKDialog() {
     debounceFn(val)
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     const down = (e: KeyboardEvent) => {
       if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
         e.preventDefault()
@@ -58,21 +86,31 @@ export function CmdKDialog() {
           onValueChange={(val) => handleChange(val)}
         />
         <CommandList>
-          <CommandEmpty>No results found.</CommandEmpty>
-          <CommandGroup heading="Suggestions">
-            <CommandItem>
-              <Calendar className="mr-2 h-4 w-4" />
-              <span>Calendar</span>
-            </CommandItem>
-            <CommandItem>
-              <Smile className="mr-2 h-4 w-4" />
-              <span>Search Emoji</span>
-            </CommandItem>
-            <CommandItem>
-              <Calculator className="mr-2 h-4 w-4" />
-              <span>Calculator</span>
-            </CommandItem>
-          </CommandGroup>
+          {searching && <span>Loading....</span>}
+          {!searching && <CommandEmpty>No results found.</CommandEmpty>}
+
+          {metrics.length > 0 && (
+            <CommandGroup heading="Metrics">
+              {metrics.map((metric) => (
+                <CommandItem
+                  onSelect={() => {
+                    navigate({
+                      to: `/metrics/$metricId`,
+                      params: { metricId: metric.id },
+                      replace: true,
+                    })
+                    setOpen(false)
+                    setMetrics([])
+                    setSearchTerm('')
+                  }}
+                  key={metric.id}
+                >
+                  <LineChart className="mr-2 h-4 w-4" />
+                  <span>{metric.name}</span>
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          )}
         </CommandList>
       </CommandDialog>
     </>
