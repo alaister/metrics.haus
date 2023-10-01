@@ -56,6 +56,7 @@ const MetricOwnersInsertMutation = graphql`
 const formSchema = z.object({
   name: z.string().min(1, "Can't be empty"),
   interval: z.enum(['minute', 'hour', 'day', 'week', 'month']),
+  unitShort: z.string().max(3).optional(),
   members: z.optional(z.string().array()),
 })
 
@@ -73,6 +74,7 @@ const MetricForm = ({ onSuccess }: MetricFormProps) => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
+      unitShort: '',
     },
   })
 
@@ -93,6 +95,7 @@ const MetricForm = ({ onSuccess }: MetricFormProps) => {
         input: {
           name: values.name,
           interval: values.interval,
+          unitShort: values.unitShort,
           teamId: selectedTeamId,
         },
         connections: [connectionID],
@@ -107,7 +110,7 @@ const MetricForm = ({ onSuccess }: MetricFormProps) => {
       onCompleted(response) {
         function onDone() {
           toast({ title: 'Metric created successfully' })
-          form.reset({ name: '', interval: 'week', members: [] })
+          form.reset({ name: '', interval: 'week', members: [], unitShort: '' })
           onSuccess?.()
           emitUserEvent('add_metric', values.name).then(() => {
             dispatch(refreshPoints(true))
@@ -182,6 +185,20 @@ const MetricForm = ({ onSuccess }: MetricFormProps) => {
                     <SelectItem value="year">Year</SelectItem>
                   </SelectContent>
                 </Select>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="unitShort"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Unit (Short)</FormLabel>
+              <FormControl>
+                <Input placeholder="$, €, %, ..." {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

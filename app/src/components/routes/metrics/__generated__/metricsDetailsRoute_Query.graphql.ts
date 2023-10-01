@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<e009513203adea4fe213bfed9835e09e>>
+ * @generated SignedSource<<4926d5d124b804169c3189a7683885b2>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -15,9 +15,12 @@ export type metricsDetailsRoute_Query$variables = {
 };
 export type metricsDetailsRoute_Query$data = {
   readonly node: {
+    readonly description?: string | null;
+    readonly icon?: string | null;
     readonly id?: string;
     readonly name?: string;
     readonly nodeId: string;
+    readonly unitShort?: string | null;
     readonly " $fragmentSpreads": FragmentRefs<"MetricDetailsSection_metrics">;
   } | null;
 };
@@ -66,10 +69,45 @@ v5 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
+  "name": "icon",
+  "storageKey": null
+},
+v6 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "unitShort",
+  "storageKey": null
+},
+v7 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "description",
+  "storageKey": null
+},
+v8 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
   "name": "__typename",
   "storageKey": null
 },
-v6 = [
+v9 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "time",
+  "storageKey": null
+},
+v10 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "value",
+  "storageKey": null
+},
+v11 = [
   {
     "kind": "Literal",
     "name": "first",
@@ -106,6 +144,9 @@ return {
             "selections": [
               (v3/*: any*/),
               (v4/*: any*/),
+              (v5/*: any*/),
+              (v6/*: any*/),
+              (v7/*: any*/),
               {
                 "args": null,
                 "kind": "FragmentSpread",
@@ -136,13 +177,16 @@ return {
         "name": "node",
         "plural": false,
         "selections": [
-          (v5/*: any*/),
+          (v8/*: any*/),
           (v2/*: any*/),
           {
             "kind": "InlineFragment",
             "selections": [
               (v3/*: any*/),
               (v4/*: any*/),
+              (v5/*: any*/),
+              (v6/*: any*/),
+              (v7/*: any*/),
               {
                 "alias": "dataPoints",
                 "args": null,
@@ -157,13 +201,38 @@ return {
                     "kind": "ScalarField",
                     "name": "totalCount",
                     "storageKey": null
+                  },
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "MetricsDataPointsEdge",
+                    "kind": "LinkedField",
+                    "name": "edges",
+                    "plural": true,
+                    "selections": [
+                      {
+                        "alias": null,
+                        "args": null,
+                        "concreteType": "MetricsDataPoints",
+                        "kind": "LinkedField",
+                        "name": "node",
+                        "plural": false,
+                        "selections": [
+                          (v9/*: any*/),
+                          (v10/*: any*/),
+                          (v2/*: any*/)
+                        ],
+                        "storageKey": null
+                      }
+                    ],
+                    "storageKey": null
                   }
                 ],
                 "storageKey": null
               },
               {
                 "alias": null,
-                "args": (v6/*: any*/),
+                "args": (v11/*: any*/),
                 "concreteType": "MetricsDataPointsConnection",
                 "kind": "LinkedField",
                 "name": "metricsDataPointsCollection",
@@ -186,21 +255,9 @@ return {
                         "plural": false,
                         "selections": [
                           (v2/*: any*/),
-                          {
-                            "alias": null,
-                            "args": null,
-                            "kind": "ScalarField",
-                            "name": "time",
-                            "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": null,
-                            "kind": "ScalarField",
-                            "name": "value",
-                            "storageKey": null
-                          },
-                          (v5/*: any*/)
+                          (v9/*: any*/),
+                          (v10/*: any*/),
+                          (v8/*: any*/)
                         ],
                         "storageKey": null
                       },
@@ -244,7 +301,7 @@ return {
               },
               {
                 "alias": null,
-                "args": (v6/*: any*/),
+                "args": (v11/*: any*/),
                 "filters": [
                   "orderBy"
                 ],
@@ -263,16 +320,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "0b25b62475f98c2e27e76cc32e2133c2",
+    "cacheID": "24149121f9f6f2b81c205d13b934e83a",
     "id": null,
     "metadata": {},
     "name": "metricsDetailsRoute_Query",
     "operationKind": "query",
-    "text": "query metricsDetailsRoute_Query(\n  $nodeId: ID!\n) {\n  node(nodeId: $nodeId) {\n    __typename\n    nodeId\n    ... on Metrics {\n      id\n      name\n      ...MetricDetailsSection_metrics\n    }\n  }\n}\n\nfragment LineChart_metrics on Metrics {\n  metricsDataPointsCollection(first: 100, orderBy: [{time: AscNullsLast}]) {\n    edges {\n      node {\n        nodeId\n        time\n        value\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n  nodeId\n}\n\nfragment MetricDetailsSection_metrics on Metrics {\n  dataPoints: metricsDataPointsCollection {\n    totalCount\n  }\n  ...LineChart_metrics\n}\n"
+    "text": "query metricsDetailsRoute_Query(\n  $nodeId: ID!\n) {\n  node(nodeId: $nodeId) {\n    __typename\n    nodeId\n    ... on Metrics {\n      id\n      name\n      icon\n      unitShort\n      description\n      ...MetricDetailsSection_metrics\n    }\n  }\n}\n\nfragment LineChart_metrics on Metrics {\n  metricsDataPointsCollection(first: 100, orderBy: [{time: AscNullsLast}]) {\n    edges {\n      node {\n        nodeId\n        time\n        value\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n  nodeId\n}\n\nfragment MetricDetailsSection_metrics on Metrics {\n  dataPoints: metricsDataPointsCollection {\n    totalCount\n    edges {\n      node {\n        time\n        value\n        nodeId\n      }\n    }\n  }\n  ...LineChart_metrics\n}\n"
   }
 };
 })();
 
-(node as any).hash = "6d516a6ddf49f401fdcecccf2b8c08ba";
+(node as any).hash = "f72a7bf1e74a7547fc46cb15022ee6f8";
 
 export default node;

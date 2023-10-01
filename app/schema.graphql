@@ -160,6 +160,9 @@ type Metrics implements Node {
   updatedAt: Datetime!
   interval: MetricInterval!
   name: String!
+  description: String
+  unitShort: String
+  icon: String
   teamId: UUID!
   team: Teams!
   metricsDataPointsCollection(
@@ -327,6 +330,9 @@ input MetricsFilter {
   updatedAt: DatetimeFilter
   interval: MetricIntervalFilter
   name: StringFilter
+  description: StringFilter
+  unitShort: StringFilter
+  icon: StringFilter
   teamId: UUIDFilter
   nodeId: IDFilter
 }
@@ -334,6 +340,9 @@ input MetricsFilter {
 input MetricsInsertInput {
   interval: MetricInterval
   name: String
+  description: String
+  unitShort: String
+  icon: String
   teamId: UUID
 }
 
@@ -355,6 +364,9 @@ input MetricsOrderBy {
   updatedAt: OrderByDirection
   interval: OrderByDirection
   name: OrderByDirection
+  description: OrderByDirection
+  unitShort: OrderByDirection
+  icon: OrderByDirection
   teamId: OrderByDirection
 }
 
@@ -444,6 +456,9 @@ type MetricsOwnersUpdateResponse {
 input MetricsUpdateInput {
   interval: MetricInterval
   name: String
+  description: String
+  unitShort: String
+  icon: String
 }
 
 type MetricsUpdateResponse {
@@ -508,6 +523,21 @@ type Mutation {
   ): MetricsOwnersDeleteResponse!
 
   """
+  Deletes zero or more records from the `Notifications` collection
+  """
+  deleteFromNotificationsCollection(
+    """
+    Restricts the mutation's impact to records matching the criteria
+    """
+    filter: NotificationsFilter
+
+    """
+    The maximum number of records in the collection permitted to be affected
+    """
+    atMost: Int! = 1
+  ): NotificationsDeleteResponse!
+
+  """
   Deletes zero or more records from the `TeamMembers` collection
   """
   deleteFromTeamMembersCollection(
@@ -559,6 +589,13 @@ type Mutation {
   ): MetricsOwnersInsertResponse
 
   """
+  Adds one or more `Notifications` records to the collection
+  """
+  insertIntoNotificationsCollection(
+    objects: [NotificationsInsertInput!]!
+  ): NotificationsInsertResponse
+
+  """
   Adds one or more `Teams` records to the collection
   """
   insertIntoTeamsCollection(objects: [TeamsInsertInput!]!): TeamsInsertResponse
@@ -602,6 +639,26 @@ type Mutation {
     """
     atMost: Int! = 1
   ): MetricsOwnersUpdateResponse!
+
+  """
+  Updates zero or more records in the `Notifications` collection
+  """
+  updateNotificationsCollection(
+    """
+    Fields that are set will be updated for all records matching the `filter`
+    """
+    set: NotificationsUpdateInput!
+
+    """
+    Restricts the mutation's impact to records matching the criteria
+    """
+    filter: NotificationsFilter
+
+    """
+    The maximum number of records in the collection permitted to be affected
+    """
+    atMost: Int! = 1
+  ): NotificationsUpdateResponse!
 
   """
   Updates zero or more records in the `Profiles` collection
@@ -649,6 +706,96 @@ interface Node {
   Retrieves a record by `ID`
   """
   nodeId: ID!
+}
+
+type Notifications implements Node {
+  """
+  Globally Unique Record Identifier
+  """
+  nodeId: ID!
+  id: UUID!
+  createdAt: Datetime
+  text: String
+  profileId: UUID!
+  metadata: JSON
+  profile: Profiles!
+}
+
+type NotificationsConnection {
+  edges: [NotificationsEdge!]!
+  pageInfo: PageInfo!
+}
+
+type NotificationsDeleteResponse {
+  """
+  Count of the records impacted by the mutation
+  """
+  affectedCount: Int!
+
+  """
+  Array of records impacted by the mutation
+  """
+  records: [Notifications!]!
+}
+
+type NotificationsEdge {
+  cursor: String!
+  node: Notifications!
+}
+
+input NotificationsFilter {
+  id: UUIDFilter
+  createdAt: DatetimeFilter
+  text: StringFilter
+  profileId: UUIDFilter
+  nodeId: IDFilter
+}
+
+input NotificationsInsertInput {
+  id: UUID
+  createdAt: Datetime
+  text: String
+  profileId: UUID
+  metadata: JSON
+}
+
+type NotificationsInsertResponse {
+  """
+  Count of the records impacted by the mutation
+  """
+  affectedCount: Int!
+
+  """
+  Array of records impacted by the mutation
+  """
+  records: [Notifications!]!
+}
+
+input NotificationsOrderBy {
+  id: OrderByDirection
+  createdAt: OrderByDirection
+  text: OrderByDirection
+  profileId: OrderByDirection
+}
+
+input NotificationsUpdateInput {
+  id: UUID
+  createdAt: Datetime
+  text: String
+  profileId: UUID
+  metadata: JSON
+}
+
+type NotificationsUpdateResponse {
+  """
+  Count of the records impacted by the mutation
+  """
+  affectedCount: Int!
+
+  """
+  Array of records impacted by the mutation
+  """
+  records: [Notifications!]!
 }
 
 """
@@ -705,6 +852,7 @@ type Profiles implements Node {
   createdAt: Datetime!
   updatedAt: Datetime!
   name: String!
+  avatarPath: String
   teamMembersCollection(
     """
     Query the first `n` records in the collection
@@ -798,6 +946,37 @@ type Profiles implements Node {
     """
     orderBy: [MetricsOwnersOrderBy!]
   ): MetricsOwnersConnection
+  notificationsCollection(
+    """
+    Query the first `n` records in the collection
+    """
+    first: Int
+
+    """
+    Query the last `n` records in the collection
+    """
+    last: Int
+
+    """
+    Query values in the collection before the provided cursor
+    """
+    before: Cursor
+
+    """
+    Query values in the collection after the provided cursor
+    """
+    after: Cursor
+
+    """
+    Filters to apply to the results set when querying from the collection
+    """
+    filter: NotificationsFilter
+
+    """
+    Sort order to apply to the collection
+    """
+    orderBy: [NotificationsOrderBy!]
+  ): NotificationsConnection
 }
 
 type ProfilesConnection {
@@ -815,6 +994,7 @@ input ProfilesFilter {
   createdAt: DatetimeFilter
   updatedAt: DatetimeFilter
   name: StringFilter
+  avatarPath: StringFilter
   nodeId: IDFilter
 }
 
@@ -823,6 +1003,7 @@ input ProfilesOrderBy {
   createdAt: OrderByDirection
   updatedAt: OrderByDirection
   name: OrderByDirection
+  avatarPath: OrderByDirection
 }
 
 input ProfilesUpdateInput {
@@ -959,6 +1140,41 @@ type Query {
     """
     nodeId: ID!
   ): Node
+
+  """
+  A pagable collection of type `Notifications`
+  """
+  notificationsCollection(
+    """
+    Query the first `n` records in the collection
+    """
+    first: Int
+
+    """
+    Query the last `n` records in the collection
+    """
+    last: Int
+
+    """
+    Query values in the collection before the provided cursor
+    """
+    before: Cursor
+
+    """
+    Query values in the collection after the provided cursor
+    """
+    after: Cursor
+
+    """
+    Filters to apply to the results set when querying from the collection
+    """
+    filter: NotificationsFilter
+
+    """
+    Sort order to apply to the collection
+    """
+    orderBy: [NotificationsOrderBy!]
+  ): NotificationsConnection
 
   """
   A pagable collection of type `Profiles`
@@ -1301,6 +1517,23 @@ input TimeFilter {
   lt: Time
   lte: Time
   neq: Time
+}
+
+enum UserEvent {
+  view_page
+  add_metric
+  add_data_point
+  update_avatar
+}
+
+"""
+Boolean expression comparing fields on type "UserEvent"
+"""
+input UserEventFilter {
+  eq: UserEvent
+  in: [UserEvent!]
+  is: FilterIs
+  neq: UserEvent
 }
 
 """

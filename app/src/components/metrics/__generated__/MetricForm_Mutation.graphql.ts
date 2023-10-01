@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<60f96f45fe2f1d1330bb00daa2388683>>
+ * @generated SignedSource<<5268101210a97977973f0db34c12825b>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -12,9 +12,12 @@ import { ConcreteRequest, Mutation } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type MetricInterval = "day" | "hour" | "minute" | "month" | "week" | "%future added value";
 export type MetricsInsertInput = {
+  description?: string | null;
+  icon?: string | null;
   interval?: MetricInterval | null;
   name?: string | null;
   teamId?: string | null;
+  unitShort?: string | null;
 };
 export type MetricForm_Mutation$variables = {
   connections: ReadonlyArray<string>;
@@ -80,7 +83,21 @@ v5 = {
   "name": "nodeId",
   "storageKey": null
 },
-v6 = [
+v6 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "time",
+  "storageKey": null
+},
+v7 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "value",
+  "storageKey": null
+},
+v8 = [
   {
     "kind": "Literal",
     "name": "first",
@@ -179,12 +196,36 @@ return {
                 "alias": null,
                 "args": null,
                 "kind": "ScalarField",
+                "name": "icon",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "unitShort",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
                 "name": "createdAt",
                 "storageKey": null
               },
               {
                 "alias": "dataPoints",
-                "args": null,
+                "args": [
+                  {
+                    "kind": "Literal",
+                    "name": "orderBy",
+                    "value": [
+                      {
+                        "time": "AscNullsFirst"
+                      }
+                    ]
+                  }
+                ],
                 "concreteType": "MetricsDataPointsConnection",
                 "kind": "LinkedField",
                 "name": "metricsDataPointsCollection",
@@ -196,13 +237,38 @@ return {
                     "kind": "ScalarField",
                     "name": "totalCount",
                     "storageKey": null
+                  },
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "MetricsDataPointsEdge",
+                    "kind": "LinkedField",
+                    "name": "edges",
+                    "plural": true,
+                    "selections": [
+                      {
+                        "alias": null,
+                        "args": null,
+                        "concreteType": "MetricsDataPoints",
+                        "kind": "LinkedField",
+                        "name": "node",
+                        "plural": false,
+                        "selections": [
+                          (v6/*: any*/),
+                          (v7/*: any*/),
+                          (v5/*: any*/)
+                        ],
+                        "storageKey": null
+                      }
+                    ],
+                    "storageKey": null
                   }
                 ],
-                "storageKey": null
+                "storageKey": "metricsDataPointsCollection(orderBy:[{\"time\":\"AscNullsFirst\"}])"
               },
               {
                 "alias": null,
-                "args": (v6/*: any*/),
+                "args": (v8/*: any*/),
                 "concreteType": "MetricsDataPointsConnection",
                 "kind": "LinkedField",
                 "name": "metricsDataPointsCollection",
@@ -225,20 +291,8 @@ return {
                         "plural": false,
                         "selections": [
                           (v5/*: any*/),
-                          {
-                            "alias": null,
-                            "args": null,
-                            "kind": "ScalarField",
-                            "name": "time",
-                            "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": null,
-                            "kind": "ScalarField",
-                            "name": "value",
-                            "storageKey": null
-                          },
+                          (v6/*: any*/),
+                          (v7/*: any*/),
                           {
                             "alias": null,
                             "args": null,
@@ -289,7 +343,7 @@ return {
               },
               {
                 "alias": null,
-                "args": (v6/*: any*/),
+                "args": (v8/*: any*/),
                 "filters": [
                   "orderBy"
                 ],
@@ -328,12 +382,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "0534aad32b1bff5658d3c71536ddad39",
+    "cacheID": "541ed02e64b1f82b90063feaba4d40f5",
     "id": null,
     "metadata": {},
     "name": "MetricForm_Mutation",
     "operationKind": "mutation",
-    "text": "mutation MetricForm_Mutation(\n  $input: MetricsInsertInput!\n) {\n  insertIntoMetricsCollection(objects: [$input]) {\n    affectedCount\n    records {\n      id\n      nodeId\n      ...MetricCard_metrics\n    }\n  }\n}\n\nfragment LineChart_metrics on Metrics {\n  metricsDataPointsCollection(first: 100, orderBy: [{time: AscNullsLast}]) {\n    edges {\n      node {\n        nodeId\n        time\n        value\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n  nodeId\n}\n\nfragment MetricCard_metrics on Metrics {\n  id\n  name\n  createdAt\n  dataPoints: metricsDataPointsCollection {\n    totalCount\n  }\n  ...LineChart_metrics\n}\n"
+    "text": "mutation MetricForm_Mutation(\n  $input: MetricsInsertInput!\n) {\n  insertIntoMetricsCollection(objects: [$input]) {\n    affectedCount\n    records {\n      id\n      nodeId\n      ...MetricCard_metrics\n    }\n  }\n}\n\nfragment LineChart_metrics on Metrics {\n  metricsDataPointsCollection(first: 100, orderBy: [{time: AscNullsLast}]) {\n    edges {\n      node {\n        nodeId\n        time\n        value\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n  nodeId\n}\n\nfragment MetricCard_metrics on Metrics {\n  id\n  name\n  icon\n  unitShort\n  createdAt\n  dataPoints: metricsDataPointsCollection(orderBy: [{time: AscNullsFirst}]) {\n    totalCount\n    edges {\n      node {\n        time\n        value\n        nodeId\n      }\n    }\n  }\n  ...LineChart_metrics\n}\n"
   }
 };
 })();

@@ -14,6 +14,9 @@ export const query = graphql`
       ... on Metrics {
         id
         name
+        icon
+        unitShort
+        description
         ...MetricDetailsSection_metrics
       }
     }
