@@ -91,8 +91,8 @@ export function LineChart({
   }))
 
   return (
-    <div className={cn('w-full, h-full', containerClassName)}>
-      <div className={'h-3/4 md:h-5/6'}>
+    <div className={cn('w-full h-full', containerClassName)}>
+      <div className={preview ? 'h-full' : 'h-3/4 md:h-5/6'}>
         <ResponsiveContainer>
           <AreaChart data={chartData}>
             <defs>
@@ -157,18 +157,20 @@ export function LineChart({
           </AreaChart>
         </ResponsiveContainer>
       </div>
-      <div className={'h-1/4 md:h-1/6'}>
-        <ResponsiveContainer>
-          <RechartsLineChart data={chartData.map((d) => ({ ...d, value: 0 }))}>
-            {!preview && (
+
+      {!preview && (
+        <div className={'h-1/4 md:h-1/6'}>
+          <ResponsiveContainer>
+            <RechartsLineChart
+              data={chartData.map((d) => ({ ...d, value: 0 }))}
+            >
               <YAxis
                 tickFormatter={() => ''}
                 type="number"
                 tickCount={0}
                 domain={[0, 1]}
               />
-            )}
-            {!preview && (
+
               <XAxis
                 ticks={ticks}
                 dataKey="ts"
@@ -181,23 +183,24 @@ export function LineChart({
                 tickFormatter={(ms) => timestampToLabel(new Date(ms))}
                 domain={['dataMin', 'dataMax']}
               />
-            )}
-            {threads.map((t) => (
-              <ReferenceDot
-                className="cursor-pointer"
-                key={t.id}
-                r={6}
-                stroke=""
-                fill="#333"
-                y={0.6}
-                x={t.timestamp.getTime()}
-                onClick={() => alert(t.comment + ' TODO')}
-              />
-            ))}
-            <Line dataKey="value" opacity={0} />
-          </RechartsLineChart>
-        </ResponsiveContainer>
-      </div>
+
+              {threads.map((t) => (
+                <ReferenceDot
+                  className="cursor-pointer"
+                  key={t.id}
+                  r={6}
+                  stroke=""
+                  fill="#333"
+                  y={0.6}
+                  x={t.timestamp.getTime()}
+                  onClick={() => alert(t.comment + ' TODO')}
+                />
+              ))}
+              <Line dataKey="value" opacity={0} />
+            </RechartsLineChart>
+          </ResponsiveContainer>
+        </div>
+      )}
     </div>
   )
 }
