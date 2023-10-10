@@ -1,6 +1,6 @@
 import { subDays } from 'date-fns'
 import { useState } from 'react'
-import { useFragment } from 'react-relay'
+import { usePaginationFragment } from 'react-relay'
 import {
   Area,
   AreaChart,
@@ -34,7 +34,11 @@ const LineChartMetricsFragment = graphql`
       after: $cursor
       first: $count
       orderBy: [{ time: AscNullsLast }]
-    ) @connection(key: "MetricDataPoints_metrics_metricsDataPointsCollection") {
+    )
+      @connection(
+        key: "MetricDataPoints_metrics_metricsDataPointsCollection"
+        filters: []
+      ) {
       edges {
         node {
           nodeId
@@ -58,10 +62,10 @@ export function LineChart({
   containerClassName,
 }: LineChartProps) {
   const data =
-    useFragment(
+    usePaginationFragment(
       LineChartMetricsFragment,
       dataPoints,
-    ).metricsDataPointsCollection?.edges.map((e) => e.node) ?? []
+    ).data.metricsDataPointsCollection?.edges.map((e) => e.node) ?? []
 
   const isEmpty = data.length == 0
 
