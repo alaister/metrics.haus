@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<8d7527a859cab6478245bcc42562a0a4>>
+ * @generated SignedSource<<6ffb6681810cf5b52877f711f10e9e21>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -8,7 +8,7 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { Fragment, ReaderFragment } from 'relay-runtime';
+import { ReaderFragment, RefetchableFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type MetricCard_metrics$data = {
   readonly createdAt: string;
@@ -25,6 +25,7 @@ export type MetricCard_metrics$data = {
   readonly icon: string | null;
   readonly id: string;
   readonly name: string;
+  readonly nodeId: string;
   readonly unitShort: string | null;
   readonly " $fragmentSpreads": FragmentRefs<"LineChart_metrics">;
   readonly " $fragmentType": "MetricCard_metrics";
@@ -34,10 +35,58 @@ export type MetricCard_metrics$key = {
   readonly " $fragmentSpreads": FragmentRefs<"MetricCard_metrics">;
 };
 
-const node: ReaderFragment = {
-  "argumentDefinitions": [],
+import MetricCardPagination_Query_graphql from './MetricCardPagination_Query.graphql';
+
+const node: ReaderFragment = (function(){
+var v0 = [
+  "dataPoints"
+],
+v1 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "nodeId",
+  "storageKey": null
+};
+return {
+  "argumentDefinitions": [
+    {
+      "defaultValue": 100,
+      "kind": "LocalArgument",
+      "name": "count"
+    },
+    {
+      "defaultValue": null,
+      "kind": "LocalArgument",
+      "name": "cursor"
+    }
+  ],
   "kind": "Fragment",
-  "metadata": null,
+  "metadata": {
+    "connection": [
+      {
+        "count": "count",
+        "cursor": "cursor",
+        "direction": "forward",
+        "path": (v0/*: any*/)
+      }
+    ],
+    "refetch": {
+      "connection": {
+        "forward": {
+          "count": "count",
+          "cursor": "cursor"
+        },
+        "backward": null,
+        "path": (v0/*: any*/)
+      },
+      "fragmentPathInResult": [
+        "node"
+      ],
+      "operation": MetricCardPagination_Query_graphql,
+      "identifierField": "nodeId"
+    }
+  },
   "name": "MetricCard_metrics",
   "selections": [
     {
@@ -77,20 +126,10 @@ const node: ReaderFragment = {
     },
     {
       "alias": "dataPoints",
-      "args": [
-        {
-          "kind": "Literal",
-          "name": "orderBy",
-          "value": [
-            {
-              "time": "AscNullsFirst"
-            }
-          ]
-        }
-      ],
+      "args": null,
       "concreteType": "MetricsDataPointsConnection",
       "kind": "LinkedField",
-      "name": "metricsDataPointsCollection",
+      "name": "__MetricCard_metrics_dataPoints_connection",
       "plural": false,
       "selections": [
         {
@@ -116,13 +155,7 @@ const node: ReaderFragment = {
               "name": "node",
               "plural": false,
               "selections": [
-                {
-                  "alias": null,
-                  "args": null,
-                  "kind": "ScalarField",
-                  "name": "nodeId",
-                  "storageKey": null
-                },
+                (v1/*: any*/),
                 {
                   "alias": null,
                   "args": null,
@@ -136,26 +169,67 @@ const node: ReaderFragment = {
                   "kind": "ScalarField",
                   "name": "value",
                   "storageKey": null
+                },
+                {
+                  "alias": null,
+                  "args": null,
+                  "kind": "ScalarField",
+                  "name": "__typename",
+                  "storageKey": null
                 }
               ],
+              "storageKey": null
+            },
+            {
+              "alias": null,
+              "args": null,
+              "kind": "ScalarField",
+              "name": "cursor",
+              "storageKey": null
+            }
+          ],
+          "storageKey": null
+        },
+        {
+          "alias": null,
+          "args": null,
+          "concreteType": "PageInfo",
+          "kind": "LinkedField",
+          "name": "pageInfo",
+          "plural": false,
+          "selections": [
+            {
+              "alias": null,
+              "args": null,
+              "kind": "ScalarField",
+              "name": "endCursor",
+              "storageKey": null
+            },
+            {
+              "alias": null,
+              "args": null,
+              "kind": "ScalarField",
+              "name": "hasNextPage",
               "storageKey": null
             }
           ],
           "storageKey": null
         }
       ],
-      "storageKey": "metricsDataPointsCollection(orderBy:[{\"time\":\"AscNullsFirst\"}])"
+      "storageKey": null
     },
     {
       "args": null,
       "kind": "FragmentSpread",
       "name": "LineChart_metrics"
-    }
+    },
+    (v1/*: any*/)
   ],
   "type": "Metrics",
   "abstractKey": null
 };
+})();
 
-(node as any).hash = "ed091d18057bda3b5bd64c297d141226";
+(node as any).hash = "e4b0a56efbdfa42bd465fbc7e294677c";
 
 export default node;
