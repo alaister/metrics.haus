@@ -3,3 +3,4 @@ __generated__
 dist
 .idea
 .vscode
+app/schema.graphql
