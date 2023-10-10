@@ -15,13 +15,13 @@ import {
   FormMessage,
 } from '~/components/ui/Form'
 import { Input } from '~/components/ui/Input'
+import { toGlobalId } from '~/lib/graphql'
 import { useToast } from '~/lib/hooks/use-toast'
 import { emitUserEvent } from '~/lib/userEvents'
 import { useAppDispatch } from '~/stores'
 import { refreshPoints } from '~/stores/points-slice'
 import { DateTimePicker } from '../ui/DateTimePicker'
 import { MetricDataPointForm_Mutation } from './__generated__/MetricDataPointForm_Mutation.graphql'
-import { toGlobalId } from '~/lib/graphql'
 
 const MetricDataPointInsertMutation = graphql`
   mutation MetricDataPointForm_Mutation(
@@ -73,12 +73,6 @@ const MetricForm = ({ onSuccess, metricId }: MetricFormProps) => {
   const [isExploding, setIsExploding] = useState(false)
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const connectionID = ConnectionHandler.getConnectionID(
-      toGlobalId(metricId, 'metrics'),
-      'MetricDataPoints_metrics_metricsDataPointsCollection',
-      { orderBy: [{ time: 'AscNullsLast' }] },
-    )
-
     mutate({
       variables: {
         input: {
@@ -86,7 +80,16 @@ const MetricForm = ({ onSuccess, metricId }: MetricFormProps) => {
           time: values.timestamp,
           value: values.value,
         },
-        connections: [connectionID],
+        connections: [
+          ConnectionHandler.getConnectionID(
+            toGlobalId(metricId, 'metrics'),
+            'MetricDetailsSection_metrics_dataPoints',
+          ),
+          ConnectionHandler.getConnectionID(
+            toGlobalId(metricId, 'metrics'),
+            'MetricDataPoints_metrics_metricsDataPointsCollection',
+          ),
+        ],
       },
       onError(error) {
         toast({

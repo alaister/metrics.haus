@@ -19,6 +19,7 @@ const MetricCardFragment = graphql`
       totalCount
       edges {
         node {
+          nodeId
           time
           value
         }

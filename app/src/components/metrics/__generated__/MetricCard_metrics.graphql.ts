@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<81f560b19d8ff28d66ca3ade8080c94c>>
+ * @generated SignedSource<<8d7527a859cab6478245bcc42562a0a4>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -15,6 +15,7 @@ export type MetricCard_metrics$data = {
   readonly dataPoints: {
     readonly edges: ReadonlyArray<{
       readonly node: {
+        readonly nodeId: string;
         readonly time: string;
         readonly value: number;
       };
@@ -119,6 +120,13 @@ const node: ReaderFragment = {
                   "alias": null,
                   "args": null,
                   "kind": "ScalarField",
+                  "name": "nodeId",
+                  "storageKey": null
+                },
+                {
+                  "alias": null,
+                  "args": null,
+                  "kind": "ScalarField",
                   "name": "time",
                   "storageKey": null
                 },
@@ -148,6 +156,6 @@ const node: ReaderFragment = {
   "abstractKey": null
 };
 
-(node as any).hash = "a3599a979bc9692f46bbee193e8eac2d";
+(node as any).hash = "ed091d18057bda3b5bd64c297d141226";
 
 export default node;

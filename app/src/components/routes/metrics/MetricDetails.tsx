@@ -1,6 +1,7 @@
 import { Link, useNavigate } from '@tanstack/react-router'
 import { Plus } from 'lucide-react'
 import { usePreloadedQuery } from 'react-relay'
+import IntervalPicker from '~/components/common/IntervalPicker'
 import MetricDetailsSection from '~/components/metrics/MetricDetailsSection'
 import { Button } from '~/components/ui/Button'
 import { Dialog, DialogContent } from '~/components/ui/Dialog'
@@ -30,7 +31,7 @@ const MetricDetails: (typeof metricsDetailsRoute)['options']['component'] = ({
               </h2>
             </div>
 
-            <div className="flex gap-1">
+            <div className="flex gap-4">
               <Button variant="outline" asChild>
                 <Link
                   search={{ showNewDataPointModal: true }}
@@ -40,9 +41,11 @@ const MetricDetails: (typeof metricsDetailsRoute)['options']['component'] = ({
                   }}
                 >
                   <Plus className="w-4 h-4" />
-                  <span>Add Data Point</span>
+                  <span>Data Point</span>
                 </Link>
               </Button>
+
+              <IntervalPicker />
             </div>
           </div>
 

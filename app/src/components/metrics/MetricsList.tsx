@@ -14,7 +14,8 @@ const MetricsFragment = graphql`
       after: $cursor
       first: $count
       orderBy: [{ createdAt: DescNullsLast }]
-    ) @connection(key: "Metrics_query_metricsCollection") {
+      filter: { archived: { eq: false } }
+    ) @connection(key: "Metrics_query_metricsCollection", filters: []) {
       pageInfo {
         hasNextPage
         endCursor

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<4430d0aa01bf9fec7d1024d296c2964c>>
+ * @generated SignedSource<<23ddcabf01794f26fb1630e22ee4471f>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -77,17 +77,7 @@ return {
   "selections": [
     {
       "alias": "metricsCollection",
-      "args": [
-        {
-          "kind": "Literal",
-          "name": "orderBy",
-          "value": [
-            {
-              "createdAt": "DescNullsLast"
-            }
-          ]
-        }
-      ],
+      "args": null,
       "concreteType": "MetricsConnection",
       "kind": "LinkedField",
       "name": "__Metrics_query_metricsCollection_connection",
@@ -167,7 +157,7 @@ return {
           "storageKey": null
         }
       ],
-      "storageKey": "__Metrics_query_metricsCollection_connection(orderBy:[{\"createdAt\":\"DescNullsLast\"}])"
+      "storageKey": null
     }
   ],
   "type": "Query",
@@ -175,6 +165,6 @@ return {
 };
 })();
 
-(node as any).hash = "9b6626bf941af89584c30d259aaba347";
+(node as any).hash = "93302070e2475a4cf34d14a0e38cb9b7";
 
 export default node;
