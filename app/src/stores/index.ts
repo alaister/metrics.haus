@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import supabase from '~/lib/supabase'
 import authReducer, { setUser } from './auth-slice'
 import teamReducer from './team-slice'
+import appReducer from './app-slice'
 import pointsReducer, { refreshPoints } from './points-slice'
 
 export const store = configureStore({
@@ -11,6 +12,7 @@ export const store = configureStore({
     auth: authReducer,
     team: teamReducer,
     points: pointsReducer,
+    app: appReducer,
   },
 })
 

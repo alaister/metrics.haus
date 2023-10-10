@@ -1,6 +1,7 @@
 import { Link, Outlet } from '@tanstack/react-router'
 import { Plus } from 'lucide-react'
 import { Button } from '../ui/Button'
+import IntervalPicker from '../common/IntervalPicker'
 
 const MetricsLayout = () => {
   return (
@@ -10,15 +11,19 @@ const MetricsLayout = () => {
           Metrics
         </h1>
 
-        <Button variant="outline" asChild>
-          <Link
-            search={{ showNewMetricModal: true }}
-            mask={{ to: '/metrics/new' }}
-          >
-            <Plus className="w-4 h-4" />
-            <span>New Metric</span>
-          </Link>
-        </Button>
+        <div className="flex gap-x-4">
+          <Button variant="outline" asChild>
+            <Link
+              search={{ showNewMetricModal: true }}
+              mask={{ to: '/metrics/new' }}
+            >
+              <Plus className="w-4 h-4" />
+              <span>Add</span>
+            </Link>
+          </Button>
+
+          <IntervalPicker />
+        </div>
       </div>
 
       <hr />
