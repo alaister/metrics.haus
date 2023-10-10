@@ -38,9 +38,7 @@ from
     anon,
     authenticated;
 
-grant << << << < HEAD
-update (name, interval, unit_short, description, icon),
-= = = = = = =
+grant
 update (
     name,
     interval,
@@ -49,7 +47,7 @@ update (
     icon,
     archived
 ),
->> >> >> > main insert (
+insert (
     name,
     interval,
     team_id,
