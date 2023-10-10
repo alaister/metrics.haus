@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<5268101210a97977973f0db34c12825b>>
+ * @generated SignedSource<<a8356c67a72f17c1f535251a3f269967>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -254,9 +254,9 @@ return {
                         "name": "node",
                         "plural": false,
                         "selections": [
+                          (v5/*: any*/),
                           (v6/*: any*/),
-                          (v7/*: any*/),
-                          (v5/*: any*/)
+                          (v7/*: any*/)
                         ],
                         "storageKey": null
                       }
@@ -344,9 +344,7 @@ return {
               {
                 "alias": null,
                 "args": (v8/*: any*/),
-                "filters": [
-                  "orderBy"
-                ],
+                "filters": [],
                 "handle": "connection",
                 "key": "MetricDataPoints_metrics_metricsDataPointsCollection",
                 "kind": "LinkedHandle",
@@ -382,12 +380,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "541ed02e64b1f82b90063feaba4d40f5",
+    "cacheID": "46f3d58125936db604169a235296f0ea",
     "id": null,
     "metadata": {},
     "name": "MetricForm_Mutation",
     "operationKind": "mutation",
-    "text": "mutation MetricForm_Mutation(\n  $input: MetricsInsertInput!\n) {\n  insertIntoMetricsCollection(objects: [$input]) {\n    affectedCount\n    records {\n      id\n      nodeId\n      ...MetricCard_metrics\n    }\n  }\n}\n\nfragment LineChart_metrics on Metrics {\n  metricsDataPointsCollection(first: 100, orderBy: [{time: AscNullsLast}]) {\n    edges {\n      node {\n        nodeId\n        time\n        value\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n  nodeId\n}\n\nfragment MetricCard_metrics on Metrics {\n  id\n  name\n  icon\n  unitShort\n  createdAt\n  dataPoints: metricsDataPointsCollection(orderBy: [{time: AscNullsFirst}]) {\n    totalCount\n    edges {\n      node {\n        time\n        value\n        nodeId\n      }\n    }\n  }\n  ...LineChart_metrics\n}\n"
+    "text": "mutation MetricForm_Mutation(\n  $input: MetricsInsertInput!\n) {\n  insertIntoMetricsCollection(objects: [$input]) {\n    affectedCount\n    records {\n      id\n      nodeId\n      ...MetricCard_metrics\n    }\n  }\n}\n\nfragment LineChart_metrics on Metrics {\n  metricsDataPointsCollection(first: 100, orderBy: [{time: AscNullsLast}]) {\n    edges {\n      node {\n        nodeId\n        time\n        value\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n  nodeId\n}\n\nfragment MetricCard_metrics on Metrics {\n  id\n  name\n  icon\n  unitShort\n  createdAt\n  dataPoints: metricsDataPointsCollection(orderBy: [{time: AscNullsFirst}]) {\n    totalCount\n    edges {\n      node {\n        nodeId\n        time\n        value\n      }\n    }\n  }\n  ...LineChart_metrics\n}\n"
   }
 };
 })();

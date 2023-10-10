@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<9df5692e40694f93e0c44c5e1bd9c217>>
+ * @generated SignedSource<<cb4e50e8cae21932ce7388855f71f23a>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,27 +10,33 @@
 
 import { ConcreteRequest, Query } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
-export type metricsDetailsRoute_Query$variables = {
+export type MetricDetailsSectionPagination_Query$variables = {
+  count?: number | null;
+  cursor?: any | null;
   nodeId: string;
 };
-export type metricsDetailsRoute_Query$data = {
+export type MetricDetailsSectionPagination_Query$data = {
   readonly node: {
-    readonly description?: string | null;
-    readonly icon?: string | null;
-    readonly id?: string;
-    readonly name?: string;
-    readonly nodeId: string;
-    readonly unitShort?: string | null;
     readonly " $fragmentSpreads": FragmentRefs<"MetricDetailsSection_metrics">;
   } | null;
 };
-export type metricsDetailsRoute_Query = {
-  response: metricsDetailsRoute_Query$data;
-  variables: metricsDetailsRoute_Query$variables;
+export type MetricDetailsSectionPagination_Query = {
+  response: MetricDetailsSectionPagination_Query$data;
+  variables: MetricDetailsSectionPagination_Query$variables;
 };
 
 const node: ConcreteRequest = (function(){
 var v0 = [
+  {
+    "defaultValue": 100,
+    "kind": "LocalArgument",
+    "name": "count"
+  },
+  {
+    "defaultValue": null,
+    "kind": "LocalArgument",
+    "name": "cursor"
+  },
   {
     "defaultValue": null,
     "kind": "LocalArgument",
@@ -48,68 +54,39 @@ v2 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "nodeId",
+  "name": "__typename",
   "storageKey": null
 },
 v3 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "id",
+  "name": "nodeId",
   "storageKey": null
 },
 v4 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "name",
-  "storageKey": null
+  "kind": "Literal",
+  "name": "orderBy",
+  "value": [
+    {
+      "time": "AscNullsLast"
+    }
+  ]
 },
-v5 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "icon",
-  "storageKey": null
-},
-v6 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "unitShort",
-  "storageKey": null
-},
-v7 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "description",
-  "storageKey": null
-},
-v8 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "__typename",
-  "storageKey": null
-},
-v9 = [
+v5 = [
   {
-    "kind": "Literal",
-    "name": "first",
-    "value": 100
+    "kind": "Variable",
+    "name": "after",
+    "variableName": "cursor"
   },
   {
-    "kind": "Literal",
-    "name": "orderBy",
-    "value": [
-      {
-        "time": "AscNullsLast"
-      }
-    ]
-  }
+    "kind": "Variable",
+    "name": "first",
+    "variableName": "count"
+  },
+  (v4/*: any*/)
 ],
-v10 = {
+v6 = {
   "alias": null,
   "args": null,
   "concreteType": "MetricsDataPointsEdge",
@@ -125,7 +102,7 @@ v10 = {
       "name": "node",
       "plural": false,
       "selections": [
-        (v2/*: any*/),
+        (v3/*: any*/),
         {
           "alias": null,
           "args": null,
@@ -140,7 +117,7 @@ v10 = {
           "name": "value",
           "storageKey": null
         },
-        (v8/*: any*/)
+        (v2/*: any*/)
       ],
       "storageKey": null
     },
@@ -154,7 +131,7 @@ v10 = {
   ],
   "storageKey": null
 },
-v11 = {
+v7 = {
   "alias": null,
   "args": null,
   "concreteType": "PageInfo",
@@ -178,13 +155,21 @@ v11 = {
     }
   ],
   "storageKey": null
-};
+},
+v8 = [
+  {
+    "kind": "Literal",
+    "name": "first",
+    "value": 100
+  },
+  (v4/*: any*/)
+];
 return {
   "fragment": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "metricsDetailsRoute_Query",
+    "name": "MetricDetailsSectionPagination_Query",
     "selections": [
       {
         "alias": null,
@@ -194,23 +179,21 @@ return {
         "name": "node",
         "plural": false,
         "selections": [
-          (v2/*: any*/),
           {
-            "kind": "InlineFragment",
-            "selections": [
-              (v3/*: any*/),
-              (v4/*: any*/),
-              (v5/*: any*/),
-              (v6/*: any*/),
-              (v7/*: any*/),
+            "args": [
               {
-                "args": null,
-                "kind": "FragmentSpread",
-                "name": "MetricDetailsSection_metrics"
+                "kind": "Variable",
+                "name": "count",
+                "variableName": "count"
+              },
+              {
+                "kind": "Variable",
+                "name": "cursor",
+                "variableName": "cursor"
               }
             ],
-            "type": "Metrics",
-            "abstractKey": null
+            "kind": "FragmentSpread",
+            "name": "MetricDetailsSection_metrics"
           }
         ],
         "storageKey": null
@@ -223,7 +206,7 @@ return {
   "operation": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "metricsDetailsRoute_Query",
+    "name": "MetricDetailsSectionPagination_Query",
     "selections": [
       {
         "alias": null,
@@ -233,19 +216,28 @@ return {
         "name": "node",
         "plural": false,
         "selections": [
-          (v8/*: any*/),
           (v2/*: any*/),
+          (v3/*: any*/),
           {
             "kind": "InlineFragment",
             "selections": [
-              (v3/*: any*/),
-              (v4/*: any*/),
-              (v5/*: any*/),
-              (v6/*: any*/),
-              (v7/*: any*/),
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "id",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "unitShort",
+                "storageKey": null
+              },
               {
                 "alias": "dataPoints",
-                "args": (v9/*: any*/),
+                "args": (v5/*: any*/),
                 "concreteType": "MetricsDataPointsConnection",
                 "kind": "LinkedField",
                 "name": "metricsDataPointsCollection",
@@ -258,14 +250,14 @@ return {
                     "name": "totalCount",
                     "storageKey": null
                   },
-                  (v10/*: any*/),
-                  (v11/*: any*/)
+                  (v6/*: any*/),
+                  (v7/*: any*/)
                 ],
-                "storageKey": "metricsDataPointsCollection(first:100,orderBy:[{\"time\":\"AscNullsLast\"}])"
+                "storageKey": null
               },
               {
                 "alias": "dataPoints",
-                "args": (v9/*: any*/),
+                "args": (v5/*: any*/),
                 "filters": [],
                 "handle": "connection",
                 "key": "MetricDetailsSection_metrics_dataPoints",
@@ -274,20 +266,20 @@ return {
               },
               {
                 "alias": null,
-                "args": (v9/*: any*/),
+                "args": (v8/*: any*/),
                 "concreteType": "MetricsDataPointsConnection",
                 "kind": "LinkedField",
                 "name": "metricsDataPointsCollection",
                 "plural": false,
                 "selections": [
-                  (v10/*: any*/),
-                  (v11/*: any*/)
+                  (v6/*: any*/),
+                  (v7/*: any*/)
                 ],
                 "storageKey": "metricsDataPointsCollection(first:100,orderBy:[{\"time\":\"AscNullsLast\"}])"
               },
               {
                 "alias": null,
-                "args": (v9/*: any*/),
+                "args": (v8/*: any*/),
                 "filters": [],
                 "handle": "connection",
                 "key": "MetricDataPoints_metrics_metricsDataPointsCollection",
@@ -304,16 +296,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "f0204afb710a33231e264cbc305ac7ea",
+    "cacheID": "7a952560efb5d59f1fcec93a0cbff166",
     "id": null,
     "metadata": {},
-    "name": "metricsDetailsRoute_Query",
+    "name": "MetricDetailsSectionPagination_Query",
     "operationKind": "query",
-    "text": "query metricsDetailsRoute_Query(\n  $nodeId: ID!\n) {\n  node(nodeId: $nodeId) {\n    __typename\n    nodeId\n    ... on Metrics {\n      id\n      name\n      icon\n      unitShort\n      description\n      ...MetricDetailsSection_metrics\n    }\n  }\n}\n\nfragment LineChart_metrics on Metrics {\n  metricsDataPointsCollection(first: 100, orderBy: [{time: AscNullsLast}]) {\n    edges {\n      node {\n        nodeId\n        time\n        value\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n  nodeId\n}\n\nfragment MetricDetailsSection_metrics on Metrics {\n  id\n  unitShort\n  dataPoints: metricsDataPointsCollection(first: 100, orderBy: [{time: AscNullsLast}]) {\n    totalCount\n    edges {\n      node {\n        nodeId\n        time\n        value\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n  ...LineChart_metrics\n  nodeId\n}\n"
+    "text": "query MetricDetailsSectionPagination_Query(\n  $count: Int = 100\n  $cursor: Cursor\n  $nodeId: ID!\n) {\n  node(nodeId: $nodeId) {\n    __typename\n    ...MetricDetailsSection_metrics_1G22uz\n    nodeId\n  }\n}\n\nfragment LineChart_metrics on Metrics {\n  metricsDataPointsCollection(first: 100, orderBy: [{time: AscNullsLast}]) {\n    edges {\n      node {\n        nodeId\n        time\n        value\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n  nodeId\n}\n\nfragment MetricDetailsSection_metrics_1G22uz on Metrics {\n  id\n  unitShort\n  dataPoints: metricsDataPointsCollection(after: $cursor, first: $count, orderBy: [{time: AscNullsLast}]) {\n    totalCount\n    edges {\n      node {\n        nodeId\n        time\n        value\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n  ...LineChart_metrics\n  nodeId\n}\n"
   }
 };
 })();
 
-(node as any).hash = "f72a7bf1e74a7547fc46cb15022ee6f8";
+(node as any).hash = "b739723b9ed944359f5920a23049832e";
 
 export default node;

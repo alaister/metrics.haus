@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<e45938de66083207bf3ba404e7781db0>>
+ * @generated SignedSource<<e2705add380fb3f2b88f6122659d63d8>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -226,9 +226,7 @@ return {
               {
                 "alias": null,
                 "args": (v4/*: any*/),
-                "filters": [
-                  "orderBy"
-                ],
+                "filters": [],
                 "handle": "connection",
                 "key": "MetricDataPoints_metrics_metricsDataPointsCollection",
                 "kind": "LinkedHandle",
@@ -254,6 +252,6 @@ return {
 };
 })();
 
-(node as any).hash = "f881f5bab64603c760afb7005479c781";
+(node as any).hash = "976afdd764477f7b35711a5132048707";
 
 export default node;

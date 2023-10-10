@@ -87,7 +87,6 @@ const MetricForm = ({ onSuccess }: MetricFormProps) => {
     const connectionID = ConnectionHandler.getConnectionID(
       'root',
       'Metrics_query_metricsCollection',
-      { orderBy: [{ createdAt: 'DescNullsLast' }] },
     )
 
     mutate({

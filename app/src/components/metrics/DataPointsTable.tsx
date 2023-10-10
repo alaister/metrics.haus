@@ -1,4 +1,8 @@
 import { format } from 'date-fns'
+import { useMutation } from 'react-relay'
+import { ConnectionHandler, graphql } from 'relay-runtime'
+import { useToast } from '~/lib/hooks/use-toast'
+import { Button } from '../ui/Button'
 import {
   Table,
   TableBody,
@@ -7,14 +11,10 @@ import {
   TableHeader,
   TableRow,
 } from '../ui/Table'
-import { Button } from '../ui/Button'
-import { graphql } from 'relay-runtime'
-import { useMutation } from 'react-relay'
-import { useToast } from '~/lib/hooks/use-toast'
 import { DataPointsTable_Delete_Mutation } from './__generated__/DataPointsTable_Delete_Mutation.graphql'
+import { toGlobalId } from '~/lib/graphql'
 
-interface Props {
-  onChange?: () => void
+export interface DataPointsTableProps {
   metricId: string
   dataPoints: {
     time: string
@@ -23,19 +23,25 @@ interface Props {
 }
 
 const DeleteDataPointMutation = graphql`
-  mutation DataPointsTable_Delete_Mutation($filter: MetricsDataPointsFilter!) {
+  mutation DataPointsTable_Delete_Mutation(
+    $filter: MetricsDataPointsFilter!
+    $connections: [ID!]!
+  ) {
     deleteFromMetricsDataPointsCollection(filter: $filter) {
       affectedCount
+      records {
+        nodeId @deleteEdge(connections: $connections)
+      }
     }
   }
 `
 
-const DataPointsTable = ({ dataPoints, onChange, metricId }: Props) => {
+const DataPointsTable = ({ dataPoints, metricId }: DataPointsTableProps) => {
   const [deleteDataPointMutation] =
     useMutation<DataPointsTable_Delete_Mutation>(DeleteDataPointMutation)
   const { toast } = useToast()
 
-  const deleteDataPoint = async (dataPoint: { time: string }) => {
+  const deleteDataPoint = (dataPoint: { time: string }) => {
     const confirmed = confirm(
       'Are you sure you want to delete this data point?',
     )
@@ -43,7 +49,7 @@ const DataPointsTable = ({ dataPoints, onChange, metricId }: Props) => {
       return
     }
 
-    await deleteDataPointMutation({
+    deleteDataPointMutation({
       variables: {
         filter: {
           metricId: {
@@ -53,10 +59,18 @@ const DataPointsTable = ({ dataPoints, onChange, metricId }: Props) => {
             eq: dataPoint.time,
           },
         },
+        connections: [
+          ConnectionHandler.getConnectionID(
+            toGlobalId(metricId, 'metrics'),
+            'MetricDetailsSection_metrics_dataPoints',
+          ),
+          ConnectionHandler.getConnectionID(
+            toGlobalId(metricId, 'metrics'),
+            'MetricDataPoints_metrics_metricsDataPointsCollection',
+          ),
+        ],
       },
     })
-
-    onChange?.()
 
     toast({
       title: 'Successfully deleted data point',

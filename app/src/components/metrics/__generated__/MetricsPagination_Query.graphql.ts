@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<47649c1459d7cb15edbe9a4e638d16fc>>
+ * @generated SignedSource<<9e179150600fca7d754ef0e996fa4b34>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -120,10 +120,7 @@ v9 = {
   "kind": "ScalarField",
   "name": "__typename",
   "storageKey": null
-},
-v10 = [
-  "orderBy"
-];
+};
 return {
   "fragment": {
     "argumentDefinitions": (v0/*: any*/),
@@ -272,9 +269,9 @@ return {
                             "name": "node",
                             "plural": false,
                             "selections": [
+                              (v5/*: any*/),
                               (v6/*: any*/),
-                              (v7/*: any*/),
-                              (v5/*: any*/)
+                              (v7/*: any*/)
                             ],
                             "storageKey": null
                           }
@@ -338,7 +335,7 @@ return {
                   {
                     "alias": null,
                     "args": (v8/*: any*/),
-                    "filters": (v10/*: any*/),
+                    "filters": [],
                     "handle": "connection",
                     "key": "MetricDataPoints_metrics_metricsDataPointsCollection",
                     "kind": "LinkedHandle",
@@ -357,7 +354,7 @@ return {
       {
         "alias": null,
         "args": (v1/*: any*/),
-        "filters": (v10/*: any*/),
+        "filters": [],
         "handle": "connection",
         "key": "Metrics_query_metricsCollection",
         "kind": "LinkedHandle",
@@ -366,16 +363,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "7f9b12d5eeda64f06d8089cc3ae66060",
+    "cacheID": "0658ae790245ee380909295d0ebe34bc",
     "id": null,
     "metadata": {},
     "name": "MetricsPagination_Query",
     "operationKind": "query",
-    "text": "query MetricsPagination_Query(\n  $count: Int = 100\n  $cursor: Cursor\n) {\n  ...MetricsList_query_1G22uz\n}\n\nfragment LineChart_metrics on Metrics {\n  metricsDataPointsCollection(first: 100, orderBy: [{time: AscNullsLast}]) {\n    edges {\n      node {\n        nodeId\n        time\n        value\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n  nodeId\n}\n\nfragment MetricCard_metrics on Metrics {\n  id\n  name\n  icon\n  unitShort\n  createdAt\n  dataPoints: metricsDataPointsCollection(orderBy: [{time: AscNullsFirst}]) {\n    totalCount\n    edges {\n      node {\n        time\n        value\n        nodeId\n      }\n    }\n  }\n  ...LineChart_metrics\n}\n\nfragment MetricsList_query_1G22uz on Query {\n  metricsCollection(after: $cursor, first: $count, orderBy: [{createdAt: DescNullsLast}]) {\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n    edges {\n      cursor\n      node {\n        nodeId\n        ...MetricCard_metrics\n        __typename\n      }\n    }\n  }\n}\n"
+    "text": "query MetricsPagination_Query(\n  $count: Int = 100\n  $cursor: Cursor\n) {\n  ...MetricsList_query_1G22uz\n}\n\nfragment LineChart_metrics on Metrics {\n  metricsDataPointsCollection(first: 100, orderBy: [{time: AscNullsLast}]) {\n    edges {\n      node {\n        nodeId\n        time\n        value\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n  nodeId\n}\n\nfragment MetricCard_metrics on Metrics {\n  id\n  name\n  icon\n  unitShort\n  createdAt\n  dataPoints: metricsDataPointsCollection(orderBy: [{time: AscNullsFirst}]) {\n    totalCount\n    edges {\n      node {\n        nodeId\n        time\n        value\n      }\n    }\n  }\n  ...LineChart_metrics\n}\n\nfragment MetricsList_query_1G22uz on Query {\n  metricsCollection(after: $cursor, first: $count, orderBy: [{createdAt: DescNullsLast}]) {\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n    edges {\n      cursor\n      node {\n        nodeId\n        ...MetricCard_metrics\n        __typename\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "9b6626bf941af89584c30d259aaba347";
+(node as any).hash = "253a9f8da9cf8a089bfefecd8d330d3c";
 
 export default node;

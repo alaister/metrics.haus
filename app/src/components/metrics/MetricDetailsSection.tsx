@@ -1,19 +1,29 @@
-import { useFragment } from 'react-relay'
+import { usePaginationFragment } from 'react-relay'
 import { graphql } from 'relay-runtime'
-import { LineChart } from './LineChart'
-import { MetricDetailsSection_metrics$key } from './__generated__/MetricDetailsSection_metrics.graphql'
-import GrowthBadge from './GrowthBadge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs'
 import DataPointsTable from './DataPointsTable'
+import GrowthBadge from './GrowthBadge'
+import { LineChart } from './LineChart'
+import { MetricDetailsSection_metrics$key } from './__generated__/MetricDetailsSection_metrics.graphql'
 
 const MetricDetailsSectionFragment = graphql`
-  fragment MetricDetailsSection_metrics on Metrics {
+  fragment MetricDetailsSection_metrics on Metrics
+  @argumentDefinitions(
+    cursor: { type: "Cursor" }
+    count: { type: "Int", defaultValue: 100 }
+  )
+  @refetchable(queryName: "MetricDetailsSectionPagination_Query") {
     id
     unitShort
-    dataPoints: metricsDataPointsCollection {
+    dataPoints: metricsDataPointsCollection(
+      after: $cursor
+      first: $count
+      orderBy: [{ time: AscNullsLast }]
+    ) @connection(key: "MetricDetailsSection_metrics_dataPoints", filters: []) {
       totalCount
       edges {
         node {
+          nodeId
           time
           value
         }
@@ -28,7 +38,7 @@ export interface MetricDetailsProps {
 }
 
 const MetricDetailsSection = ({ metric }: MetricDetailsProps) => {
-  const data = useFragment(MetricDetailsSectionFragment, metric)
+  const { data } = usePaginationFragment(MetricDetailsSectionFragment, metric)
 
   const dataPoints = data.dataPoints?.edges.map((edge) => edge.node) || []
 
