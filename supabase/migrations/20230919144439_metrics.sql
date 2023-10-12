@@ -39,8 +39,22 @@ from
     authenticated;
 
 grant
-update (name, interval, unit_short, description, icon, archived),
-insert (name, interval, team_id, unit_short, description, icon) on public.metrics to public,
+update (
+    name,
+    interval,
+    unit_short,
+    description,
+    icon,
+    archived
+),
+insert (
+    name,
+    interval,
+    team_id,
+    unit_short,
+    description,
+    icon
+) on public.metrics to public,
 authenticated;
 
 create table

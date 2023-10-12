@@ -1,12 +1,12 @@
 import { Link, useNavigate } from '@tanstack/react-router'
 import { Plus } from 'lucide-react'
 import { usePreloadedQuery } from 'react-relay'
+import IntervalPicker from '~/components/common/IntervalPicker'
 import MetricDetailsSection from '~/components/metrics/MetricDetailsSection'
 import { Button } from '~/components/ui/Button'
 import { Dialog, DialogContent } from '~/components/ui/Dialog'
 import NewMetricDataPoint from './NewDataPoint'
 import metricsDetailsRoute, { query } from './metrics-details-route'
-import IntervalPicker from '~/components/common/IntervalPicker'
 
 const MetricDetails: (typeof metricsDetailsRoute)['options']['component'] = ({
   useParams,

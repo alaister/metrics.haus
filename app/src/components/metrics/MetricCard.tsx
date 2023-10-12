@@ -7,15 +7,22 @@ import { MetricCard_metrics$key } from './__generated__/MetricCard_metrics.graph
 import GrowthBadge from './GrowthBadge'
 
 const MetricCardFragment = graphql`
-  fragment MetricCard_metrics on Metrics {
+  fragment MetricCard_metrics on Metrics
+  @argumentDefinitions(
+    cursor: { type: "Cursor" }
+    count: { type: "Int", defaultValue: 100 }
+  )
+  @refetchable(queryName: "MetricCardPagination_Query") {
     id
     name
     icon
     unitShort
     createdAt
     dataPoints: metricsDataPointsCollection(
-      orderBy: [{ time: AscNullsFirst }]
-    ) {
+      after: $cursor
+      first: $count
+      orderBy: [{ time: AscNullsLast }]
+    ) @connection(key: "MetricCard_metrics_dataPoints", filters: []) {
       totalCount
       edges {
         node {

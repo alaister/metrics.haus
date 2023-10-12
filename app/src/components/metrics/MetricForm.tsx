@@ -84,11 +84,6 @@ const MetricForm = ({ onSuccess }: MetricFormProps) => {
   )
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const connectionID = ConnectionHandler.getConnectionID(
-      'root',
-      'Metrics_query_metricsCollection',
-    )
-
     mutate({
       variables: {
         input: {
@@ -97,7 +92,12 @@ const MetricForm = ({ onSuccess }: MetricFormProps) => {
           unitShort: values.unitShort,
           teamId: selectedTeamId,
         },
-        connections: [connectionID],
+        connections: [
+          ConnectionHandler.getConnectionID(
+            'root',
+            'Metrics_query_metricsCollection',
+          ),
+        ],
       },
       onError(error) {
         toast({

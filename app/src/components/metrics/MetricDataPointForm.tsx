@@ -89,6 +89,10 @@ const MetricForm = ({ onSuccess, metricId }: MetricFormProps) => {
             toGlobalId(metricId, 'metrics'),
             'MetricDataPoints_metrics_metricsDataPointsCollection',
           ),
+          ConnectionHandler.getConnectionID(
+            toGlobalId(metricId, 'metrics'),
+            'MetricCard_metrics_dataPoints',
+          ),
         ],
       },
       onError(error) {

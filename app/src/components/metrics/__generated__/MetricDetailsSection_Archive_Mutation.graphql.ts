@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<8f134128092a783ce1fe499870e05978>>
+ * @generated SignedSource<<0454dbaa3faf91f958806f861d7b03a5>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,14 +11,6 @@
 import { ConcreteRequest, Mutation } from 'relay-runtime';
 export type FilterIs = "NOT_NULL" | "NULL" | "%future added value";
 export type MetricInterval = "day" | "hour" | "minute" | "month" | "week" | "%future added value";
-export type MetricsUpdateInput = {
-  archived?: boolean | null;
-  description?: string | null;
-  icon?: string | null;
-  interval?: MetricInterval | null;
-  name?: string | null;
-  unitShort?: string | null;
-};
 export type MetricsFilter = {
   archived?: BooleanFilter | null;
   createdAt?: DatetimeFilter | null;
@@ -77,12 +69,15 @@ export type IDFilter = {
   eq?: string | null;
 };
 export type MetricDetailsSection_Archive_Mutation$variables = {
+  connections: ReadonlyArray<string>;
   filter?: MetricsFilter | null;
-  input: MetricsUpdateInput;
 };
 export type MetricDetailsSection_Archive_Mutation$data = {
   readonly updateMetricsCollection: {
     readonly affectedCount: number;
+    readonly records: ReadonlyArray<{
+      readonly nodeId: string;
+    }>;
   };
 };
 export type MetricDetailsSection_Archive_Mutation = {
@@ -94,44 +89,41 @@ const node: ConcreteRequest = (function(){
 var v0 = {
   "defaultValue": null,
   "kind": "LocalArgument",
-  "name": "filter"
+  "name": "connections"
 },
 v1 = {
   "defaultValue": null,
   "kind": "LocalArgument",
-  "name": "input"
+  "name": "filter"
 },
 v2 = [
   {
-    "alias": null,
-    "args": [
-      {
-        "kind": "Variable",
-        "name": "filter",
-        "variableName": "filter"
-      },
-      {
-        "kind": "Variable",
-        "name": "set",
-        "variableName": "input"
-      }
-    ],
-    "concreteType": "MetricsUpdateResponse",
-    "kind": "LinkedField",
-    "name": "updateMetricsCollection",
-    "plural": false,
-    "selections": [
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "affectedCount",
-        "storageKey": null
-      }
-    ],
-    "storageKey": null
+    "kind": "Variable",
+    "name": "filter",
+    "variableName": "filter"
+  },
+  {
+    "kind": "Literal",
+    "name": "set",
+    "value": {
+      "archived": true
+    }
   }
-];
+],
+v3 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "affectedCount",
+  "storageKey": null
+},
+v4 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "nodeId",
+  "storageKey": null
+};
 return {
   "fragment": {
     "argumentDefinitions": [
@@ -141,7 +133,32 @@ return {
     "kind": "Fragment",
     "metadata": null,
     "name": "MetricDetailsSection_Archive_Mutation",
-    "selections": (v2/*: any*/),
+    "selections": [
+      {
+        "alias": null,
+        "args": (v2/*: any*/),
+        "concreteType": "MetricsUpdateResponse",
+        "kind": "LinkedField",
+        "name": "updateMetricsCollection",
+        "plural": false,
+        "selections": [
+          (v3/*: any*/),
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "Metrics",
+            "kind": "LinkedField",
+            "name": "records",
+            "plural": true,
+            "selections": [
+              (v4/*: any*/)
+            ],
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
+      }
+    ],
     "type": "Mutation",
     "abstractKey": null
   },
@@ -153,19 +170,60 @@ return {
     ],
     "kind": "Operation",
     "name": "MetricDetailsSection_Archive_Mutation",
-    "selections": (v2/*: any*/)
+    "selections": [
+      {
+        "alias": null,
+        "args": (v2/*: any*/),
+        "concreteType": "MetricsUpdateResponse",
+        "kind": "LinkedField",
+        "name": "updateMetricsCollection",
+        "plural": false,
+        "selections": [
+          (v3/*: any*/),
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "Metrics",
+            "kind": "LinkedField",
+            "name": "records",
+            "plural": true,
+            "selections": [
+              (v4/*: any*/),
+              {
+                "alias": null,
+                "args": null,
+                "filters": null,
+                "handle": "deleteEdge",
+                "key": "",
+                "kind": "ScalarHandle",
+                "name": "nodeId",
+                "handleArgs": [
+                  {
+                    "kind": "Variable",
+                    "name": "connections",
+                    "variableName": "connections"
+                  }
+                ]
+              }
+            ],
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
+      }
+    ]
   },
   "params": {
-    "cacheID": "95bafb46d34b73d6b8bd5c3d179eced0",
+    "cacheID": "a9b61ed2dab6220bc644094edb78cc5a",
     "id": null,
     "metadata": {},
     "name": "MetricDetailsSection_Archive_Mutation",
     "operationKind": "mutation",
-    "text": "mutation MetricDetailsSection_Archive_Mutation(\n  $input: MetricsUpdateInput!\n  $filter: MetricsFilter\n) {\n  updateMetricsCollection(set: $input, filter: $filter) {\n    affectedCount\n  }\n}\n"
+    "text": "mutation MetricDetailsSection_Archive_Mutation(\n  $filter: MetricsFilter\n) {\n  updateMetricsCollection(set: {archived: true}, filter: $filter) {\n    affectedCount\n    records {\n      nodeId\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "00a1f34761ada4fdf796fba924494cef";
+(node as any).hash = "3aa7711f9394b4db987c8b6253c37d9e";
 
 export default node;

@@ -68,6 +68,10 @@ const DataPointsTable = ({ dataPoints, metricId }: DataPointsTableProps) => {
             toGlobalId(metricId, 'metrics'),
             'MetricDataPoints_metrics_metricsDataPointsCollection',
           ),
+          ConnectionHandler.getConnectionID(
+            toGlobalId(metricId, 'metrics'),
+            'MetricCard_metrics_dataPoints',
+          ),
         ],
       },
     })
