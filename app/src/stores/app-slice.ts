@@ -1,21 +1,28 @@
-import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 import { subMonths } from 'date-fns'
-import { DateRange } from 'react-day-picker'
+
+interface Interval {
+  from: string | undefined
+  to: string | undefined
+}
 
 export interface PointsState {
-  metricsInterval: DateRange
+  metricsInterval: Interval
 }
 
 const initialState: PointsState = {
-  metricsInterval: { from: subMonths(new Date(), 1), to: new Date() },
+  metricsInterval: {
+    from: subMonths(new Date(), 1).toISOString(),
+    to: new Date().toISOString(),
+  },
 }
 
 export const appSlice = createSlice({
   name: 'app',
   initialState,
   reducers: {
-    setMetricsInterval: (state, action: PayloadAction<DateRange>) => {
+    setMetricsInterval: (state, action: PayloadAction<Interval>) => {
       state.metricsInterval = action.payload
     },
   },

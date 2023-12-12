@@ -1,6 +1,5 @@
 import { subDays } from 'date-fns'
 import { useState } from 'react'
-import { usePaginationFragment } from 'react-relay'
 import {
   Area,
   AreaChart,
@@ -12,46 +11,22 @@ import {
   XAxis,
   YAxis,
 } from 'recharts'
-import { graphql } from 'relay-runtime'
 import { cn } from '~/lib/utils'
 import { createTickDates, timestampToLabel } from '../../lib/chart-helpers'
 import { Button } from '../ui/Button'
-import { LineChart_metrics$key } from './__generated__/LineChart_metrics.graphql'
 
 const MAX_TICKS = 5
 
 const CHART_COLOR = '#82ca9d'
 const EMPTY_CHART_COLOR = '#eee'
 
-const LineChartMetricsFragment = graphql`
-  fragment LineChart_metrics on Metrics
-  @argumentDefinitions(
-    cursor: { type: "Cursor" }
-    count: { type: "Int", defaultValue: 100 }
-  )
-  @refetchable(queryName: "MetricsDataPointsPagination_Query") {
-    metricsDataPointsCollection(
-      after: $cursor
-      first: $count
-      orderBy: [{ time: AscNullsLast }]
-    )
-      @connection(
-        key: "MetricDataPoints_metrics_metricsDataPointsCollection"
-        filters: []
-      ) {
-      edges {
-        node {
-          nodeId
-          time
-          value
-        }
-      }
-    }
-  }
-`
-
+export interface DataPoint {
+  nodeId: string
+  time: string
+  value: number
+}
 export interface LineChartProps {
-  dataPoints: LineChart_metrics$key
+  dataPoints: DataPoint[]
   preview?: boolean
   containerClassName?: string
 }
@@ -61,13 +36,7 @@ export function LineChart({
   preview = false,
   containerClassName,
 }: LineChartProps) {
-  const data =
-    usePaginationFragment(
-      LineChartMetricsFragment,
-      dataPoints,
-    ).data.metricsDataPointsCollection?.edges.map((e) => e.node) ?? []
-
-  const isEmpty = data.length == 0
+  const isEmpty = dataPoints.length == 0
 
   const [threads, setThreads] = useState<Thread[]>([])
 
@@ -82,7 +51,7 @@ export function LineChart({
     )
   }
 
-  const dataForChart = isEmpty ? getRandomData() : data
+  const dataForChart = isEmpty ? getRandomData() : dataPoints
 
   const ticks = createTickDates(
     dataForChart.map((m) => new Date(m.time)),

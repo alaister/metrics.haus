@@ -1,6 +1,6 @@
+import { useMutation } from '@apollo/client'
 import { format } from 'date-fns'
-import { useMutation } from 'react-relay'
-import { ConnectionHandler, graphql } from 'relay-runtime'
+import { graphql } from '~/lib/gql'
 import { useToast } from '~/lib/hooks/use-toast'
 import { Button } from '../ui/Button'
 import {
@@ -11,8 +11,6 @@ import {
   TableHeader,
   TableRow,
 } from '../ui/Table'
-import { DataPointsTable_Delete_Mutation } from './__generated__/DataPointsTable_Delete_Mutation.graphql'
-import { toGlobalId } from '~/lib/graphql'
 
 export interface DataPointsTableProps {
   metricId: string
@@ -22,23 +20,19 @@ export interface DataPointsTableProps {
   }[]
 }
 
-const DeleteDataPointMutation = graphql`
-  mutation DataPointsTable_Delete_Mutation(
-    $filter: MetricsDataPointsFilter!
-    $connections: [ID!]!
-  ) {
+const DeleteDataPointMutation = graphql(/* GraphQL */ `
+  mutation DataPointsTable_Delete_Mutation($filter: MetricsDataPointsFilter!) {
     deleteFromMetricsDataPointsCollection(filter: $filter) {
       affectedCount
       records {
-        nodeId @deleteEdge(connections: $connections)
+        nodeId
       }
     }
   }
-`
+`)
 
 const DataPointsTable = ({ dataPoints, metricId }: DataPointsTableProps) => {
-  const [deleteDataPointMutation] =
-    useMutation<DataPointsTable_Delete_Mutation>(DeleteDataPointMutation)
+  const [deleteDataPointMutation] = useMutation(DeleteDataPointMutation)
   const { toast } = useToast()
 
   const deleteDataPoint = (dataPoint: { time: string }) => {
@@ -59,20 +53,6 @@ const DataPointsTable = ({ dataPoints, metricId }: DataPointsTableProps) => {
             eq: dataPoint.time,
           },
         },
-        connections: [
-          ConnectionHandler.getConnectionID(
-            toGlobalId(metricId, 'metrics'),
-            'MetricDetailsSection_metrics_dataPoints',
-          ),
-          ConnectionHandler.getConnectionID(
-            toGlobalId(metricId, 'metrics'),
-            'MetricDataPoints_metrics_metricsDataPointsCollection',
-          ),
-          ConnectionHandler.getConnectionID(
-            toGlobalId(metricId, 'metrics'),
-            'MetricCard_metrics_dataPoints',
-          ),
-        ],
       },
     })
 

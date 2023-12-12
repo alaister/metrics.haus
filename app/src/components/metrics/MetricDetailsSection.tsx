@@ -1,29 +1,18 @@
-import { useNavigate } from '@tanstack/react-router'
-import { useMutation, usePaginationFragment } from 'react-relay'
-import { ConnectionHandler, graphql } from 'relay-runtime'
+import { useFragment, useMutation } from '@apollo/client'
+import { graphql } from '~/lib/gql'
 import { useToast } from '~/lib/hooks/use-toast'
+import { useNavigate } from '~/lib/router'
 import { Button } from '../ui/Button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs'
 import DataPointsTable from './DataPointsTable'
 import GrowthBadge from './GrowthBadge'
 import { LineChart } from './LineChart'
-import { MetricDetailsSection_Archive_Mutation } from './__generated__/MetricDetailsSection_Archive_Mutation.graphql'
-import { MetricDetailsSection_metrics$key } from './__generated__/MetricDetailsSection_metrics.graphql'
 
-const MetricDetailsSectionFragment = graphql`
-  fragment MetricDetailsSection_metrics on Metrics
-  @argumentDefinitions(
-    cursor: { type: "Cursor" }
-    count: { type: "Int", defaultValue: 100 }
-  )
-  @refetchable(queryName: "MetricDetailsSectionPagination_Query") {
+const MetricDetailsSectionFragment = graphql(/* GraphQL */ `
+  fragment MetricDetailsSectionItem on Metrics {
     id
     unitShort
-    dataPoints: metricsDataPointsCollection(
-      after: $cursor
-      first: $count
-      orderBy: [{ time: AscNullsLast }]
-    ) @connection(key: "MetricDetailsSection_metrics_dataPoints", filters: []) {
+    metricsDataPointsCollection(orderBy: [{ time: AscNullsLast }]) {
       totalCount
       edges {
         node {
@@ -33,36 +22,44 @@ const MetricDetailsSectionFragment = graphql`
         }
       }
     }
-    ...LineChart_metrics
   }
-`
+`)
 
-const MetricArchiveMutation = graphql`
-  mutation MetricDetailsSection_Archive_Mutation(
-    $filter: MetricsFilter
-    $connections: [ID!]!
-  ) {
+const MetricArchiveMutation = graphql(/* GraphQL */ `
+  mutation MetricDetailsSectionArchiveMutation($filter: MetricsFilter) {
     updateMetricsCollection(set: { archived: true }, filter: $filter) {
       affectedCount
       records {
-        nodeId @deleteEdge(connections: $connections)
+        nodeId
       }
     }
   }
-`
+`)
 
 export interface MetricDetailsProps {
-  metric: MetricDetailsSection_metrics$key
+  metricNodeId: string
 }
 
-const MetricDetailsSection = ({ metric }: MetricDetailsProps) => {
-  const { data } = usePaginationFragment(MetricDetailsSectionFragment, metric)
-  const [archiveMutation, isArchiving] =
-    useMutation<MetricDetailsSection_Archive_Mutation>(MetricArchiveMutation)
+const MetricDetailsSection = ({ metricNodeId }: MetricDetailsProps) => {
+  const { data, complete } = useFragment({
+    fragment: MetricDetailsSectionFragment,
+    fragmentName: 'MetricDetailsSectionItem',
+    from: {
+      nodeId: metricNodeId,
+    },
+  })
+  const [archiveMutation, { loading: isArchiving }] = useMutation(
+    MetricArchiveMutation,
+  )
   const { toast } = useToast()
   const navigate = useNavigate()
 
-  const dataPoints = data.dataPoints?.edges.map((edge) => edge.node) || []
+  if (!complete) {
+    return null
+  }
+
+  const dataPoints =
+    data.metricsDataPointsCollection?.edges.map((edge) => edge.node) ?? []
 
   const lastDataPoint = dataPoints[dataPoints.length - 1]
 
@@ -74,12 +71,6 @@ const MetricDetailsSection = ({ metric }: MetricDetailsProps) => {
             eq: data.id,
           },
         },
-        connections: [
-          ConnectionHandler.getConnectionID(
-            'root',
-            'Metrics_query_metricsCollection',
-          ),
-        ],
       },
       onCompleted() {
         toast({
@@ -87,9 +78,7 @@ const MetricDetailsSection = ({ metric }: MetricDetailsProps) => {
           title: 'Successfully archived metric',
         })
 
-        navigate({
-          to: '/',
-        })
+        navigate('/')
       },
     })
   }
@@ -114,7 +103,7 @@ const MetricDetailsSection = ({ metric }: MetricDetailsProps) => {
         </TabsList>
         <TabsContent value="graph">
           <div className="w-full h-[250px] md:h-[500px]">
-            <LineChart dataPoints={data} containerClassName="h-full" />
+            <LineChart dataPoints={dataPoints} containerClassName="h-full" />
           </div>
         </TabsContent>
         <TabsContent value="table">
