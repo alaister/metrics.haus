@@ -6,7 +6,7 @@ import {
 } from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
 import { relayStylePagination } from '@apollo/client/utilities'
-import { SUPABASE_URL } from './config'
+import { SUPABASE_ANON_KEY, SUPABASE_URL } from './config'
 import supabase from './supabase'
 
 const cache = new InMemoryCache({
@@ -38,6 +38,9 @@ const cache = new InMemoryCache({
 
 const httpLink = createHttpLink({
   uri: `${SUPABASE_URL}/graphql/v1`,
+  headers: {
+    apikey: SUPABASE_ANON_KEY,
+  },
 })
 
 const authLink = setContext(async (_, { headers }) => {
