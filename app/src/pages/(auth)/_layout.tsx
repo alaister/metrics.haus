@@ -6,7 +6,7 @@ import { useAppSelector } from '~/stores'
 const AuthLayout = () => {
   const { user, hasLoaded } = useAppSelector((state) => state.auth)
   if (hasLoaded && user) {
-    return <Navigate to="/sign-in" />
+    return <Navigate to="/" />
   }
 
   return (
