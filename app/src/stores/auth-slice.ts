@@ -4,10 +4,12 @@ import { User } from '@supabase/gotrue-js'
 
 export interface AuthState {
   user: User | null
+  hasLoaded: boolean
 }
 
 const initialState: AuthState = {
   user: null,
+  hasLoaded: false,
 }
 
 export const userSlice = createSlice({
@@ -15,6 +17,7 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     setUser: (state, action: PayloadAction<User | null>) => {
+      state.hasLoaded = true
       state.user = action.payload
     },
   },

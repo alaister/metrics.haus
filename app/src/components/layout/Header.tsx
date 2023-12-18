@@ -1,11 +1,11 @@
-import { Link } from '@tanstack/react-router'
+import { Suspense } from 'react'
 import ConfettiExplosion from 'react-confetti-explosion'
+import { Link } from '~/lib/router'
 import { useAppSelector } from '~/stores'
 import { UserAvatar } from '../UserAvatar'
 import { CmdKDialog } from '../cmdk/CmdKDialog'
 import { Notifications } from '../notifications'
 import TeamSelector from '../teams/TeamSelector'
-import { Suspense } from 'react'
 
 const Header = () => {
   const points = useAppSelector((state) => state.points.points)

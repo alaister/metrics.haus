@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
-import { Link, useNavigate } from '@tanstack/react-router'
 import { getAvatarUrl } from '~/lib/avatars'
 import { toast } from '~/lib/hooks/use-toast'
+import { Link, useNavigate } from '~/lib/router'
 import supabase from '~/lib/supabase'
 import { useAppSelector } from '~/stores'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/Avatar'
@@ -32,10 +32,7 @@ export function UserAvatar() {
     }
 
     setIsLoading(false)
-    navigate({
-      to: '/sign-in',
-      replace: true,
-    })
+    navigate('/sign-in', { replace: true })
   }
 
   const avatarUrl = useMemo(

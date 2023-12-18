@@ -1,28 +1,18 @@
-import { Link } from '@tanstack/react-router'
+import { useFragment } from '@apollo/client'
 import { memo } from 'react'
-import { useFragment } from 'react-relay'
-import { graphql } from 'relay-runtime'
-import { LineChart } from './LineChart'
-import { MetricCard_metrics$key } from './__generated__/MetricCard_metrics.graphql'
+import { graphql } from '~/lib/gql'
+import { Link } from '~/lib/router'
 import GrowthBadge from './GrowthBadge'
+import { LineChart } from './LineChart'
 
-const MetricCardFragment = graphql`
-  fragment MetricCard_metrics on Metrics
-  @argumentDefinitions(
-    cursor: { type: "Cursor" }
-    count: { type: "Int", defaultValue: 100 }
-  )
-  @refetchable(queryName: "MetricCardPagination_Query") {
+const MetricCardFragment = graphql(/* GraphQL */ `
+  fragment MetricCardItem on Metrics {
     id
     name
     icon
     unitShort
     createdAt
-    dataPoints: metricsDataPointsCollection(
-      after: $cursor
-      first: $count
-      orderBy: [{ time: AscNullsLast }]
-    ) @connection(key: "MetricCard_metrics_dataPoints", filters: []) {
+    metricsDataPointsCollection(orderBy: [{ time: AscNullsLast }]) {
       totalCount
       edges {
         node {
@@ -32,29 +22,34 @@ const MetricCardFragment = graphql`
         }
       }
     }
-    ...LineChart_metrics
   }
-`
+`)
 
 export interface MetricCardProps {
-  metric: MetricCard_metrics$key
+  metricNodeId: string
 }
 
-const MetricCard = memo(function MetricCard({ metric }: MetricCardProps) {
-  const data = useFragment(MetricCardFragment, metric)
+const MetricCard = memo(function MetricCard({ metricNodeId }: MetricCardProps) {
+  const { data, complete } = useFragment({
+    fragment: MetricCardFragment,
+    fragmentName: 'MetricCardItem',
+    from: {
+      nodeId: metricNodeId,
+    },
+  })
 
-  const hasNoDataPoints = data.dataPoints?.totalCount === 0
+  if (!complete) {
+    return null
+  }
 
-  const dataPoints = data.dataPoints?.edges.map((edge) => edge.node) || []
+  const dataPoints =
+    data.metricsDataPointsCollection?.edges.map((edge) => edge.node) ?? []
+  const hasNoDataPoints = data.metricsDataPointsCollection?.totalCount === 0
 
   const lastDataPoint = dataPoints[dataPoints.length - 1]
 
   return (
-    <Link
-      to="/metrics/$metricId"
-      params={{ metricId: data.id }}
-      preload="intent"
-    >
+    <Link to="/metrics/:id" params={{ id: data.id }}>
       <div className="rounded-lg border shadow pt-4 cursor-pointer">
         <div className="px-4 pb-4 border-b">
           <div className="flex justify-between">
@@ -83,7 +78,7 @@ const MetricCard = memo(function MetricCard({ metric }: MetricCardProps) {
           <LineChart
             containerClassName="w-[110%] h-36 -ml-6"
             preview={true}
-            dataPoints={data}
+            dataPoints={dataPoints}
           />
         </div>
       </div>
