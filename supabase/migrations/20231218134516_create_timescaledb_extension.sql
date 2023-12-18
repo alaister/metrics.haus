@@ -1,5 +1,3 @@
-drop extension timescaledb cascade;
-
 create extension timescaledb
 with
   schema extensions;
