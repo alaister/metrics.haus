@@ -39,7 +39,7 @@ export default defineConfig(({ mode }) => {
     ],
     // Swap VITE_ to NEXT_PUBLIC_ as the Vercel Supabase integration names
     // environment variables with the NEXT_PUBLIC_ prefix.
-    envPrefix: ['NEXT_PUBLIC_', 'VERCEL_ENV'],
+    envPrefix: 'NEXT_PUBLIC_',
     resolve: {
       alias: {
         '~': path.resolve(__dirname, './src'),
