@@ -21,13 +21,13 @@ create table
 
 alter table public.metrics enable row level security;
 
-create policy "user can see metrics for teams they are in" on public.metrics for all using (private.is_current_user_in_team (team_id));
+create policy "can manage metrics from accessible teams" on public.metrics as restrictive for all using (private.is_current_user_in_team (team_id));
 
 revoke
 select
 ,
+    insert,
 update,
-insert,
 delete on public.metrics
 from
     anon,
@@ -104,13 +104,29 @@ create table
     public.metrics_owners (
         metric_id uuid not null references public.metrics ("id") on delete cascade on update cascade,
         profile_id uuid not null references public.profiles ("id") on delete cascade on update cascade,
-        "created_at" timestamp with time zone not null default now(),
+        created_at timestamp with time zone not null default now(),
         primary key (metric_id, profile_id)
     );
 
+revoke
+select
+,
+    insert,
+update,
+delete on public.metrics_owners
+from
+    anon,
+    authenticated;
+
+grant
+select
+,
+    insert (metric_id, profile_id),
+    delete on public.metrics_owners to authenticated;
+
 alter table public.metrics_owners enable row level security;
 
-create policy "user can manage metric owners from accessible metrics" on public.metrics_owners using (
+create policy "user can manage metric owners from accessible metrics" on public.metrics_owners for all using (
     exists (
         select
             1
