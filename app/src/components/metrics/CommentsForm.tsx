@@ -47,11 +47,10 @@ type CommentsFormProps = {
   replyTo?: string
 }
 
-const CommentsForm = ({
-  // date,
-  onSuccess, // metricId,
-} // replyTo,
-: CommentsFormProps) => {
+// date,
+// metricId,
+// replyTo,
+const CommentsForm = ({ onSuccess }: CommentsFormProps) => {
   const selectedTeamId = useAppSelector((state) => state.team.selectedTeamId)
 
   const { toast } = useToast()
