@@ -34,9 +34,98 @@ export interface Database {
   }
   public: {
     Tables: {
+      commentable_entities: {
+        Row: {
+          id: string
+          team_id: string
+          type: Database['public']['Enums']['commentable_entity_type']
+        }
+        Insert: {
+          id?: string
+          team_id: string
+          type: Database['public']['Enums']['commentable_entity_type']
+        }
+        Update: {
+          id?: string
+          team_id?: string
+          type?: Database['public']['Enums']['commentable_entity_type']
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'commentable_entities_team_id_fkey'
+            columns: ['team_id']
+            isOneToOne: false
+            referencedRelation: 'teams'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      comments: {
+        Row: {
+          body: string
+          created_at: string | null
+          id: string
+          profile_id: string
+          reply_to_comment_id: string | null
+          team_id: string
+          thread_id: string
+          updated_at: string | null
+        }
+        Insert: {
+          body: string
+          created_at?: string | null
+          id?: string
+          profile_id?: string
+          reply_to_comment_id?: string | null
+          team_id: string
+          thread_id: string
+          updated_at?: string | null
+        }
+        Update: {
+          body?: string
+          created_at?: string | null
+          id?: string
+          profile_id?: string
+          reply_to_comment_id?: string | null
+          team_id?: string
+          thread_id?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'comments_profile_id_fkey'
+            columns: ['profile_id']
+            isOneToOne: false
+            referencedRelation: 'profiles'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'comments_reply_to_comment_id_fkey'
+            columns: ['reply_to_comment_id']
+            isOneToOne: false
+            referencedRelation: 'comments'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'comments_team_id_fkey'
+            columns: ['team_id']
+            isOneToOne: false
+            referencedRelation: 'teams'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'comments_thread_id_fkey'
+            columns: ['thread_id']
+            isOneToOne: false
+            referencedRelation: 'threads'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       metrics: {
         Row: {
           archived: boolean | null
+          commentable_entity_id: string | null
           created_at: string
           description: string | null
           icon: string | null
@@ -49,6 +138,7 @@ export interface Database {
         }
         Insert: {
           archived?: boolean | null
+          commentable_entity_id?: string | null
           created_at?: string
           description?: string | null
           icon?: string | null
@@ -61,6 +151,7 @@ export interface Database {
         }
         Update: {
           archived?: boolean | null
+          commentable_entity_id?: string | null
           created_at?: string
           description?: string | null
           icon?: string | null
@@ -73,6 +164,13 @@ export interface Database {
         }
         Relationships: [
           {
+            foreignKeyName: 'metrics_commentable_entity_id_fkey'
+            columns: ['commentable_entity_id']
+            isOneToOne: false
+            referencedRelation: 'commentable_entities'
+            referencedColumns: ['id']
+          },
+          {
             foreignKeyName: 'metrics_team_id_fkey'
             columns: ['team_id']
             isOneToOne: false
@@ -83,24 +181,34 @@ export interface Database {
       }
       metrics_data_points: {
         Row: {
+          commentable_entity_id: string | null
           metric_id: string
           reported_by: string
           time: string
           value: number
         }
         Insert: {
+          commentable_entity_id?: string | null
           metric_id: string
           reported_by?: string
           time: string
           value: number
         }
         Update: {
+          commentable_entity_id?: string | null
           metric_id?: string
           reported_by?: string
           time?: string
           value?: number
         }
         Relationships: [
+          {
+            foreignKeyName: 'metrics_data_points_commentable_entity_id_fkey'
+            columns: ['commentable_entity_id']
+            isOneToOne: false
+            referencedRelation: 'commentable_entities'
+            referencedColumns: ['id']
+          },
           {
             foreignKeyName: 'metrics_data_points_metric_id_fkey'
             columns: ['metric_id']
@@ -152,25 +260,31 @@ export interface Database {
       }
       notifications: {
         Row: {
+          body: string | null
           created_at: string | null
           id: string
           metadata: Json | null
           profile_id: string
-          text: string | null
+          seen_at: string | null
+          team_id: string
         }
         Insert: {
+          body?: string | null
           created_at?: string | null
           id?: string
           metadata?: Json | null
           profile_id: string
-          text?: string | null
+          seen_at?: string | null
+          team_id: string
         }
         Update: {
+          body?: string | null
           created_at?: string | null
           id?: string
           metadata?: Json | null
           profile_id?: string
-          text?: string | null
+          seen_at?: string | null
+          team_id?: string
         }
         Relationships: [
           {
@@ -178,6 +292,13 @@ export interface Database {
             columns: ['profile_id']
             isOneToOne: false
             referencedRelation: 'profiles'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'notifications_team_id_fkey'
+            columns: ['team_id']
+            isOneToOne: false
+            referencedRelation: 'teams'
             referencedColumns: ['id']
           },
         ]
@@ -274,6 +395,58 @@ export interface Database {
         }
         Relationships: []
       }
+      threads: {
+        Row: {
+          commentable_entity_id: string
+          created_at: string | null
+          id: string
+          profile_id: string
+          team_id: string
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          commentable_entity_id: string
+          created_at?: string | null
+          id?: string
+          profile_id?: string
+          team_id: string
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          commentable_entity_id?: string
+          created_at?: string | null
+          id?: string
+          profile_id?: string
+          team_id?: string
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'threads_commentable_entity_id_fkey'
+            columns: ['commentable_entity_id']
+            isOneToOne: false
+            referencedRelation: 'commentable_entities'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'threads_profile_id_fkey'
+            columns: ['profile_id']
+            isOneToOne: false
+            referencedRelation: 'profiles'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'threads_team_id_fkey'
+            columns: ['team_id']
+            isOneToOne: false
+            referencedRelation: 'teams'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       user_events: {
         Row: {
           event: Database['public']['Enums']['user_event']
@@ -323,6 +496,7 @@ export interface Database {
       [_ in never]: never
     }
     Enums: {
+      commentable_entity_type: 'METRIC' | 'METRIC_DATA_POINT'
       metric_interval: 'minute' | 'hour' | 'day' | 'week' | 'month'
       user_event:
         | 'view_page'

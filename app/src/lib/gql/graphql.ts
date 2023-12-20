@@ -77,6 +77,194 @@ export type BooleanFilter = {
   is?: InputMaybe<FilterIs>
 }
 
+export type CommentableEntities = Node & {
+  __typename?: 'CommentableEntities'
+  id: Scalars['UUID']['output']
+  metricsCollection?: Maybe<MetricsConnection>
+  metricsDataPointsCollection?: Maybe<MetricsDataPointsConnection>
+  /** Globally Unique Record Identifier */
+  nodeId: Scalars['ID']['output']
+  team: Teams
+  teamId: Scalars['UUID']['output']
+  threadsCollection?: Maybe<ThreadsConnection>
+  type: CommentableEntityType
+}
+
+export type CommentableEntitiesMetricsCollectionArgs = {
+  after?: InputMaybe<Scalars['Cursor']['input']>
+  before?: InputMaybe<Scalars['Cursor']['input']>
+  filter?: InputMaybe<MetricsFilter>
+  first?: InputMaybe<Scalars['Int']['input']>
+  last?: InputMaybe<Scalars['Int']['input']>
+  orderBy?: InputMaybe<Array<MetricsOrderBy>>
+}
+
+export type CommentableEntitiesMetricsDataPointsCollectionArgs = {
+  after?: InputMaybe<Scalars['Cursor']['input']>
+  before?: InputMaybe<Scalars['Cursor']['input']>
+  filter?: InputMaybe<MetricsDataPointsFilter>
+  first?: InputMaybe<Scalars['Int']['input']>
+  last?: InputMaybe<Scalars['Int']['input']>
+  orderBy?: InputMaybe<Array<MetricsDataPointsOrderBy>>
+}
+
+export type CommentableEntitiesThreadsCollectionArgs = {
+  after?: InputMaybe<Scalars['Cursor']['input']>
+  before?: InputMaybe<Scalars['Cursor']['input']>
+  filter?: InputMaybe<ThreadsFilter>
+  first?: InputMaybe<Scalars['Int']['input']>
+  last?: InputMaybe<Scalars['Int']['input']>
+  orderBy?: InputMaybe<Array<ThreadsOrderBy>>
+}
+
+export type CommentableEntitiesConnection = {
+  __typename?: 'CommentableEntitiesConnection'
+  edges: Array<CommentableEntitiesEdge>
+  pageInfo: PageInfo
+}
+
+export type CommentableEntitiesEdge = {
+  __typename?: 'CommentableEntitiesEdge'
+  cursor: Scalars['String']['output']
+  node: CommentableEntities
+}
+
+export type CommentableEntitiesFilter = {
+  /** Returns true only if all its inner filters are true, otherwise returns false */
+  and?: InputMaybe<Array<CommentableEntitiesFilter>>
+  id?: InputMaybe<UuidFilter>
+  nodeId?: InputMaybe<IdFilter>
+  /** Negates a filter */
+  not?: InputMaybe<CommentableEntitiesFilter>
+  /** Returns true if at least one of its inner filters is true, otherwise returns false */
+  or?: InputMaybe<Array<CommentableEntitiesFilter>>
+  teamId?: InputMaybe<UuidFilter>
+  type?: InputMaybe<CommentableEntityTypeFilter>
+}
+
+export type CommentableEntitiesOrderBy = {
+  id?: InputMaybe<OrderByDirection>
+  teamId?: InputMaybe<OrderByDirection>
+  type?: InputMaybe<OrderByDirection>
+}
+
+export enum CommentableEntityType {
+  Metric = 'METRIC',
+  MetricDataPoint = 'METRIC_DATA_POINT',
+}
+
+/** Boolean expression comparing fields on type "CommentableEntityType" */
+export type CommentableEntityTypeFilter = {
+  eq?: InputMaybe<CommentableEntityType>
+  in?: InputMaybe<Array<CommentableEntityType>>
+  is?: InputMaybe<FilterIs>
+  neq?: InputMaybe<CommentableEntityType>
+}
+
+export type Comments = Node & {
+  __typename?: 'Comments'
+  body: Scalars['String']['output']
+  commentsCollection?: Maybe<CommentsConnection>
+  createdAt?: Maybe<Scalars['Datetime']['output']>
+  id: Scalars['UUID']['output']
+  /** Globally Unique Record Identifier */
+  nodeId: Scalars['ID']['output']
+  profile: Profiles
+  profileId: Scalars['UUID']['output']
+  replyToComment?: Maybe<Comments>
+  replyToCommentId?: Maybe<Scalars['UUID']['output']>
+  team: Teams
+  teamId: Scalars['UUID']['output']
+  thread: Threads
+  threadId: Scalars['UUID']['output']
+  updatedAt?: Maybe<Scalars['Datetime']['output']>
+}
+
+export type CommentsCommentsCollectionArgs = {
+  after?: InputMaybe<Scalars['Cursor']['input']>
+  before?: InputMaybe<Scalars['Cursor']['input']>
+  filter?: InputMaybe<CommentsFilter>
+  first?: InputMaybe<Scalars['Int']['input']>
+  last?: InputMaybe<Scalars['Int']['input']>
+  orderBy?: InputMaybe<Array<CommentsOrderBy>>
+}
+
+export type CommentsConnection = {
+  __typename?: 'CommentsConnection'
+  edges: Array<CommentsEdge>
+  pageInfo: PageInfo
+}
+
+export type CommentsDeleteResponse = {
+  __typename?: 'CommentsDeleteResponse'
+  /** Count of the records impacted by the mutation */
+  affectedCount: Scalars['Int']['output']
+  /** Array of records impacted by the mutation */
+  records: Array<Comments>
+}
+
+export type CommentsEdge = {
+  __typename?: 'CommentsEdge'
+  cursor: Scalars['String']['output']
+  node: Comments
+}
+
+export type CommentsFilter = {
+  /** Returns true only if all its inner filters are true, otherwise returns false */
+  and?: InputMaybe<Array<CommentsFilter>>
+  body?: InputMaybe<StringFilter>
+  createdAt?: InputMaybe<DatetimeFilter>
+  id?: InputMaybe<UuidFilter>
+  nodeId?: InputMaybe<IdFilter>
+  /** Negates a filter */
+  not?: InputMaybe<CommentsFilter>
+  /** Returns true if at least one of its inner filters is true, otherwise returns false */
+  or?: InputMaybe<Array<CommentsFilter>>
+  profileId?: InputMaybe<UuidFilter>
+  replyToCommentId?: InputMaybe<UuidFilter>
+  teamId?: InputMaybe<UuidFilter>
+  threadId?: InputMaybe<UuidFilter>
+  updatedAt?: InputMaybe<DatetimeFilter>
+}
+
+export type CommentsInsertInput = {
+  body?: InputMaybe<Scalars['String']['input']>
+  replyToCommentId?: InputMaybe<Scalars['UUID']['input']>
+  teamId?: InputMaybe<Scalars['UUID']['input']>
+  threadId?: InputMaybe<Scalars['UUID']['input']>
+}
+
+export type CommentsInsertResponse = {
+  __typename?: 'CommentsInsertResponse'
+  /** Count of the records impacted by the mutation */
+  affectedCount: Scalars['Int']['output']
+  /** Array of records impacted by the mutation */
+  records: Array<Comments>
+}
+
+export type CommentsOrderBy = {
+  body?: InputMaybe<OrderByDirection>
+  createdAt?: InputMaybe<OrderByDirection>
+  id?: InputMaybe<OrderByDirection>
+  profileId?: InputMaybe<OrderByDirection>
+  replyToCommentId?: InputMaybe<OrderByDirection>
+  teamId?: InputMaybe<OrderByDirection>
+  threadId?: InputMaybe<OrderByDirection>
+  updatedAt?: InputMaybe<OrderByDirection>
+}
+
+export type CommentsUpdateInput = {
+  body?: InputMaybe<Scalars['String']['input']>
+}
+
+export type CommentsUpdateResponse = {
+  __typename?: 'CommentsUpdateResponse'
+  /** Count of the records impacted by the mutation */
+  affectedCount: Scalars['Int']['output']
+  /** Array of records impacted by the mutation */
+  records: Array<Comments>
+}
+
 /** Boolean expression comparing fields on type "Date" */
 export type DateFilter = {
   eq?: InputMaybe<Scalars['Date']['input']>
@@ -154,6 +342,8 @@ export type MetricIntervalFilter = {
 export type Metrics = Node & {
   __typename?: 'Metrics'
   archived?: Maybe<Scalars['Boolean']['output']>
+  commentableEntity?: Maybe<CommentableEntities>
+  commentableEntityId?: Maybe<Scalars['UUID']['output']>
   createdAt: Scalars['Datetime']['output']
   description?: Maybe<Scalars['String']['output']>
   icon?: Maybe<Scalars['String']['output']>
@@ -196,6 +386,8 @@ export type MetricsConnection = {
 
 export type MetricsDataPoints = Node & {
   __typename?: 'MetricsDataPoints'
+  commentableEntity?: Maybe<CommentableEntities>
+  commentableEntityId?: Maybe<Scalars['UUID']['output']>
   metric: Metrics
   metricId: Scalars['UUID']['output']
   /** Globally Unique Record Identifier */
@@ -229,8 +421,15 @@ export type MetricsDataPointsEdge = {
 }
 
 export type MetricsDataPointsFilter = {
+  /** Returns true only if all its inner filters are true, otherwise returns false */
+  and?: InputMaybe<Array<MetricsDataPointsFilter>>
+  commentableEntityId?: InputMaybe<UuidFilter>
   metricId?: InputMaybe<UuidFilter>
   nodeId?: InputMaybe<IdFilter>
+  /** Negates a filter */
+  not?: InputMaybe<MetricsDataPointsFilter>
+  /** Returns true if at least one of its inner filters is true, otherwise returns false */
+  or?: InputMaybe<Array<MetricsDataPointsFilter>>
   reportedBy?: InputMaybe<UuidFilter>
   time?: InputMaybe<DatetimeFilter>
   value?: InputMaybe<FloatFilter>
@@ -251,6 +450,7 @@ export type MetricsDataPointsInsertResponse = {
 }
 
 export type MetricsDataPointsOrderBy = {
+  commentableEntityId?: InputMaybe<OrderByDirection>
   metricId?: InputMaybe<OrderByDirection>
   reportedBy?: InputMaybe<OrderByDirection>
   time?: InputMaybe<OrderByDirection>
@@ -272,7 +472,10 @@ export type MetricsEdge = {
 }
 
 export type MetricsFilter = {
+  /** Returns true only if all its inner filters are true, otherwise returns false */
+  and?: InputMaybe<Array<MetricsFilter>>
   archived?: InputMaybe<BooleanFilter>
+  commentableEntityId?: InputMaybe<UuidFilter>
   createdAt?: InputMaybe<DatetimeFilter>
   description?: InputMaybe<StringFilter>
   icon?: InputMaybe<StringFilter>
@@ -280,6 +483,10 @@ export type MetricsFilter = {
   interval?: InputMaybe<MetricIntervalFilter>
   name?: InputMaybe<StringFilter>
   nodeId?: InputMaybe<IdFilter>
+  /** Negates a filter */
+  not?: InputMaybe<MetricsFilter>
+  /** Returns true if at least one of its inner filters is true, otherwise returns false */
+  or?: InputMaybe<Array<MetricsFilter>>
   teamId?: InputMaybe<UuidFilter>
   unitShort?: InputMaybe<StringFilter>
   updatedAt?: InputMaybe<DatetimeFilter>
@@ -304,6 +511,7 @@ export type MetricsInsertResponse = {
 
 export type MetricsOrderBy = {
   archived?: InputMaybe<OrderByDirection>
+  commentableEntityId?: InputMaybe<OrderByDirection>
   createdAt?: InputMaybe<OrderByDirection>
   description?: InputMaybe<OrderByDirection>
   icon?: InputMaybe<OrderByDirection>
@@ -347,14 +555,19 @@ export type MetricsOwnersEdge = {
 }
 
 export type MetricsOwnersFilter = {
+  /** Returns true only if all its inner filters are true, otherwise returns false */
+  and?: InputMaybe<Array<MetricsOwnersFilter>>
   createdAt?: InputMaybe<DatetimeFilter>
   metricId?: InputMaybe<UuidFilter>
   nodeId?: InputMaybe<IdFilter>
+  /** Negates a filter */
+  not?: InputMaybe<MetricsOwnersFilter>
+  /** Returns true if at least one of its inner filters is true, otherwise returns false */
+  or?: InputMaybe<Array<MetricsOwnersFilter>>
   profileId?: InputMaybe<UuidFilter>
 }
 
 export type MetricsOwnersInsertInput = {
-  createdAt?: InputMaybe<Scalars['Datetime']['input']>
   metricId?: InputMaybe<Scalars['UUID']['input']>
   profileId?: InputMaybe<Scalars['UUID']['input']>
 }
@@ -371,20 +584,6 @@ export type MetricsOwnersOrderBy = {
   createdAt?: InputMaybe<OrderByDirection>
   metricId?: InputMaybe<OrderByDirection>
   profileId?: InputMaybe<OrderByDirection>
-}
-
-export type MetricsOwnersUpdateInput = {
-  createdAt?: InputMaybe<Scalars['Datetime']['input']>
-  metricId?: InputMaybe<Scalars['UUID']['input']>
-  profileId?: InputMaybe<Scalars['UUID']['input']>
-}
-
-export type MetricsOwnersUpdateResponse = {
-  __typename?: 'MetricsOwnersUpdateResponse'
-  /** Count of the records impacted by the mutation */
-  affectedCount: Scalars['Int']['output']
-  /** Array of records impacted by the mutation */
-  records: Array<MetricsOwners>
 }
 
 export type MetricsUpdateInput = {
@@ -407,38 +606,46 @@ export type MetricsUpdateResponse = {
 /** The root type for creating and mutating data */
 export type Mutation = {
   __typename?: 'Mutation'
+  /** Deletes zero or more records from the `Comments` collection */
+  deleteFromCommentsCollection: CommentsDeleteResponse
   /** Deletes zero or more records from the `Metrics` collection */
   deleteFromMetricsCollection: MetricsDeleteResponse
   /** Deletes zero or more records from the `MetricsDataPoints` collection */
   deleteFromMetricsDataPointsCollection: MetricsDataPointsDeleteResponse
   /** Deletes zero or more records from the `MetricsOwners` collection */
   deleteFromMetricsOwnersCollection: MetricsOwnersDeleteResponse
-  /** Deletes zero or more records from the `Notifications` collection */
-  deleteFromNotificationsCollection: NotificationsDeleteResponse
-  /** Deletes zero or more records from the `TeamMembers` collection */
-  deleteFromTeamMembersCollection: TeamMembersDeleteResponse
-  /** Deletes zero or more records from the `Teams` collection */
-  deleteFromTeamsCollection: TeamsDeleteResponse
+  /** Deletes zero or more records from the `Threads` collection */
+  deleteFromThreadsCollection: ThreadsDeleteResponse
+  /** Adds one or more `Comments` records to the collection */
+  insertIntoCommentsCollection?: Maybe<CommentsInsertResponse>
   /** Adds one or more `Metrics` records to the collection */
   insertIntoMetricsCollection?: Maybe<MetricsInsertResponse>
   /** Adds one or more `MetricsDataPoints` records to the collection */
   insertIntoMetricsDataPointsCollection?: Maybe<MetricsDataPointsInsertResponse>
   /** Adds one or more `MetricsOwners` records to the collection */
   insertIntoMetricsOwnersCollection?: Maybe<MetricsOwnersInsertResponse>
-  /** Adds one or more `Notifications` records to the collection */
-  insertIntoNotificationsCollection?: Maybe<NotificationsInsertResponse>
-  /** Adds one or more `Teams` records to the collection */
-  insertIntoTeamsCollection?: Maybe<TeamsInsertResponse>
+  /** Adds one or more `Threads` records to the collection */
+  insertIntoThreadsCollection?: Maybe<ThreadsInsertResponse>
+  /** Adds one or more `UserEvents` records to the collection */
+  insertIntoUserEventsCollection?: Maybe<UserEventsInsertResponse>
+  /** Updates zero or more records in the `Comments` collection */
+  updateCommentsCollection: CommentsUpdateResponse
   /** Updates zero or more records in the `Metrics` collection */
   updateMetricsCollection: MetricsUpdateResponse
-  /** Updates zero or more records in the `MetricsOwners` collection */
-  updateMetricsOwnersCollection: MetricsOwnersUpdateResponse
   /** Updates zero or more records in the `Notifications` collection */
   updateNotificationsCollection: NotificationsUpdateResponse
   /** Updates zero or more records in the `Profiles` collection */
   updateProfilesCollection: ProfilesUpdateResponse
   /** Updates zero or more records in the `Teams` collection */
   updateTeamsCollection: TeamsUpdateResponse
+  /** Updates zero or more records in the `Threads` collection */
+  updateThreadsCollection: ThreadsUpdateResponse
+}
+
+/** The root type for creating and mutating data */
+export type MutationDeleteFromCommentsCollectionArgs = {
+  atMost?: Scalars['Int']['input']
+  filter?: InputMaybe<CommentsFilter>
 }
 
 /** The root type for creating and mutating data */
@@ -460,21 +667,14 @@ export type MutationDeleteFromMetricsOwnersCollectionArgs = {
 }
 
 /** The root type for creating and mutating data */
-export type MutationDeleteFromNotificationsCollectionArgs = {
+export type MutationDeleteFromThreadsCollectionArgs = {
   atMost?: Scalars['Int']['input']
-  filter?: InputMaybe<NotificationsFilter>
+  filter?: InputMaybe<ThreadsFilter>
 }
 
 /** The root type for creating and mutating data */
-export type MutationDeleteFromTeamMembersCollectionArgs = {
-  atMost?: Scalars['Int']['input']
-  filter?: InputMaybe<TeamMembersFilter>
-}
-
-/** The root type for creating and mutating data */
-export type MutationDeleteFromTeamsCollectionArgs = {
-  atMost?: Scalars['Int']['input']
-  filter?: InputMaybe<TeamsFilter>
+export type MutationInsertIntoCommentsCollectionArgs = {
+  objects: Array<CommentsInsertInput>
 }
 
 /** The root type for creating and mutating data */
@@ -493,13 +693,20 @@ export type MutationInsertIntoMetricsOwnersCollectionArgs = {
 }
 
 /** The root type for creating and mutating data */
-export type MutationInsertIntoNotificationsCollectionArgs = {
-  objects: Array<NotificationsInsertInput>
+export type MutationInsertIntoThreadsCollectionArgs = {
+  objects: Array<ThreadsInsertInput>
 }
 
 /** The root type for creating and mutating data */
-export type MutationInsertIntoTeamsCollectionArgs = {
-  objects: Array<TeamsInsertInput>
+export type MutationInsertIntoUserEventsCollectionArgs = {
+  objects: Array<UserEventsInsertInput>
+}
+
+/** The root type for creating and mutating data */
+export type MutationUpdateCommentsCollectionArgs = {
+  atMost?: Scalars['Int']['input']
+  filter?: InputMaybe<CommentsFilter>
+  set: CommentsUpdateInput
 }
 
 /** The root type for creating and mutating data */
@@ -507,13 +714,6 @@ export type MutationUpdateMetricsCollectionArgs = {
   atMost?: Scalars['Int']['input']
   filter?: InputMaybe<MetricsFilter>
   set: MetricsUpdateInput
-}
-
-/** The root type for creating and mutating data */
-export type MutationUpdateMetricsOwnersCollectionArgs = {
-  atMost?: Scalars['Int']['input']
-  filter?: InputMaybe<MetricsOwnersFilter>
-  set: MetricsOwnersUpdateInput
 }
 
 /** The root type for creating and mutating data */
@@ -537,6 +737,13 @@ export type MutationUpdateTeamsCollectionArgs = {
   set: TeamsUpdateInput
 }
 
+/** The root type for creating and mutating data */
+export type MutationUpdateThreadsCollectionArgs = {
+  atMost?: Scalars['Int']['input']
+  filter?: InputMaybe<ThreadsFilter>
+  set: ThreadsUpdateInput
+}
+
 export type Node = {
   /** Retrieves a record by `ID` */
   nodeId: Scalars['ID']['output']
@@ -544,6 +751,7 @@ export type Node = {
 
 export type Notifications = Node & {
   __typename?: 'Notifications'
+  body?: Maybe<Scalars['String']['output']>
   createdAt?: Maybe<Scalars['Datetime']['output']>
   id: Scalars['UUID']['output']
   metadata?: Maybe<Scalars['JSON']['output']>
@@ -551,21 +759,15 @@ export type Notifications = Node & {
   nodeId: Scalars['ID']['output']
   profile: Profiles
   profileId: Scalars['UUID']['output']
-  text?: Maybe<Scalars['String']['output']>
+  seenAt?: Maybe<Scalars['Datetime']['output']>
+  team: Teams
+  teamId: Scalars['UUID']['output']
 }
 
 export type NotificationsConnection = {
   __typename?: 'NotificationsConnection'
   edges: Array<NotificationsEdge>
   pageInfo: PageInfo
-}
-
-export type NotificationsDeleteResponse = {
-  __typename?: 'NotificationsDeleteResponse'
-  /** Count of the records impacted by the mutation */
-  affectedCount: Scalars['Int']['output']
-  /** Array of records impacted by the mutation */
-  records: Array<Notifications>
 }
 
 export type NotificationsEdge = {
@@ -575,42 +777,32 @@ export type NotificationsEdge = {
 }
 
 export type NotificationsFilter = {
+  /** Returns true only if all its inner filters are true, otherwise returns false */
+  and?: InputMaybe<Array<NotificationsFilter>>
+  body?: InputMaybe<StringFilter>
   createdAt?: InputMaybe<DatetimeFilter>
   id?: InputMaybe<UuidFilter>
   nodeId?: InputMaybe<IdFilter>
+  /** Negates a filter */
+  not?: InputMaybe<NotificationsFilter>
+  /** Returns true if at least one of its inner filters is true, otherwise returns false */
+  or?: InputMaybe<Array<NotificationsFilter>>
   profileId?: InputMaybe<UuidFilter>
-  text?: InputMaybe<StringFilter>
-}
-
-export type NotificationsInsertInput = {
-  createdAt?: InputMaybe<Scalars['Datetime']['input']>
-  id?: InputMaybe<Scalars['UUID']['input']>
-  metadata?: InputMaybe<Scalars['JSON']['input']>
-  profileId?: InputMaybe<Scalars['UUID']['input']>
-  text?: InputMaybe<Scalars['String']['input']>
-}
-
-export type NotificationsInsertResponse = {
-  __typename?: 'NotificationsInsertResponse'
-  /** Count of the records impacted by the mutation */
-  affectedCount: Scalars['Int']['output']
-  /** Array of records impacted by the mutation */
-  records: Array<Notifications>
+  seenAt?: InputMaybe<DatetimeFilter>
+  teamId?: InputMaybe<UuidFilter>
 }
 
 export type NotificationsOrderBy = {
+  body?: InputMaybe<OrderByDirection>
   createdAt?: InputMaybe<OrderByDirection>
   id?: InputMaybe<OrderByDirection>
   profileId?: InputMaybe<OrderByDirection>
-  text?: InputMaybe<OrderByDirection>
+  seenAt?: InputMaybe<OrderByDirection>
+  teamId?: InputMaybe<OrderByDirection>
 }
 
 export type NotificationsUpdateInput = {
-  createdAt?: InputMaybe<Scalars['Datetime']['input']>
-  id?: InputMaybe<Scalars['UUID']['input']>
-  metadata?: InputMaybe<Scalars['JSON']['input']>
-  profileId?: InputMaybe<Scalars['UUID']['input']>
-  text?: InputMaybe<Scalars['String']['input']>
+  seenAt?: InputMaybe<Scalars['Datetime']['input']>
 }
 
 export type NotificationsUpdateResponse = {
@@ -650,6 +842,7 @@ export type PageInfo = {
 export type Profiles = Node & {
   __typename?: 'Profiles'
   avatarPath?: Maybe<Scalars['String']['output']>
+  commentsCollection?: Maybe<CommentsConnection>
   createdAt: Scalars['Datetime']['output']
   id: Scalars['UUID']['output']
   metricsDataPointsCollection?: Maybe<MetricsDataPointsConnection>
@@ -659,7 +852,18 @@ export type Profiles = Node & {
   nodeId: Scalars['ID']['output']
   notificationsCollection?: Maybe<NotificationsConnection>
   teamMembersCollection?: Maybe<TeamMembersConnection>
+  threadsCollection?: Maybe<ThreadsConnection>
   updatedAt: Scalars['Datetime']['output']
+  userEventsCollection?: Maybe<UserEventsConnection>
+}
+
+export type ProfilesCommentsCollectionArgs = {
+  after?: InputMaybe<Scalars['Cursor']['input']>
+  before?: InputMaybe<Scalars['Cursor']['input']>
+  filter?: InputMaybe<CommentsFilter>
+  first?: InputMaybe<Scalars['Int']['input']>
+  last?: InputMaybe<Scalars['Int']['input']>
+  orderBy?: InputMaybe<Array<CommentsOrderBy>>
 }
 
 export type ProfilesMetricsDataPointsCollectionArgs = {
@@ -698,6 +902,24 @@ export type ProfilesTeamMembersCollectionArgs = {
   orderBy?: InputMaybe<Array<TeamMembersOrderBy>>
 }
 
+export type ProfilesThreadsCollectionArgs = {
+  after?: InputMaybe<Scalars['Cursor']['input']>
+  before?: InputMaybe<Scalars['Cursor']['input']>
+  filter?: InputMaybe<ThreadsFilter>
+  first?: InputMaybe<Scalars['Int']['input']>
+  last?: InputMaybe<Scalars['Int']['input']>
+  orderBy?: InputMaybe<Array<ThreadsOrderBy>>
+}
+
+export type ProfilesUserEventsCollectionArgs = {
+  after?: InputMaybe<Scalars['Cursor']['input']>
+  before?: InputMaybe<Scalars['Cursor']['input']>
+  filter?: InputMaybe<UserEventsFilter>
+  first?: InputMaybe<Scalars['Int']['input']>
+  last?: InputMaybe<Scalars['Int']['input']>
+  orderBy?: InputMaybe<Array<UserEventsOrderBy>>
+}
+
 export type ProfilesConnection = {
   __typename?: 'ProfilesConnection'
   edges: Array<ProfilesEdge>
@@ -711,11 +933,17 @@ export type ProfilesEdge = {
 }
 
 export type ProfilesFilter = {
+  /** Returns true only if all its inner filters are true, otherwise returns false */
+  and?: InputMaybe<Array<ProfilesFilter>>
   avatarPath?: InputMaybe<StringFilter>
   createdAt?: InputMaybe<DatetimeFilter>
   id?: InputMaybe<UuidFilter>
   name?: InputMaybe<StringFilter>
   nodeId?: InputMaybe<IdFilter>
+  /** Negates a filter */
+  not?: InputMaybe<ProfilesFilter>
+  /** Returns true if at least one of its inner filters is true, otherwise returns false */
+  or?: InputMaybe<Array<ProfilesFilter>>
   updatedAt?: InputMaybe<DatetimeFilter>
 }
 
@@ -742,6 +970,10 @@ export type ProfilesUpdateResponse = {
 /** The root type for querying data */
 export type Query = {
   __typename?: 'Query'
+  /** A pagable collection of type `CommentableEntities` */
+  commentableEntitiesCollection?: Maybe<CommentableEntitiesConnection>
+  /** A pagable collection of type `Comments` */
+  commentsCollection?: Maybe<CommentsConnection>
   /** A pagable collection of type `Metrics` */
   metricsCollection?: Maybe<MetricsConnection>
   /** A pagable collection of type `MetricsDataPoints` */
@@ -758,6 +990,30 @@ export type Query = {
   teamMembersCollection?: Maybe<TeamMembersConnection>
   /** A pagable collection of type `Teams` */
   teamsCollection?: Maybe<TeamsConnection>
+  /** A pagable collection of type `Threads` */
+  threadsCollection?: Maybe<ThreadsConnection>
+  /** A pagable collection of type `UserEvents` */
+  userEventsCollection?: Maybe<UserEventsConnection>
+}
+
+/** The root type for querying data */
+export type QueryCommentableEntitiesCollectionArgs = {
+  after?: InputMaybe<Scalars['Cursor']['input']>
+  before?: InputMaybe<Scalars['Cursor']['input']>
+  filter?: InputMaybe<CommentableEntitiesFilter>
+  first?: InputMaybe<Scalars['Int']['input']>
+  last?: InputMaybe<Scalars['Int']['input']>
+  orderBy?: InputMaybe<Array<CommentableEntitiesOrderBy>>
+}
+
+/** The root type for querying data */
+export type QueryCommentsCollectionArgs = {
+  after?: InputMaybe<Scalars['Cursor']['input']>
+  before?: InputMaybe<Scalars['Cursor']['input']>
+  filter?: InputMaybe<CommentsFilter>
+  first?: InputMaybe<Scalars['Int']['input']>
+  last?: InputMaybe<Scalars['Int']['input']>
+  orderBy?: InputMaybe<Array<CommentsOrderBy>>
 }
 
 /** The root type for querying data */
@@ -835,6 +1091,26 @@ export type QueryTeamsCollectionArgs = {
   orderBy?: InputMaybe<Array<TeamsOrderBy>>
 }
 
+/** The root type for querying data */
+export type QueryThreadsCollectionArgs = {
+  after?: InputMaybe<Scalars['Cursor']['input']>
+  before?: InputMaybe<Scalars['Cursor']['input']>
+  filter?: InputMaybe<ThreadsFilter>
+  first?: InputMaybe<Scalars['Int']['input']>
+  last?: InputMaybe<Scalars['Int']['input']>
+  orderBy?: InputMaybe<Array<ThreadsOrderBy>>
+}
+
+/** The root type for querying data */
+export type QueryUserEventsCollectionArgs = {
+  after?: InputMaybe<Scalars['Cursor']['input']>
+  before?: InputMaybe<Scalars['Cursor']['input']>
+  filter?: InputMaybe<UserEventsFilter>
+  first?: InputMaybe<Scalars['Int']['input']>
+  last?: InputMaybe<Scalars['Int']['input']>
+  orderBy?: InputMaybe<Array<UserEventsOrderBy>>
+}
+
 /** Boolean expression comparing fields on type "String" */
 export type StringFilter = {
   eq?: InputMaybe<Scalars['String']['input']>
@@ -870,14 +1146,6 @@ export type TeamMembersConnection = {
   pageInfo: PageInfo
 }
 
-export type TeamMembersDeleteResponse = {
-  __typename?: 'TeamMembersDeleteResponse'
-  /** Count of the records impacted by the mutation */
-  affectedCount: Scalars['Int']['output']
-  /** Array of records impacted by the mutation */
-  records: Array<TeamMembers>
-}
-
 export type TeamMembersEdge = {
   __typename?: 'TeamMembersEdge'
   cursor: Scalars['String']['output']
@@ -885,8 +1153,14 @@ export type TeamMembersEdge = {
 }
 
 export type TeamMembersFilter = {
+  /** Returns true only if all its inner filters are true, otherwise returns false */
+  and?: InputMaybe<Array<TeamMembersFilter>>
   createdAt?: InputMaybe<DatetimeFilter>
   nodeId?: InputMaybe<IdFilter>
+  /** Negates a filter */
+  not?: InputMaybe<TeamMembersFilter>
+  /** Returns true if at least one of its inner filters is true, otherwise returns false */
+  or?: InputMaybe<Array<TeamMembersFilter>>
   profileId?: InputMaybe<UuidFilter>
   teamId?: InputMaybe<UuidFilter>
   updatedAt?: InputMaybe<DatetimeFilter>
@@ -901,15 +1175,37 @@ export type TeamMembersOrderBy = {
 
 export type Teams = Node & {
   __typename?: 'Teams'
+  commentableEntitiesCollection?: Maybe<CommentableEntitiesConnection>
+  commentsCollection?: Maybe<CommentsConnection>
   createdAt: Scalars['Datetime']['output']
   id: Scalars['UUID']['output']
   metricsCollection?: Maybe<MetricsConnection>
   name: Scalars['String']['output']
   /** Globally Unique Record Identifier */
   nodeId: Scalars['ID']['output']
+  notificationsCollection?: Maybe<NotificationsConnection>
   ssoProviderId?: Maybe<Scalars['String']['output']>
   teamMembersCollection?: Maybe<TeamMembersConnection>
+  threadsCollection?: Maybe<ThreadsConnection>
   updatedAt: Scalars['Datetime']['output']
+}
+
+export type TeamsCommentableEntitiesCollectionArgs = {
+  after?: InputMaybe<Scalars['Cursor']['input']>
+  before?: InputMaybe<Scalars['Cursor']['input']>
+  filter?: InputMaybe<CommentableEntitiesFilter>
+  first?: InputMaybe<Scalars['Int']['input']>
+  last?: InputMaybe<Scalars['Int']['input']>
+  orderBy?: InputMaybe<Array<CommentableEntitiesOrderBy>>
+}
+
+export type TeamsCommentsCollectionArgs = {
+  after?: InputMaybe<Scalars['Cursor']['input']>
+  before?: InputMaybe<Scalars['Cursor']['input']>
+  filter?: InputMaybe<CommentsFilter>
+  first?: InputMaybe<Scalars['Int']['input']>
+  last?: InputMaybe<Scalars['Int']['input']>
+  orderBy?: InputMaybe<Array<CommentsOrderBy>>
 }
 
 export type TeamsMetricsCollectionArgs = {
@@ -921,6 +1217,15 @@ export type TeamsMetricsCollectionArgs = {
   orderBy?: InputMaybe<Array<MetricsOrderBy>>
 }
 
+export type TeamsNotificationsCollectionArgs = {
+  after?: InputMaybe<Scalars['Cursor']['input']>
+  before?: InputMaybe<Scalars['Cursor']['input']>
+  filter?: InputMaybe<NotificationsFilter>
+  first?: InputMaybe<Scalars['Int']['input']>
+  last?: InputMaybe<Scalars['Int']['input']>
+  orderBy?: InputMaybe<Array<NotificationsOrderBy>>
+}
+
 export type TeamsTeamMembersCollectionArgs = {
   after?: InputMaybe<Scalars['Cursor']['input']>
   before?: InputMaybe<Scalars['Cursor']['input']>
@@ -930,18 +1235,19 @@ export type TeamsTeamMembersCollectionArgs = {
   orderBy?: InputMaybe<Array<TeamMembersOrderBy>>
 }
 
+export type TeamsThreadsCollectionArgs = {
+  after?: InputMaybe<Scalars['Cursor']['input']>
+  before?: InputMaybe<Scalars['Cursor']['input']>
+  filter?: InputMaybe<ThreadsFilter>
+  first?: InputMaybe<Scalars['Int']['input']>
+  last?: InputMaybe<Scalars['Int']['input']>
+  orderBy?: InputMaybe<Array<ThreadsOrderBy>>
+}
+
 export type TeamsConnection = {
   __typename?: 'TeamsConnection'
   edges: Array<TeamsEdge>
   pageInfo: PageInfo
-}
-
-export type TeamsDeleteResponse = {
-  __typename?: 'TeamsDeleteResponse'
-  /** Count of the records impacted by the mutation */
-  affectedCount: Scalars['Int']['output']
-  /** Array of records impacted by the mutation */
-  records: Array<Teams>
 }
 
 export type TeamsEdge = {
@@ -951,28 +1257,18 @@ export type TeamsEdge = {
 }
 
 export type TeamsFilter = {
+  /** Returns true only if all its inner filters are true, otherwise returns false */
+  and?: InputMaybe<Array<TeamsFilter>>
   createdAt?: InputMaybe<DatetimeFilter>
   id?: InputMaybe<UuidFilter>
   name?: InputMaybe<StringFilter>
   nodeId?: InputMaybe<IdFilter>
+  /** Negates a filter */
+  not?: InputMaybe<TeamsFilter>
+  /** Returns true if at least one of its inner filters is true, otherwise returns false */
+  or?: InputMaybe<Array<TeamsFilter>>
   ssoProviderId?: InputMaybe<StringFilter>
   updatedAt?: InputMaybe<DatetimeFilter>
-}
-
-export type TeamsInsertInput = {
-  createdAt?: InputMaybe<Scalars['Datetime']['input']>
-  id?: InputMaybe<Scalars['UUID']['input']>
-  name?: InputMaybe<Scalars['String']['input']>
-  ssoProviderId?: InputMaybe<Scalars['String']['input']>
-  updatedAt?: InputMaybe<Scalars['Datetime']['input']>
-}
-
-export type TeamsInsertResponse = {
-  __typename?: 'TeamsInsertResponse'
-  /** Count of the records impacted by the mutation */
-  affectedCount: Scalars['Int']['output']
-  /** Array of records impacted by the mutation */
-  records: Array<Teams>
 }
 
 export type TeamsOrderBy = {
@@ -993,6 +1289,104 @@ export type TeamsUpdateResponse = {
   affectedCount: Scalars['Int']['output']
   /** Array of records impacted by the mutation */
   records: Array<Teams>
+}
+
+export type Threads = Node & {
+  __typename?: 'Threads'
+  commentableEntity: CommentableEntities
+  commentableEntityId: Scalars['UUID']['output']
+  commentsCollection?: Maybe<CommentsConnection>
+  createdAt?: Maybe<Scalars['Datetime']['output']>
+  id: Scalars['UUID']['output']
+  /** Globally Unique Record Identifier */
+  nodeId: Scalars['ID']['output']
+  profile: Profiles
+  profileId: Scalars['UUID']['output']
+  team: Teams
+  teamId: Scalars['UUID']['output']
+  title: Scalars['String']['output']
+  updatedAt?: Maybe<Scalars['Datetime']['output']>
+}
+
+export type ThreadsCommentsCollectionArgs = {
+  after?: InputMaybe<Scalars['Cursor']['input']>
+  before?: InputMaybe<Scalars['Cursor']['input']>
+  filter?: InputMaybe<CommentsFilter>
+  first?: InputMaybe<Scalars['Int']['input']>
+  last?: InputMaybe<Scalars['Int']['input']>
+  orderBy?: InputMaybe<Array<CommentsOrderBy>>
+}
+
+export type ThreadsConnection = {
+  __typename?: 'ThreadsConnection'
+  edges: Array<ThreadsEdge>
+  pageInfo: PageInfo
+}
+
+export type ThreadsDeleteResponse = {
+  __typename?: 'ThreadsDeleteResponse'
+  /** Count of the records impacted by the mutation */
+  affectedCount: Scalars['Int']['output']
+  /** Array of records impacted by the mutation */
+  records: Array<Threads>
+}
+
+export type ThreadsEdge = {
+  __typename?: 'ThreadsEdge'
+  cursor: Scalars['String']['output']
+  node: Threads
+}
+
+export type ThreadsFilter = {
+  /** Returns true only if all its inner filters are true, otherwise returns false */
+  and?: InputMaybe<Array<ThreadsFilter>>
+  commentableEntityId?: InputMaybe<UuidFilter>
+  createdAt?: InputMaybe<DatetimeFilter>
+  id?: InputMaybe<UuidFilter>
+  nodeId?: InputMaybe<IdFilter>
+  /** Negates a filter */
+  not?: InputMaybe<ThreadsFilter>
+  /** Returns true if at least one of its inner filters is true, otherwise returns false */
+  or?: InputMaybe<Array<ThreadsFilter>>
+  profileId?: InputMaybe<UuidFilter>
+  teamId?: InputMaybe<UuidFilter>
+  title?: InputMaybe<StringFilter>
+  updatedAt?: InputMaybe<DatetimeFilter>
+}
+
+export type ThreadsInsertInput = {
+  teamId?: InputMaybe<Scalars['UUID']['input']>
+  title?: InputMaybe<Scalars['String']['input']>
+}
+
+export type ThreadsInsertResponse = {
+  __typename?: 'ThreadsInsertResponse'
+  /** Count of the records impacted by the mutation */
+  affectedCount: Scalars['Int']['output']
+  /** Array of records impacted by the mutation */
+  records: Array<Threads>
+}
+
+export type ThreadsOrderBy = {
+  commentableEntityId?: InputMaybe<OrderByDirection>
+  createdAt?: InputMaybe<OrderByDirection>
+  id?: InputMaybe<OrderByDirection>
+  profileId?: InputMaybe<OrderByDirection>
+  teamId?: InputMaybe<OrderByDirection>
+  title?: InputMaybe<OrderByDirection>
+  updatedAt?: InputMaybe<OrderByDirection>
+}
+
+export type ThreadsUpdateInput = {
+  title?: InputMaybe<Scalars['String']['input']>
+}
+
+export type ThreadsUpdateResponse = {
+  __typename?: 'ThreadsUpdateResponse'
+  /** Count of the records impacted by the mutation */
+  affectedCount: Scalars['Int']['output']
+  /** Array of records impacted by the mutation */
+  records: Array<Threads>
 }
 
 /** Boolean expression comparing fields on type "Time" */
@@ -1030,6 +1424,68 @@ export type UserEventFilter = {
   neq?: InputMaybe<UserEvent>
 }
 
+export type UserEvents = Node & {
+  __typename?: 'UserEvents'
+  event: UserEvent
+  id: Scalars['UUID']['output']
+  meta?: Maybe<Scalars['JSON']['output']>
+  /** Globally Unique Record Identifier */
+  nodeId: Scalars['ID']['output']
+  ts: Scalars['Datetime']['output']
+  user: Profiles
+  userId: Scalars['UUID']['output']
+  value?: Maybe<Scalars['String']['output']>
+}
+
+export type UserEventsConnection = {
+  __typename?: 'UserEventsConnection'
+  edges: Array<UserEventsEdge>
+  pageInfo: PageInfo
+}
+
+export type UserEventsEdge = {
+  __typename?: 'UserEventsEdge'
+  cursor: Scalars['String']['output']
+  node: UserEvents
+}
+
+export type UserEventsFilter = {
+  /** Returns true only if all its inner filters are true, otherwise returns false */
+  and?: InputMaybe<Array<UserEventsFilter>>
+  event?: InputMaybe<UserEventFilter>
+  id?: InputMaybe<UuidFilter>
+  nodeId?: InputMaybe<IdFilter>
+  /** Negates a filter */
+  not?: InputMaybe<UserEventsFilter>
+  /** Returns true if at least one of its inner filters is true, otherwise returns false */
+  or?: InputMaybe<Array<UserEventsFilter>>
+  ts?: InputMaybe<DatetimeFilter>
+  userId?: InputMaybe<UuidFilter>
+  value?: InputMaybe<StringFilter>
+}
+
+export type UserEventsInsertInput = {
+  event?: InputMaybe<UserEvent>
+  meta?: InputMaybe<Scalars['JSON']['input']>
+  value?: InputMaybe<Scalars['String']['input']>
+}
+
+export type UserEventsInsertResponse = {
+  __typename?: 'UserEventsInsertResponse'
+  /** Count of the records impacted by the mutation */
+  affectedCount: Scalars['Int']['output']
+  /** Array of records impacted by the mutation */
+  records: Array<UserEvents>
+}
+
+export type UserEventsOrderBy = {
+  event?: InputMaybe<OrderByDirection>
+  id?: InputMaybe<OrderByDirection>
+  ts?: InputMaybe<OrderByDirection>
+  userId?: InputMaybe<OrderByDirection>
+  value?: InputMaybe<OrderByDirection>
+}
+
 export type TeamMembersSelector_QueryQueryVariables = Exact<{
   teamId: Scalars['UUID']['input']
 }>
@@ -1045,6 +1501,31 @@ export type TeamMembersSelector_QueryQuery = {
         nodeId: string
         profile: { __typename: 'Profiles'; id: string; name: string }
       }
+    }>
+  } | null
+}
+
+export type CommentsFormInsertMutationMutationVariables = Exact<{
+  input: CommentsInsertInput
+}>
+
+export type CommentsFormInsertMutationMutation = {
+  __typename: 'Mutation'
+  insertIntoCommentsCollection?: {
+    __typename: 'CommentsInsertResponse'
+    affectedCount: number
+    records: Array<{
+      __typename: 'Comments'
+      nodeId: string
+      id: string
+      body: string
+      createdAt?: string | null
+      profileId: string
+      replyToComment?: {
+        __typename: 'Comments'
+        nodeId: string
+        id: string
+      } | null
     }>
   } | null
 }
@@ -1240,6 +1721,8 @@ export type MetricDetailsQueryQueryVariables = Exact<{
 export type MetricDetailsQueryQuery = {
   __typename: 'Query'
   node?:
+    | { __typename: 'CommentableEntities'; nodeId: string }
+    | { __typename: 'Comments'; nodeId: string }
     | {
         __typename: 'Metrics'
         id: string
@@ -1268,6 +1751,8 @@ export type MetricDetailsQueryQuery = {
     | { __typename: 'Profiles'; nodeId: string }
     | { __typename: 'TeamMembers'; nodeId: string }
     | { __typename: 'Teams'; nodeId: string }
+    | { __typename: 'Threads'; nodeId: string }
+    | { __typename: 'UserEvents'; nodeId: string }
     | null
 }
 
@@ -1576,6 +2061,118 @@ export const TeamMembersSelector_QueryDocument = {
 } as unknown as DocumentNode<
   TeamMembersSelector_QueryQuery,
   TeamMembersSelector_QueryQueryVariables
+>
+export const CommentsFormInsertMutationDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'CommentsFormInsertMutation' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'input' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'CommentsInsertInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: '__typename' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'insertIntoCommentsCollection' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'objects' },
+                value: {
+                  kind: 'ListValue',
+                  values: [
+                    {
+                      kind: 'Variable',
+                      name: { kind: 'Name', value: 'input' },
+                    },
+                  ],
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: '__typename' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'affectedCount' },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'records' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: '__typename' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'nodeId' },
+                      },
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'body' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'replyToComment' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: '__typename' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'nodeId' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'id' },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'createdAt' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'profileId' },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  CommentsFormInsertMutationMutation,
+  CommentsFormInsertMutationMutationVariables
 >
 export const DataPointsTable_Delete_MutationDocument = {
   kind: 'Document',

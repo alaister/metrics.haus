@@ -26,6 +26,9 @@ const config: CodegenConfig = {
       preset: 'client',
       documentTransforms: [addTypenameSelectionDocumentTransform],
       plugins: [],
+      presetConfig: {
+        fragmentMasking: false,
+      },
       config: {
         scalars: {
           UUID: 'string',

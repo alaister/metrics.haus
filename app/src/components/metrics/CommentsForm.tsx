@@ -1,13 +1,12 @@
-import { graphql, useMutation, ConnectionHandler } from 'react-relay'
-import { z } from 'zod'
-import { useForm } from 'react-hook-form'
+import { useMutation } from '@apollo/client'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useEffect, useRef } from 'react'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+import { graphql } from '~/lib/gql'
 import { useToast } from '~/lib/hooks/use-toast'
 import { useAppSelector } from '~/stores'
-import { Input } from '../ui/Input'
-import { useEffect, useRef } from 'react'
 import { Button } from '../ui/Button'
-import { CommentsFormInsert_Mutation } from './__generated__/CommentsFormInsert_Mutation.graphql'
 import {
   Form,
   FormControl,
@@ -16,26 +15,27 @@ import {
   FormLabel,
   FormMessage,
 } from '../ui/Form'
+import { Input } from '../ui/Input'
 
-const CommentsInsertMutation = graphql`
-  mutation CommentsFormInsert_Mutation(
-    $input: CommentsInsertInput!
-    $connections: [ID!]!
-  ) {
+const CommentsInsertMutation = graphql(/* GraphQL */ `
+  mutation CommentsFormInsertMutation($input: CommentsInsertInput!) {
     insertIntoCommentsCollection(objects: [$input]) {
       affectedCount
-      records
-        @prependNode(connections: $connections, edgeTypeName: "CommentsEdge") {
-        teamId
-        metricId
-        message
-        replyTo
+      records {
+        nodeId
+        id
+        body
+        replyToComment {
+          nodeId
+          id
+        }
+        createdAt
         profileId
-        timestamp
       }
     }
   }
-`
+`)
+
 const commentSchema = z.object({
   comment: z.string().min(1, "Can't be empty"),
 })
@@ -48,11 +48,10 @@ type CommentsFormProps = {
 }
 
 const CommentsForm = ({
-  date,
-  onSuccess,
-  metricId,
-  replyTo,
-}: CommentsFormProps) => {
+  // date,
+  onSuccess, // metricId,
+} // replyTo,
+: CommentsFormProps) => {
   const selectedTeamId = useAppSelector((state) => state.team.selectedTeamId)
 
   const { toast } = useToast()
@@ -64,9 +63,7 @@ const CommentsForm = ({
     },
   })
 
-  const [mutate] = useMutation<CommentsFormInsert_Mutation>(
-    CommentsInsertMutation,
-  )
+  const [mutate] = useMutation(CommentsInsertMutation)
 
   const inputRef = useRef<HTMLInputElement | null>(null)
   useEffect(() => {
@@ -75,22 +72,12 @@ const CommentsForm = ({
   }, [])
 
   async function onSubmit(values: z.infer<typeof commentSchema>) {
-    const connectionID = ConnectionHandler.getConnectionID(
-      'root',
-      'Comments_query_commentsCollection',
-      { orderBy: [{ createdAt: 'DescNullsLast' }] },
-    )
-
     mutate({
       variables: {
         input: {
-          message: values.comment,
-          metricId,
+          body: values.comment,
           teamId: selectedTeamId,
-          timestamp: date.toISOString(),
-          replyTo,
         },
-        connections: [connectionID],
       },
       onError(error) {
         toast({

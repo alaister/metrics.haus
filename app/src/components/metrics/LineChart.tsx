@@ -1,4 +1,5 @@
 import { subDays } from 'date-fns'
+import { useState } from 'react'
 import {
   Area,
   AreaChart,
@@ -10,8 +11,8 @@ import {
   XAxis,
   YAxis,
 } from 'recharts'
-import { createTickDates, timestampToLabel } from '~/lib/chart-helpers'
 import { cn } from '~/lib/utils'
+import { createTickDates, timestampToLabel } from '../../lib/chart-helpers'
 import { Button } from '../ui/Button'
 
 const MAX_TICKS = 5
@@ -28,20 +29,27 @@ export interface LineChartProps {
   dataPoints: DataPoint[]
   preview?: boolean
   containerClassName?: string
-  handleCommentAddition?: (timestamp: Date) => void
-  handleCommentClick?: (id: string) => void
 }
 
 export function LineChart({
   dataPoints,
   preview = false,
   containerClassName,
-  handleCommentAddition = () => {},
-  handleCommentClick = () => {},
 }: LineChartProps) {
   const isEmpty = dataPoints.length == 0
 
-  const commentThreads = dataPoints.filter((c) => !c.replyTo) // replies are not thread starts
+  const [threads, setThreads] = useState<Thread[]>([])
+
+  function addThread(timestamp: Date) {
+    setThreads((ts) =>
+      ts.concat({
+        user: '342384283492834',
+        comment: 'Another Threaddd',
+        timestamp,
+        id: Math.random().toString(),
+      }),
+    )
+  }
 
   const dataForChart = isEmpty ? getRandomData() : dataPoints
 
@@ -87,11 +95,7 @@ export function LineChart({
 
             {!preview && !isEmpty && (
               <Tooltip
-                content={
-                  <CustomTooltip
-                    handleCommentAddition={handleCommentAddition}
-                  />
-                }
+                content={<CustomTooltip handleClick={addThread} />}
                 trigger="click"
               />
             )}
@@ -153,7 +157,7 @@ export function LineChart({
                 domain={['dataMin', 'dataMax']}
               />
 
-              {commentThreads.map((t) => (
+              {threads.map((t) => (
                 <ReferenceDot
                   className="cursor-pointer"
                   key={t.id}
@@ -177,11 +181,11 @@ export function LineChart({
 type TooltipProps = {
   active: boolean
   payload: { payload: { ts: number } }[]
-  handleCommentAddition: (d: Date) => void
+  handleClick: (d: Date) => void
 }
 function CustomTooltip(props: Partial<TooltipProps>) {
   // handling mf recharts + typescript
-  const { active, payload, handleCommentAddition } = props as TooltipProps
+  const { active, payload, handleClick } = props as TooltipProps
   if (!active || !payload?.length) return null
 
   const { ts } = payload[0].payload
@@ -189,11 +193,18 @@ function CustomTooltip(props: Partial<TooltipProps>) {
   return (
     <Button
       className="pointer-events-auto"
-      onClick={() => handleCommentAddition(new Date(ts))}
+      onClick={() => handleClick(new Date(ts))}
     >
       Add Comment
     </Button>
   )
+}
+
+type Thread = {
+  comment: string
+  user: string
+  timestamp: Date
+  id: string
 }
 
 function getRandomData() {
