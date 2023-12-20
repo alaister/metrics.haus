@@ -1,7 +1,8 @@
+import { useMutation } from '@apollo/client'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { produce } from 'immer'
 import { Save } from 'lucide-react'
 import { useForm } from 'react-hook-form'
-import { ConnectionHandler, graphql, useMutation } from 'react-relay'
 import { z } from 'zod'
 import TeamMembersSelector from '~/components/members/TeamMembersSelector'
 import { Button } from '~/components/ui/Button'
@@ -21,40 +22,38 @@ import {
   SelectTrigger,
   SelectValue,
 } from '~/components/ui/Select'
+import { graphql } from '~/lib/gql'
+import { MetricInterval, MetricsListQueryDocument } from '~/lib/gql/graphql'
 import { useToast } from '~/lib/hooks/use-toast'
-import { useAppSelector } from '~/stores'
-import { MetricForm_Mutation } from './__generated__/MetricForm_Mutation.graphql'
-import { MetricForm_Owners_Mutation } from './__generated__/MetricForm_Owners_Mutation.graphql'
 import { emitUserEvent } from '~/lib/userEvents'
+import { useAppDispatch, useAppSelector } from '~/stores'
+import { refreshPoints } from '~/stores/points-slice'
 
-const MetricInsertMutation = graphql`
-  mutation MetricForm_Mutation(
-    $input: MetricsInsertInput!
-    $connections: [ID!]!
-  ) {
+const MetricInsertMutation = graphql(/* GraphQL */ `
+  mutation MetricFormMutation($input: MetricsInsertInput!) {
     insertIntoMetricsCollection(objects: [$input]) {
       affectedCount
-      records
-        @prependNode(connections: $connections, edgeTypeName: "MetricsEdge") {
+      records {
         id
         nodeId
-        ...MetricCard_metrics
+        ...MetricCardItem
       }
     }
   }
-`
+`)
 
-const MetricOwnersInsertMutation = graphql`
-  mutation MetricForm_Owners_Mutation($input: [MetricsOwnersInsertInput!]!) {
+const MetricOwnersInsertMutation = graphql(/* GraphQL */ `
+  mutation MetricFormOwnersMutation($input: [MetricsOwnersInsertInput!]!) {
     insertIntoMetricsOwnersCollection(objects: $input) {
       affectedCount
     }
   }
-`
+`)
 
 const formSchema = z.object({
   name: z.string().min(1, "Can't be empty"),
-  interval: z.enum(['minute', 'hour', 'day', 'week', 'month']),
+  interval: z.nativeEnum(MetricInterval),
+  unitShort: z.string().max(3).optional(),
   members: z.optional(z.string().array()),
 })
 
@@ -64,6 +63,7 @@ export interface MetricFormProps {
 
 const MetricForm = ({ onSuccess }: MetricFormProps) => {
   const selectedTeamId = useAppSelector((state) => state.team.selectedTeamId)
+  const dispatch = useAppDispatch()
 
   const { toast } = useToast()
 
@@ -71,29 +71,37 @@ const MetricForm = ({ onSuccess }: MetricFormProps) => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
+      unitShort: '',
     },
   })
 
-  const [mutate] = useMutation<MetricForm_Mutation>(MetricInsertMutation)
-  const [mutateOwners] = useMutation<MetricForm_Owners_Mutation>(
-    MetricOwnersInsertMutation,
-  )
+  const [mutate] = useMutation(MetricInsertMutation, {
+    update(cache, { data }) {
+      const record = data?.insertIntoMetricsCollection?.records[0]
+      if (record) {
+        cache.updateQuery({ query: MetricsListQueryDocument }, (data) =>
+          produce(data, (draft) => {
+            draft?.metricsCollection?.edges.unshift({
+              __typename: 'MetricsEdge' as const,
+              cursor: '',
+              node: record,
+            })
+          }),
+        )
+      }
+    },
+  })
+  const [mutateOwners] = useMutation(MetricOwnersInsertMutation)
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const connectionID = ConnectionHandler.getConnectionID(
-      'root',
-      'Metrics_query_metricsCollection',
-      { orderBy: [{ createdAt: 'DescNullsLast' }] },
-    )
-
     mutate({
       variables: {
         input: {
           name: values.name,
           interval: values.interval,
+          unitShort: values.unitShort,
           teamId: selectedTeamId,
         },
-        connections: [connectionID],
       },
       onError(error) {
         toast({
@@ -105,9 +113,16 @@ const MetricForm = ({ onSuccess }: MetricFormProps) => {
       onCompleted(response) {
         function onDone() {
           toast({ title: 'Metric created successfully' })
-          form.reset({ name: '', interval: 'week', members: [] })
+          form.reset({
+            name: '',
+            interval: MetricInterval.Week,
+            members: [],
+            unitShort: '',
+          })
           onSuccess?.()
-          emitUserEvent('add_metric', values.name)
+          emitUserEvent('add_metric', values.name).then(() => {
+            dispatch(refreshPoints(true))
+          })
         }
 
         if (values.members && values.members.length > 0) {
@@ -172,12 +187,28 @@ const MetricForm = ({ onSuccess }: MetricFormProps) => {
                     <SelectValue placeholder="Interval" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="day">Day</SelectItem>
-                    <SelectItem value="week">Week</SelectItem>
-                    <SelectItem value="month">Month</SelectItem>
-                    <SelectItem value="year">Year</SelectItem>
+                    <SelectItem value={MetricInterval.Minute}>
+                      Minute
+                    </SelectItem>
+                    <SelectItem value={MetricInterval.Day}>Day</SelectItem>
+                    <SelectItem value={MetricInterval.Week}>Week</SelectItem>
+                    <SelectItem value={MetricInterval.Month}>Month</SelectItem>
                   </SelectContent>
                 </Select>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="unitShort"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Unit (Short)</FormLabel>
+              <FormControl>
+                <Input placeholder="$, €, %, ..." {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

@@ -1,10 +1,9 @@
+import { useQuery } from '@apollo/client'
 import { useState } from 'react'
-import { useLazyLoadQuery } from 'react-relay'
 import Select, { MultiValue } from 'react-select'
-import { graphql } from 'relay-runtime'
-import { TeamMembersSelector_Query } from './__generated__/TeamMembersSelector_Query.graphql'
+import { graphql } from '~/lib/gql'
 
-const TeamMembersSelectorQuery = graphql`
+const TeamMembersSelectorQuery = graphql(/* GraphQL */ `
   query TeamMembersSelector_Query($teamId: UUID!) {
     teamMembersCollection(filter: { teamId: { eq: $teamId } }) {
       edges {
@@ -18,7 +17,7 @@ const TeamMembersSelectorQuery = graphql`
       }
     }
   }
-`
+`)
 
 interface TeamMembersSelectorProps {
   selectedTeamId: string
@@ -29,11 +28,12 @@ const TeamMembersSelector = ({
   onValueChange,
   selectedTeamId,
 }: TeamMembersSelectorProps) => {
-  const data = useLazyLoadQuery<TeamMembersSelector_Query>(
-    TeamMembersSelectorQuery,
-    { teamId: selectedTeamId },
-  )
-  const options = data.teamMembersCollection?.edges.map((x) => ({
+  const { data } = useQuery(TeamMembersSelectorQuery, {
+    variables: {
+      teamId: selectedTeamId,
+    },
+  })
+  const options = data?.teamMembersCollection?.edges.map((x) => ({
     label: x.node.profile.name,
     value: x.node.profile.id,
   }))

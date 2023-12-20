@@ -1,52 +1,31 @@
-import { useFragment } from 'react-relay'
+import { subDays } from 'date-fns'
 import {
-  ResponsiveContainer,
-  XAxis,
-  YAxis,
-  AreaChart,
   Area,
+  AreaChart,
+  Line,
   LineChart as RechartsLineChart,
   ReferenceDot,
+  ResponsiveContainer,
   Tooltip,
-  Line,
+  XAxis,
+  YAxis,
 } from 'recharts'
-import { createTickDates, timestampToLabel } from './chart-helper'
-import { Button } from '../ui/Button'
-import { graphql } from 'relay-runtime'
-import { LineChart_metrics$key } from './__generated__/LineChart_metrics.graphql'
-import { subDays } from 'date-fns'
+import { createTickDates, timestampToLabel } from '~/lib/chart-helpers'
 import { cn } from '~/lib/utils'
+import { Button } from '../ui/Button'
 
 const MAX_TICKS = 5
 
 const CHART_COLOR = '#82ca9d'
 const EMPTY_CHART_COLOR = '#eee'
 
-const LineChartMetricsFragment = graphql`
-  fragment LineChart_metrics on Metrics {
-    metricsDataPointsCollection {
-      edges {
-        node {
-          nodeId
-          time
-          value
-        }
-      }
-    }
-    commentsCollection {
-      edges {
-        node {
-          id
-          timestamp
-          replyTo
-        }
-      }
-    }
-  }
-`
-
+export interface DataPoint {
+  nodeId: string
+  time: string
+  value: number
+}
 export interface LineChartProps {
-  dataPoints: LineChart_metrics$key
+  dataPoints: DataPoint[]
   preview?: boolean
   containerClassName?: string
   handleCommentAddition?: (timestamp: Date) => void
@@ -60,18 +39,11 @@ export function LineChart({
   handleCommentAddition = () => {},
   handleCommentClick = () => {},
 }: LineChartProps) {
-  const data = useFragment(LineChartMetricsFragment, dataPoints)
+  const isEmpty = dataPoints.length == 0
 
-  const points =
-    data.metricsDataPointsCollection?.edges.map((e) => e.node) ?? []
+  const commentThreads = dataPoints.filter((c) => !c.replyTo) // replies are not thread starts
 
-  const commentThreads = (
-    data.commentsCollection?.edges.map((e) => e.node) ?? []
-  ).filter((c) => !c.replyTo) // replies are not thread starts
-
-  const isEmpty = points.length == 0
-
-  const dataForChart = isEmpty ? getRandomData() : points
+  const dataForChart = isEmpty ? getRandomData() : dataPoints
 
   const ticks = createTickDates(
     dataForChart.map((m) => new Date(m.time)),
@@ -84,8 +56,8 @@ export function LineChart({
   }))
 
   return (
-    <div className={cn('w-full, h-full', containerClassName)}>
-      <div className={'h-3/4 md:h-5/6'}>
+    <div className={cn('w-full h-full', containerClassName)}>
+      <div className={preview ? 'h-full' : 'h-3/4 md:h-5/6'}>
         <ResponsiveContainer>
           <AreaChart data={chartData}>
             <defs>
@@ -154,18 +126,20 @@ export function LineChart({
           </AreaChart>
         </ResponsiveContainer>
       </div>
-      <div className={'h-1/4 md:h-1/6'}>
-        <ResponsiveContainer>
-          <RechartsLineChart data={chartData.map((d) => ({ ...d, value: 0 }))}>
-            {!preview && (
+
+      {!preview && (
+        <div className={'h-1/4 md:h-1/6'}>
+          <ResponsiveContainer>
+            <RechartsLineChart
+              data={chartData.map((d) => ({ ...d, value: 0 }))}
+            >
               <YAxis
                 tickFormatter={() => ''}
                 type="number"
                 tickCount={0}
                 domain={[0, 1]}
               />
-            )}
-            {!preview && (
+
               <XAxis
                 ticks={ticks}
                 dataKey="ts"
@@ -178,23 +152,24 @@ export function LineChart({
                 tickFormatter={(ms) => timestampToLabel(new Date(ms))}
                 domain={['dataMin', 'dataMax']}
               />
-            )}
-            {commentThreads.map((t) => (
-              <ReferenceDot
-                className="cursor-pointer"
-                key={t.id}
-                r={6}
-                stroke=""
-                fill="#333"
-                y={0.6}
-                x={new Date(t.timestamp).getTime()}
-                onClick={() => handleCommentClick(t.id)}
-              />
-            ))}
-            <Line dataKey="value" opacity={0} />
-          </RechartsLineChart>
-        </ResponsiveContainer>
-      </div>
+
+              {commentThreads.map((t) => (
+                <ReferenceDot
+                  className="cursor-pointer"
+                  key={t.id}
+                  r={6}
+                  stroke=""
+                  fill="#333"
+                  y={0.6}
+                  x={t.timestamp.getTime()}
+                  onClick={() => alert(t.comment + ' TODO')}
+                />
+              ))}
+              <Line dataKey="value" opacity={0} />
+            </RechartsLineChart>
+          </ResponsiveContainer>
+        </div>
+      )}
     </div>
   )
 }

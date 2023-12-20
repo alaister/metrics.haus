@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
 import { getAvatarUrl } from '~/lib/avatars'
 import { toast } from '~/lib/hooks/use-toast'
+import { Link, useNavigate } from '~/lib/router'
 import supabase from '~/lib/supabase'
 import { useAppSelector } from '~/stores'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/Avatar'

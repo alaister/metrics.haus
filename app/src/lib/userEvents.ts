@@ -5,7 +5,7 @@ export function emitUserEvent(
   value: string | null = null,
   meta: unknown | null = null,
 ) {
-  supabase
+  return supabase
     .from('user_events')
     .insert({
       event,

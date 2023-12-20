@@ -1,33 +1,15 @@
-import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { toast } from '~/lib/hooks/use-toast'
-import supabase from '~/lib/supabase'
+import { Suspense } from 'react'
+import ConfettiExplosion from 'react-confetti-explosion'
+import { Link } from '~/lib/router'
+import { useAppSelector } from '~/stores'
 import { UserAvatar } from '../UserAvatar'
 import { CmdKDialog } from '../cmdk/CmdKDialog'
 import { Notifications } from '../notifications'
 import TeamSelector from '../teams/TeamSelector'
 
 const Header = () => {
-  const [userStats, setUserStats] = useState<{
-    num_data_points_created?: number
-  }>({})
-  useEffect(() => {
-    supabase
-      .rpc('get_user_stats')
-      .single()
-      .then((resp) => {
-        const { data, error } = resp
-        if (error) {
-          toast({
-            variant: 'destructive',
-            title: 'Something went wrong',
-            description: error.message,
-          })
-          return
-        }
-        setUserStats(data)
-      })
-  }, [])
+  const points = useAppSelector((state) => state.points.points)
+  const isExploding = useAppSelector((state) => state.points.confetti)
 
   return (
     <header className="sticky top-0 border-b bg-white z-10">
@@ -36,7 +18,9 @@ const Header = () => {
           <h1 className="font-medium">
             <Link to="/">metrics.haus</Link>
           </h1>
-          <TeamSelector />
+          <Suspense>
+            <TeamSelector />
+          </Suspense>
         </div>
 
         <CmdKDialog />
@@ -45,7 +29,16 @@ const Header = () => {
           <Notifications />
           <UserAvatar />
           <div className="flex items-center justify-center">
-            <span>{userStats.num_data_points_created ?? '0'} Points</span>
+            {isExploding && (
+              <ConfettiExplosion
+                force={0.4}
+                duration={1900}
+                particleCount={30}
+                width={400}
+                zIndex={1000}
+              />
+            )}
+            <span>{points ?? '0'} Points</span>
           </div>
         </div>
       </div>

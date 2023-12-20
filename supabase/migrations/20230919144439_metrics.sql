@@ -10,25 +10,16 @@ create table
         "updated_at" timestamp with time zone not null default now(),
         interval metric_interval not null,
         name text not null,
+        description text,
+        unit_short varchar(3),
+        icon text,
+        archived boolean default false,
         team_id uuid not null references public.teams ("id") on delete cascade on update cascade
     );
 
 alter table public.metrics enable row level security;
 
-create function is_metric_in_accessible_team (team_id uuid) returns boolean as $$
-select
-    exists (
-        select
-            1
-        from
-            public.team_members
-        where
-            team_id = $1
-    );
-
-$$ language sql security definer stable;
-
-create policy "user can see metrics for teams they are in" on public.metrics for all using (is_metric_in_accessible_team(team_id));
+create policy "user can see metrics for teams they are in" on public.metrics for all using (private.is_current_user_in_team (team_id));
 
 revoke
 update,
@@ -39,8 +30,22 @@ from
     authenticated;
 
 grant
-update (name, interval),
-insert (name, interval, team_id) on public.metrics to public,
+update (
+    name,
+    interval,
+    unit_short,
+    description,
+    icon,
+    archived
+),
+insert (
+    name,
+    interval,
+    team_id,
+    unit_short,
+    description,
+    icon
+) on public.metrics to public,
 authenticated;
 
 create table

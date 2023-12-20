@@ -4,11 +4,15 @@ import { useDispatch, useSelector } from 'react-redux'
 import supabase from '~/lib/supabase'
 import authReducer, { setUser } from './auth-slice'
 import teamReducer from './team-slice'
+import appReducer from './app-slice'
+import pointsReducer, { refreshPoints } from './points-slice'
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
     team: teamReducer,
+    points: pointsReducer,
+    app: appReducer,
   },
 })
 
@@ -20,4 +24,5 @@ export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
 
 supabase.auth.onAuthStateChange((_event, session) => {
   store.dispatch(setUser(session?.user ?? null))
+  store.dispatch(refreshPoints())
 })

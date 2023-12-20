@@ -1,12 +1,10 @@
-import { useEffect } from 'react'
-import { useLazyLoadQuery } from 'react-relay'
-import { graphql } from 'relay-runtime'
+import { useQuery } from '@apollo/client'
+import { graphql } from '~/lib/gql'
 import { useAppDispatch, useAppSelector } from '~/stores'
 import { setSelectedTeamId } from '~/stores/team-slice'
-import { TeamSelector_Query } from './__generated__/TeamSelector_Query.graphql'
 
-const TeamSelectorQuery = graphql`
-  query TeamSelector_Query {
+const TeamSelectorQuery = graphql(/* GraphQL */ `
+  query TeamSelectorQuery {
     teamsCollection {
       edges {
         node {
@@ -17,21 +15,22 @@ const TeamSelectorQuery = graphql`
       }
     }
   }
-`
+`)
 
 const TeamSelector = () => {
-  const data = useLazyLoadQuery<TeamSelector_Query>(TeamSelectorQuery, {})
+  useQuery(TeamSelectorQuery, {
+    onCompleted(data) {
+      if (!selectedTeamId && (data.teamsCollection?.edges.length ?? 0) > 0) {
+        const teamId = data.teamsCollection?.edges[0].node.id
+        if (teamId) {
+          dispatch(setSelectedTeamId(teamId))
+        }
+      }
+    },
+  })
+
   const selectedTeamId = useAppSelector((state) => state.team.selectedTeamId)
   const dispatch = useAppDispatch()
-
-  useEffect(() => {
-    if (!selectedTeamId && (data.teamsCollection?.edges.length ?? 0) > 0) {
-      const teamId = data.teamsCollection?.edges[0].node.id
-      if (teamId) {
-        dispatch(setSelectedTeamId(teamId))
-      }
-    }
-  }, [data, dispatch, selectedTeamId])
 
   return <div></div>
 }

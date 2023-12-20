@@ -1,9 +1,11 @@
+import { useMutation } from '@apollo/client'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { produce } from 'immer'
 import { Save } from 'lucide-react'
-import { useForm } from 'react-hook-form'
-import { graphql, useMutation } from 'react-relay'
-import { z } from 'zod'
+import { useState } from 'react'
 import ConfettiExplosion from 'react-confetti-explosion'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 import { Button } from '~/components/ui/Button'
 import {
   Form,
@@ -14,19 +16,30 @@ import {
   FormMessage,
 } from '~/components/ui/Form'
 import { Input } from '~/components/ui/Input'
+import { graphql } from '~/lib/gql'
+import {
+  MetricDetailsQueryDocument,
+  MetricsListQueryDocument,
+} from '~/lib/gql/graphql'
 import { useToast } from '~/lib/hooks/use-toast'
-import { MetricDataPointForm_Mutation } from './__generated__/MetricDataPointForm_Mutation.graphql'
-import { DateTimePicker } from '../ui/DateTimePicker'
-import { useState } from 'react'
 import { emitUserEvent } from '~/lib/userEvents'
+import { useAppDispatch } from '~/stores'
+import { refreshPoints } from '~/stores/points-slice'
+import { DateTimePicker } from '../ui/DateTimePicker'
+import { toGlobalId } from '~/lib/graphql'
 
-const MetricDataPointInsertMutation = graphql`
-  mutation MetricDataPointForm_Mutation($input: MetricsDataPointsInsertInput!) {
+const MetricDataPointInsertMutation = graphql(/* GraphQL */ `
+  mutation MetricDataPointFormMutation($input: MetricsDataPointsInsertInput!) {
     insertIntoMetricsDataPointsCollection(objects: [$input]) {
       affectedCount
+      records {
+        nodeId
+        time
+        value
+      }
     }
   }
-`
+`)
 
 const formSchema = z.object({
   timestamp: z.string().datetime({ offset: true }),
@@ -41,6 +54,8 @@ export interface MetricFormProps {
 const MetricForm = ({ onSuccess, metricId }: MetricFormProps) => {
   const { toast } = useToast()
 
+  const dispatch = useAppDispatch()
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -49,9 +64,56 @@ const MetricForm = ({ onSuccess, metricId }: MetricFormProps) => {
     },
   })
 
-  const [mutate] = useMutation<MetricDataPointForm_Mutation>(
-    MetricDataPointInsertMutation,
-  )
+  const [mutate] = useMutation(MetricDataPointInsertMutation, {
+    update(cache, { data }) {
+      const record = data?.insertIntoMetricsDataPointsCollection?.records[0]
+      if (record) {
+        cache.updateQuery(
+          {
+            query: MetricDetailsQueryDocument,
+            variables: { nodeId: toGlobalId(metricId, 'metrics') },
+          },
+          (data) =>
+            produce(data, (draft) => {
+              if (draft?.node?.__typename === 'Metrics') {
+                draft.node.metricsDataPointsCollection?.edges.push({
+                  __typename: 'MetricsDataPointsEdge' as const,
+                  node: record,
+                })
+                draft.node.metricsDataPointsCollection?.edges.sort((a, b) => {
+                  return (
+                    new Date(a.node.time).getTime() -
+                    new Date(b.node.time).getTime()
+                  )
+                })
+              }
+            }),
+        )
+
+        cache.updateQuery({ query: MetricsListQueryDocument }, (data) =>
+          produce(data, (draft) => {
+            const metricEdge = draft?.metricsCollection?.edges.find(
+              (edge) => edge.node.id === metricId,
+            )
+            if (metricEdge) {
+              metricEdge.node.metricsDataPointsCollection?.edges.push({
+                __typename: 'MetricsDataPointsEdge' as const,
+                node: record,
+              })
+              metricEdge.node.metricsDataPointsCollection?.edges.sort(
+                (a, b) => {
+                  return (
+                    new Date(a.node.time).getTime() -
+                    new Date(b.node.time).getTime()
+                  )
+                },
+              )
+            }
+          }),
+        )
+      }
+    },
+  })
 
   const [isExploding, setIsExploding] = useState(false)
 
@@ -84,7 +146,9 @@ const MetricForm = ({ onSuccess, metricId }: MetricFormProps) => {
         setIsExploding(true)
         onSuccess?.()
 
-        emitUserEvent('add_data_point')
+        emitUserEvent('add_data_point').then(() => {
+          dispatch(refreshPoints(true))
+        })
       },
     })
   }

@@ -1,66 +1,128 @@
-import { useState } from 'react'
-import { useFragment } from 'react-relay'
+import { useFragment, useMutation } from '@apollo/client'
+import { graphql } from '~/lib/gql'
+import { useToast } from '~/lib/hooks/use-toast'
+import { useNavigate } from '~/lib/router'
+import { Button } from '../ui/Button'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs'
+import DataPointsTable from './DataPointsTable'
+import GrowthBadge from './GrowthBadge'
 import { LineChart } from './LineChart'
-import { graphql } from 'relay-runtime'
-import { MetricDetailsSection_metrics$key } from './__generated__/MetricDetailsSection_metrics.graphql'
-import CommentsForm from './CommentsForm'
-import Comments from './Comments'
 
-const MetricDetailsSectionFragment = graphql`
-  fragment MetricDetailsSection_metrics on Metrics {
+const MetricDetailsSectionFragment = graphql(/* GraphQL */ `
+  fragment MetricDetailsSectionItem on Metrics {
     id
-    dataPoints: metricsDataPointsCollection {
+    unitShort
+    metricsDataPointsCollection(orderBy: [{ time: AscNullsLast }]) {
       totalCount
-    }
-    commentsCollection {
       edges {
         node {
-          profileId
-          message
-          replyTo
+          nodeId
+          time
+          value
         }
       }
     }
-    ...LineChart_metrics
-    ...Comments_metrics
   }
-`
+`)
+
+const MetricArchiveMutation = graphql(/* GraphQL */ `
+  mutation MetricDetailsSectionArchiveMutation($filter: MetricsFilter) {
+    updateMetricsCollection(set: { archived: true }, filter: $filter) {
+      affectedCount
+      records {
+        nodeId
+      }
+    }
+  }
+`)
 
 export interface MetricDetailsProps {
-  metric: MetricDetailsSection_metrics$key
+  metricNodeId: string
 }
 
-const MetricDetailsSection = ({ metric }: MetricDetailsProps) => {
-  const [pendingCommentDate, setPendingCommentDate] = useState<null | Date>(
-    null,
+const MetricDetailsSection = ({ metricNodeId }: MetricDetailsProps) => {
+  const { data, complete } = useFragment({
+    fragment: MetricDetailsSectionFragment,
+    fragmentName: 'MetricDetailsSectionItem',
+    from: {
+      nodeId: metricNodeId,
+    },
+  })
+  const [archiveMutation, { loading: isArchiving }] = useMutation(
+    MetricArchiveMutation,
   )
-  const [openedThread, setOpenedThread] = useState('')
+  const { toast } = useToast()
+  const navigate = useNavigate()
 
-  const data = useFragment(MetricDetailsSectionFragment, metric)
+  if (!complete) {
+    return null
+  }
+
+  const dataPoints =
+    data.metricsDataPointsCollection?.edges.map((edge) => edge.node) ?? []
+
+  const lastDataPoint = dataPoints[dataPoints.length - 1]
+
+  const archive = () => {
+    archiveMutation({
+      variables: {
+        filter: {
+          id: {
+            eq: data.id,
+          },
+        },
+      },
+      onCompleted() {
+        toast({
+          variant: 'default',
+          title: 'Successfully archived metric',
+        })
+
+        navigate('/')
+      },
+    })
+  }
 
   return (
-    <>
-      <div className="w-full h-[250px] md:h-[500px]">
-        <LineChart
-          dataPoints={data}
-          handleCommentAddition={setPendingCommentDate}
-          containerClassName="h-full"
-          handleCommentClick={setOpenedThread}
-        />
-      </div>
-      <div className="mt-8 pr-8 pl-12">
-        {pendingCommentDate && !openedThread && (
-          <div>
-            <CommentsForm
-              date={pendingCommentDate}
-              metricId={data.id}
-              onSuccess={() => setPendingCommentDate(null)}
-            />
+    <div className="space-y-8">
+      {dataPoints.length > 0 && (
+        <div className="flex gap-x-4">
+          <span className="text-2xl font-bold">
+            {data.unitShort || '-'}
+            {lastDataPoint?.value || '-'}
+          </span>
+          <GrowthBadge dataPoints={dataPoints} />
+        </div>
+      )}
+
+      <Tabs defaultValue="graph">
+        <TabsList>
+          <TabsTrigger value="graph">Graph</TabsTrigger>
+          <TabsTrigger value="table">Table</TabsTrigger>
+          <TabsTrigger value="settings">Settings</TabsTrigger>
+        </TabsList>
+        <TabsContent value="graph">
+          <div className="w-full h-[250px] md:h-[500px]">
+            <LineChart dataPoints={dataPoints} containerClassName="h-full" />
           </div>
-        )}
-        <Comments openThread={openedThread} commentsKey={data} />
-      </div>
-    </>
+        </TabsContent>
+        <TabsContent value="table">
+          <DataPointsTable dataPoints={dataPoints} metricId={data.id} />
+        </TabsContent>
+        <TabsContent value="settings">
+          <div>
+            <Button
+              variant="destructive"
+              onClick={archive}
+              isLoading={isArchiving}
+              disabled={isArchiving}
+            >
+              Archive Metric
+            </Button>
+          </div>
+        </TabsContent>
+      </Tabs>
+    </div>
   )
 }
 
