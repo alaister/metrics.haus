@@ -1,5 +1,7 @@
 -- Enable the "timescaledb" extension
-create extension timescaledb;
+create extension timescaledb
+with
+    schema extensions;
 
 create type metric_interval as enum('minute', 'hour', 'day', 'week', 'month');
 
@@ -22,14 +24,26 @@ alter table public.metrics enable row level security;
 create policy "user can see metrics for teams they are in" on public.metrics for all using (private.is_current_user_in_team (team_id));
 
 revoke
+select
+,
 update,
-insert on public.metrics
+insert,
+delete on public.metrics
 from
-    public,
     anon,
     authenticated;
 
 grant
+select
+,
+    insert (
+        name,
+        interval,
+        team_id,
+        unit_short,
+        description,
+        icon
+    ),
 update (
     name,
     interval,
@@ -38,15 +52,7 @@ update (
     icon,
     archived
 ),
-insert (
-    name,
-    interval,
-    team_id,
-    unit_short,
-    description,
-    icon
-) on public.metrics to public,
-authenticated;
+delete on public.metrics to authenticated;
 
 create table
     public.metrics_data_points (
@@ -63,16 +69,19 @@ select
     create_hypertable ('metrics_data_points', 'time');
 
 revoke
+select
+,
 update,
 insert on public.metrics_data_points
 from
-    public,
     anon,
     authenticated;
 
-grant insert (time, metric_id, value),
-delete on public.metrics_data_points to public,
-authenticated;
+grant
+select
+,
+    insert (time, metric_id, value),
+    delete on public.metrics_data_points to authenticated;
 
 alter table public.metrics_data_points enable row level security;
 
