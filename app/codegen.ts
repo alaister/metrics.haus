@@ -17,7 +17,6 @@ const config: CodegenConfig = {
       },
     },
   ],
-
   documents: 'src/**/*.tsx',
   overwrite: true,
   ignoreNoDocuments: true,

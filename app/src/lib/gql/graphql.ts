@@ -173,8 +173,6 @@ export type Comments = Node & {
   profileId: Scalars['UUID']['output']
   replyToComment?: Maybe<Comments>
   replyToCommentId?: Maybe<Scalars['UUID']['output']>
-  team: Teams
-  teamId: Scalars['UUID']['output']
   thread: Threads
   threadId: Scalars['UUID']['output']
   updatedAt?: Maybe<Scalars['Datetime']['output']>
@@ -222,7 +220,6 @@ export type CommentsFilter = {
   or?: InputMaybe<Array<CommentsFilter>>
   profileId?: InputMaybe<UuidFilter>
   replyToCommentId?: InputMaybe<UuidFilter>
-  teamId?: InputMaybe<UuidFilter>
   threadId?: InputMaybe<UuidFilter>
   updatedAt?: InputMaybe<DatetimeFilter>
 }
@@ -230,7 +227,6 @@ export type CommentsFilter = {
 export type CommentsInsertInput = {
   body?: InputMaybe<Scalars['String']['input']>
   replyToCommentId?: InputMaybe<Scalars['UUID']['input']>
-  teamId?: InputMaybe<Scalars['UUID']['input']>
   threadId?: InputMaybe<Scalars['UUID']['input']>
 }
 
@@ -248,7 +244,6 @@ export type CommentsOrderBy = {
   id?: InputMaybe<OrderByDirection>
   profileId?: InputMaybe<OrderByDirection>
   replyToCommentId?: InputMaybe<OrderByDirection>
-  teamId?: InputMaybe<OrderByDirection>
   threadId?: InputMaybe<OrderByDirection>
   updatedAt?: InputMaybe<OrderByDirection>
 }
@@ -1176,7 +1171,6 @@ export type TeamMembersOrderBy = {
 export type Teams = Node & {
   __typename?: 'Teams'
   commentableEntitiesCollection?: Maybe<CommentableEntitiesConnection>
-  commentsCollection?: Maybe<CommentsConnection>
   createdAt: Scalars['Datetime']['output']
   id: Scalars['UUID']['output']
   metricsCollection?: Maybe<MetricsConnection>
@@ -1197,15 +1191,6 @@ export type TeamsCommentableEntitiesCollectionArgs = {
   first?: InputMaybe<Scalars['Int']['input']>
   last?: InputMaybe<Scalars['Int']['input']>
   orderBy?: InputMaybe<Array<CommentableEntitiesOrderBy>>
-}
-
-export type TeamsCommentsCollectionArgs = {
-  after?: InputMaybe<Scalars['Cursor']['input']>
-  before?: InputMaybe<Scalars['Cursor']['input']>
-  filter?: InputMaybe<CommentsFilter>
-  first?: InputMaybe<Scalars['Int']['input']>
-  last?: InputMaybe<Scalars['Int']['input']>
-  orderBy?: InputMaybe<Array<CommentsOrderBy>>
 }
 
 export type TeamsMetricsCollectionArgs = {
@@ -1297,11 +1282,11 @@ export type Threads = Node & {
   commentableEntityId: Scalars['UUID']['output']
   commentsCollection?: Maybe<CommentsConnection>
   createdAt?: Maybe<Scalars['Datetime']['output']>
+  createdBy: Scalars['UUID']['output']
   id: Scalars['UUID']['output']
   /** Globally Unique Record Identifier */
   nodeId: Scalars['ID']['output']
-  profile: Profiles
-  profileId: Scalars['UUID']['output']
+  profiles: Profiles
   team: Teams
   teamId: Scalars['UUID']['output']
   title: Scalars['String']['output']
@@ -1342,13 +1327,13 @@ export type ThreadsFilter = {
   and?: InputMaybe<Array<ThreadsFilter>>
   commentableEntityId?: InputMaybe<UuidFilter>
   createdAt?: InputMaybe<DatetimeFilter>
+  createdBy?: InputMaybe<UuidFilter>
   id?: InputMaybe<UuidFilter>
   nodeId?: InputMaybe<IdFilter>
   /** Negates a filter */
   not?: InputMaybe<ThreadsFilter>
   /** Returns true if at least one of its inner filters is true, otherwise returns false */
   or?: InputMaybe<Array<ThreadsFilter>>
-  profileId?: InputMaybe<UuidFilter>
   teamId?: InputMaybe<UuidFilter>
   title?: InputMaybe<StringFilter>
   updatedAt?: InputMaybe<DatetimeFilter>
@@ -1370,8 +1355,8 @@ export type ThreadsInsertResponse = {
 export type ThreadsOrderBy = {
   commentableEntityId?: InputMaybe<OrderByDirection>
   createdAt?: InputMaybe<OrderByDirection>
+  createdBy?: InputMaybe<OrderByDirection>
   id?: InputMaybe<OrderByDirection>
-  profileId?: InputMaybe<OrderByDirection>
   teamId?: InputMaybe<OrderByDirection>
   title?: InputMaybe<OrderByDirection>
   updatedAt?: InputMaybe<OrderByDirection>

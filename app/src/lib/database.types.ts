@@ -67,7 +67,6 @@ export interface Database {
           id: string
           profile_id: string
           reply_to_comment_id: string | null
-          team_id: string
           thread_id: string
           updated_at: string | null
         }
@@ -77,7 +76,6 @@ export interface Database {
           id?: string
           profile_id?: string
           reply_to_comment_id?: string | null
-          team_id: string
           thread_id: string
           updated_at?: string | null
         }
@@ -87,7 +85,6 @@ export interface Database {
           id?: string
           profile_id?: string
           reply_to_comment_id?: string | null
-          team_id?: string
           thread_id?: string
           updated_at?: string | null
         }
@@ -104,13 +101,6 @@ export interface Database {
             columns: ['reply_to_comment_id']
             isOneToOne: false
             referencedRelation: 'comments'
-            referencedColumns: ['id']
-          },
-          {
-            foreignKeyName: 'comments_team_id_fkey'
-            columns: ['team_id']
-            isOneToOne: false
-            referencedRelation: 'teams'
             referencedColumns: ['id']
           },
           {
@@ -399,8 +389,8 @@ export interface Database {
         Row: {
           commentable_entity_id: string
           created_at: string | null
+          created_by: string
           id: string
-          profile_id: string
           team_id: string
           title: string
           updated_at: string | null
@@ -408,8 +398,8 @@ export interface Database {
         Insert: {
           commentable_entity_id: string
           created_at?: string | null
+          created_by?: string
           id?: string
-          profile_id?: string
           team_id: string
           title: string
           updated_at?: string | null
@@ -417,8 +407,8 @@ export interface Database {
         Update: {
           commentable_entity_id?: string
           created_at?: string | null
+          created_by?: string
           id?: string
-          profile_id?: string
           team_id?: string
           title?: string
           updated_at?: string | null
@@ -432,8 +422,8 @@ export interface Database {
             referencedColumns: ['id']
           },
           {
-            foreignKeyName: 'threads_profile_id_fkey'
-            columns: ['profile_id']
+            foreignKeyName: 'threads_created_by_fkey'
+            columns: ['created_by']
             isOneToOne: false
             referencedRelation: 'profiles'
             referencedColumns: ['id']
@@ -705,14 +695,14 @@ export type Tables<
     ? R
     : never
   : PublicTableNameOrOptions extends keyof (Database['public']['Tables'] &
-      Database['public']['Views'])
-  ? (Database['public']['Tables'] &
-      Database['public']['Views'])[PublicTableNameOrOptions] extends {
-      Row: infer R
-    }
-    ? R
+        Database['public']['Views'])
+    ? (Database['public']['Tables'] &
+        Database['public']['Views'])[PublicTableNameOrOptions] extends {
+        Row: infer R
+      }
+      ? R
+      : never
     : never
-  : never
 
 export type TablesInsert<
   PublicTableNameOrOptions extends
@@ -728,12 +718,12 @@ export type TablesInsert<
     ? I
     : never
   : PublicTableNameOrOptions extends keyof Database['public']['Tables']
-  ? Database['public']['Tables'][PublicTableNameOrOptions] extends {
-      Insert: infer I
-    }
-    ? I
+    ? Database['public']['Tables'][PublicTableNameOrOptions] extends {
+        Insert: infer I
+      }
+      ? I
+      : never
     : never
-  : never
 
 export type TablesUpdate<
   PublicTableNameOrOptions extends
@@ -749,12 +739,12 @@ export type TablesUpdate<
     ? U
     : never
   : PublicTableNameOrOptions extends keyof Database['public']['Tables']
-  ? Database['public']['Tables'][PublicTableNameOrOptions] extends {
-      Update: infer U
-    }
-    ? U
+    ? Database['public']['Tables'][PublicTableNameOrOptions] extends {
+        Update: infer U
+      }
+      ? U
+      : never
     : never
-  : never
 
 export type Enums<
   PublicEnumNameOrOptions extends
@@ -766,5 +756,5 @@ export type Enums<
 > = PublicEnumNameOrOptions extends { schema: keyof Database }
   ? Database[PublicEnumNameOrOptions['schema']]['Enums'][EnumName]
   : PublicEnumNameOrOptions extends keyof Database['public']['Enums']
-  ? Database['public']['Enums'][PublicEnumNameOrOptions]
-  : never
+    ? Database['public']['Enums'][PublicEnumNameOrOptions]
+    : never
