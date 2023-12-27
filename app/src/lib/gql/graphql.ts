@@ -1505,7 +1505,6 @@ export type CommentsFormInsertMutationMutation = {
       id: string
       body: string
       createdAt?: string | null
-      profileId: string
       replyToComment?: {
         __typename: 'Comments'
         nodeId: string
@@ -2140,10 +2139,6 @@ export const CommentsFormInsertMutationDocument = {
                       {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'createdAt' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'profileId' },
                       },
                     ],
                   },

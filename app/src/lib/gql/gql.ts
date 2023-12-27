@@ -15,7 +15,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
 const documents = {
   '\n  query TeamMembersSelector_Query($teamId: UUID!) {\n    teamMembersCollection(filter: { teamId: { eq: $teamId } }) {\n      edges {\n        node {\n          nodeId\n          profile {\n            id\n            name\n          }\n        }\n      }\n    }\n  }\n':
     types.TeamMembersSelector_QueryDocument,
-  '\n  mutation CommentsFormInsertMutation($input: CommentsInsertInput!) {\n    insertIntoCommentsCollection(objects: [$input]) {\n      affectedCount\n      records {\n        nodeId\n        id\n        body\n        replyToComment {\n          nodeId\n          id\n        }\n        createdAt\n        profileId\n      }\n    }\n  }\n':
+  '\n  mutation CommentsFormInsertMutation($input: CommentsInsertInput!) {\n    insertIntoCommentsCollection(objects: [$input]) {\n      affectedCount\n      records {\n        nodeId\n        id\n        body\n        replyToComment {\n          nodeId\n          id\n        }\n        createdAt\n      }\n    }\n  }\n':
     types.CommentsFormInsertMutationDocument,
   '\n  mutation DataPointsTable_Delete_Mutation($filter: MetricsDataPointsFilter!) {\n    deleteFromMetricsDataPointsCollection(filter: $filter) {\n      affectedCount\n      records {\n        nodeId\n      }\n    }\n  }\n':
     types.DataPointsTable_Delete_MutationDocument,
@@ -63,8 +63,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  mutation CommentsFormInsertMutation($input: CommentsInsertInput!) {\n    insertIntoCommentsCollection(objects: [$input]) {\n      affectedCount\n      records {\n        nodeId\n        id\n        body\n        replyToComment {\n          nodeId\n          id\n        }\n        createdAt\n        profileId\n      }\n    }\n  }\n',
-): (typeof documents)['\n  mutation CommentsFormInsertMutation($input: CommentsInsertInput!) {\n    insertIntoCommentsCollection(objects: [$input]) {\n      affectedCount\n      records {\n        nodeId\n        id\n        body\n        replyToComment {\n          nodeId\n          id\n        }\n        createdAt\n        profileId\n      }\n    }\n  }\n']
+  source: '\n  mutation CommentsFormInsertMutation($input: CommentsInsertInput!) {\n    insertIntoCommentsCollection(objects: [$input]) {\n      affectedCount\n      records {\n        nodeId\n        id\n        body\n        replyToComment {\n          nodeId\n          id\n        }\n        createdAt\n      }\n    }\n  }\n',
+): (typeof documents)['\n  mutation CommentsFormInsertMutation($input: CommentsInsertInput!) {\n    insertIntoCommentsCollection(objects: [$input]) {\n      affectedCount\n      records {\n        nodeId\n        id\n        body\n        replyToComment {\n          nodeId\n          id\n        }\n        createdAt\n      }\n    }\n  }\n']
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

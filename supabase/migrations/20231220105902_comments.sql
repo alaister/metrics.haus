@@ -151,8 +151,8 @@ create table
     id uuid primary key default gen_random_uuid (),
     created_at timestamptz default now(),
     updated_at timestamptz default now(),
-    profile_id uuid default auth.uid () references public.profiles (id) on update cascade on delete cascade not null,
-    thread_id uuid references threads (id) on update cascade on delete cascade not null,
+    profile_id uuid not null default auth.uid () references public.profiles (id) on update cascade on delete cascade,
+    thread_id uuid not null references threads (id) on update cascade on delete cascade,
     reply_to_comment_id uuid references comments (id) on update cascade on delete cascade,
     body text not null
   );

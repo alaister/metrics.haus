@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { graphql } from '~/lib/gql'
 import { useToast } from '~/lib/hooks/use-toast'
-import { useAppSelector } from '~/stores'
 import { Button } from '../ui/Button'
 import {
   Form,
@@ -30,7 +29,6 @@ const CommentsInsertMutation = graphql(/* GraphQL */ `
           id
         }
         createdAt
-        profileId
       }
     }
   }
@@ -51,8 +49,6 @@ type CommentsFormProps = {
 // metricId,
 // replyTo,
 const CommentsForm = ({ onSuccess }: CommentsFormProps) => {
-  const selectedTeamId = useAppSelector((state) => state.team.selectedTeamId)
-
   const { toast } = useToast()
 
   const form = useForm<z.infer<typeof commentSchema>>({
@@ -75,7 +71,6 @@ const CommentsForm = ({ onSuccess }: CommentsFormProps) => {
       variables: {
         input: {
           body: values.comment,
-          teamId: selectedTeamId,
         },
       },
       onError(error) {
