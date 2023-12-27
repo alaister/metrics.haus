@@ -28,15 +28,15 @@ update (seen_at) on public.notifications to authenticated;
 
 alter table public.notifications enable row level security;
 
-create policy "can manage notifications from accessible teams" on public.notifications as restrictive for all using (private.is_current_user_in_team (team_id))
+create policy "can manage notifications from accessible teams" on public.notifications as restrictive for all to authenticated using (private.is_current_user_in_team (team_id))
 with
     check (private.is_current_user_in_team (team_id));
 
-create policy "user can see their own notifications" on public.notifications as permissive for
+create policy "user can see their own notifications" on public.notifications for
 select
     to authenticated using (profile_id = auth.uid ());
 
-create policy "user can delete update own notifications" on public.notifications as permissive for
+create policy "user can delete update own notifications" on public.notifications for
 update to authenticated using (profile_id = auth.uid ())
 with
     check (profile_id = auth.uid ());

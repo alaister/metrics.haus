@@ -21,7 +21,7 @@ create table
 
 alter table public.metrics enable row level security;
 
-create policy "can manage metrics from accessible teams" on public.metrics as restrictive for all using (private.is_current_user_in_team (team_id));
+create policy "can manage metrics from accessible teams" on public.metrics for all to authenticated using (private.is_current_user_in_team (team_id));
 
 revoke
 select
@@ -85,7 +85,7 @@ select
 
 alter table public.metrics_data_points enable row level security;
 
-create policy "user can manage data points from accessible metrics" on public.metrics_data_points for all using (
+create policy "user can manage data points from accessible metrics" on public.metrics_data_points for all to authenticated using (
     exists (
         select
             1
@@ -126,7 +126,7 @@ select
 
 alter table public.metrics_owners enable row level security;
 
-create policy "user can manage metric owners from accessible metrics" on public.metrics_owners for all using (
+create policy "user can manage metric owners from accessible metrics" on public.metrics_owners for all to authenticated using (
     exists (
         select
             1

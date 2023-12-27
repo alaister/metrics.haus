@@ -51,7 +51,7 @@ update (name) on public.profiles to authenticated;
 alter table public.profiles enable row level security;
 
 create policy "user can update their own profile" on public.profiles for
-update using (id = auth.uid ());
+update to authenticated using (id = auth.uid ());
 
 -- Teams
 create table
@@ -122,10 +122,10 @@ select
         select
             1
         from
-            public.team_members
+            public.team_members tm
         where
-            profile_id = auth.uid()
-            and team_id = $1
+            tm.profile_id = auth.uid()
+            and tm.team_id = $1
     );
 
 $$ language sql security definer stable;
@@ -133,20 +133,20 @@ $$ language sql security definer stable;
 grant
 execute on function private.is_current_user_in_team (uuid) to authenticated;
 
-create policy "user can view their own teams" on public.teams as restrictive for
+create policy "user can view their own teams" on public.teams for
 select
-    using (private.is_current_user_in_team (id));
+    to authenticated using (private.is_current_user_in_team (id));
 
-create policy "user can update their own teams" on public.teams as restrictive for
-update using (private.is_current_user_in_team (id));
+create policy "user can update their own teams" on public.teams for
+update to authenticated using (private.is_current_user_in_team (id));
 
-create policy "user can view fellow team members" on public.team_members as restrictive for
+create policy "user can view fellow team members" on public.team_members for
 select
-    using (private.is_current_user_in_team (team_id));
+    to authenticated using (private.is_current_user_in_team (team_id));
 
 create policy "user can view profiles of team members" on public.profiles for
 select
-    using (
+    to authenticated using (
         exists (
             select
                 1

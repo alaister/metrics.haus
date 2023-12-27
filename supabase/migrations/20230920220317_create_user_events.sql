@@ -20,13 +20,13 @@ create index if not exists ix_profile_events_user_id on public.user_events using
 
 alter table public.user_events enable row level security;
 
-create policy "allow users to insert user_events for themselves" on public.user_events for insert
+create policy "allow users to insert user_events for themselves" on public.user_events for insert to authenticated
 with
   check (auth.uid () = user_id);
 
 create policy "allow users to select of their own user_events" on public.user_events for
 select
-  using (auth.uid () = user_id);
+  to authenticated using (auth.uid () = user_id);
 
 revoke
 select
