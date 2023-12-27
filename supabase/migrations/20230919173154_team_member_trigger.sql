@@ -1,7 +1,5 @@
 create
-or replace function public.insert_team_member_if_not_exists () returns trigger language plpgsql security definer
-set
-    search_path = public as $$
+or replace function private.insert_team_member_if_not_exists () returns trigger language plpgsql security definer as $$
     declare
         v_profile_id uuid;
         v_sso_provider_id text;
@@ -25,4 +23,4 @@ $$;
 
 create trigger on_auth_identity_inserted
 after insert on auth.identities for each row
-execute function public.insert_team_member_if_not_exists ();
+execute function private.insert_team_member_if_not_exists ();

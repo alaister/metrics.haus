@@ -1,5 +1,23 @@
 create extension if not exists moddatetime schema extensions;
 
+alter default privileges
+revoke
+execute on functions
+from
+    public;
+
+alter default privileges in schema public
+revoke
+execute on functions
+from
+    anon,
+    authenticated;
+
+create schema private;
+
+grant usage on schema private to authenticated,
+service_role;
+
 comment on schema public is e'@graphql({
   "inflect_names": true,
   "max_rows": 1000
@@ -15,6 +33,26 @@ create table
         "avatar_path" text
     );
 
+revoke
+select
+,
+    insert,
+update,
+delete on public.profiles
+from
+    anon,
+    authenticated;
+
+grant
+select
+,
+update (name) on public.profiles to authenticated;
+
+alter table public.profiles enable row level security;
+
+create policy "user can update their own profile" on public.profiles for
+update to authenticated using (id = auth.uid ());
+
 -- Teams
 create table
     public.teams (
@@ -24,6 +62,27 @@ create table
         name text not null,
         sso_provider_id text
     );
+
+create trigger teams_updated_at before
+update on public.teams for each row
+execute procedure moddatetime (updated_at);
+
+revoke
+select
+,
+    insert,
+update,
+delete on public.teams
+from
+    anon,
+    authenticated;
+
+grant
+select
+,
+update (name) on public.teams to authenticated;
+
+alter table public.teams enable row level security;
 
 -- Team members
 create table
@@ -35,76 +94,59 @@ create table
         primary key (team_id, profile_id)
     );
 
-revoke insert,
-update,
-delete on public.profiles
-from
-    public,
-    anon,
-    authenticated;
-
-grant
-update (name) on public.profiles to public,
-authenticated;
-
-alter table public.profiles enable row level security;
-
-create policy "user can update their own profile" on public.profiles for
-update using (id = auth.uid ());
-
-alter table public.teams enable row level security;
-
-create function is_current_user_in_team (team_id uuid) returns boolean as $$
-select
-    exists (
-        select
-            1
-        from
-            team_members
-        where
-            profile_id = auth.uid()
-            and team_id = $1
-    );
-
-$$ language sql security definer stable;
-
-create policy "user can view their own teams" on public.teams for
-select
-    using (is_current_user_in_team (id));
-
-create policy "user can update their own teams" on public.teams for
-update using (is_current_user_in_team (id));
-
-revoke
-update on public.teams
-from
-    public,
-    anon,
-    authenticated;
-
-grant
-update (name) on public.teams to public,
-authenticated;
-
-create trigger teams_updated_at before
-update on public.teams for each row
-execute procedure moddatetime (updated_at);
-
-alter table public.team_members enable row level security;
-
-create policy "user can view fellow team members" on public.team_members for
-select
-    using (is_current_user_in_team (team_id));
-
 create unique index team_members_team_id_profile_id_unique on public.team_members (team_id, profile_id);
 
 create trigger team_members before
 update on public.teams for each row
 execute procedure moddatetime (updated_at);
 
+revoke
+select
+,
+    insert,
+update,
+delete on public.team_members
+from
+    anon,
+    authenticated;
+
+grant
+select
+    on public.team_members to authenticated;
+
+alter table public.team_members enable row level security;
+
+create function private.is_current_user_in_team (team_id uuid) returns boolean as $$
+select
+    exists (
+        select
+            1
+        from
+            public.team_members tm
+        where
+            tm.profile_id = auth.uid()
+            and tm.team_id = $1
+    );
+
+$$ language sql security definer stable;
+
+grant
+execute on function private.is_current_user_in_team (uuid) to authenticated;
+
+create policy "user can view their own teams" on public.teams for
+select
+    to authenticated using (private.is_current_user_in_team (id));
+
+create policy "user can update their own teams" on public.teams for
+update to authenticated using (private.is_current_user_in_team (id));
+
+create policy "user can view fellow team members" on public.team_members for
+select
+    to authenticated using (private.is_current_user_in_team (team_id));
+
 create policy "user can view profiles of team members" on public.profiles for
 select
-    using (
+    to authenticated using (
         exists (
             select
                 1
@@ -114,10 +156,3 @@ select
                 profile_id = profiles.id
         )
     );
-
-revoke insert,
-update on public.team_members
-from
-    public,
-    anon,
-    authenticated;

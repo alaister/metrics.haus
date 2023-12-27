@@ -3,4 +3,4 @@ __generated__
 dist
 .idea
 .vscode
-schema.graphql
+src/lib/database.types.ts

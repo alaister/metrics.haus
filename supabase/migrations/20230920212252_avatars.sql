@@ -1,12 +1,12 @@
 insert into
-  "storage"."buckets" (
-    "id",
-    "name",
-    "owner",
-    "public",
-    "avif_autodetection",
-    "file_size_limit",
-    "allowed_mime_types"
+  storage.buckets (
+    id,
+    name,
+    owner,
+    public,
+    avif_autodetection,
+    file_size_limit,
+    allowed_mime_types
   )
 values
   (
@@ -30,7 +30,7 @@ with
     auth.uid () = (string_to_array(name, '/'::text)) [1]::uuid
   );
 
-create function public.update_avatar_path () returns trigger language plpgsql security definer as $$
+create function private.update_avatar_path () returns trigger language plpgsql security definer as $$
     declare
         v_user_id uuid = (string_to_array(new.name, '/'::text))[1]::uuid;
     begin
@@ -52,4 +52,4 @@ $$;
 create
 or replace trigger on_storage_object_created
 after insert on storage.objects for each row when (new.bucket_id = 'avatars')
-execute procedure public.update_avatar_path ();
+execute procedure private.update_avatar_path ();

@@ -75,12 +75,15 @@ const MetricForm = ({ onSuccess, metricId }: MetricFormProps) => {
           },
           (data) =>
             produce(data, (draft) => {
-              if (draft?.node?.__typename === 'Metrics') {
-                draft.node.metricsDataPointsCollection?.edges.push({
+              if (
+                draft?.node?.__typename === 'Metrics' &&
+                draft.node.metricsDataPointsCollection
+              ) {
+                draft.node.metricsDataPointsCollection.edges.push({
                   __typename: 'MetricsDataPointsEdge' as const,
                   node: record,
                 })
-                draft.node.metricsDataPointsCollection?.edges.sort((a, b) => {
+                draft.node.metricsDataPointsCollection.edges.sort((a, b) => {
                   return (
                     new Date(a.node.time).getTime() -
                     new Date(b.node.time).getTime()

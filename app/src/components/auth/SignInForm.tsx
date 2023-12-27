@@ -30,9 +30,15 @@ const SignInForm = () => {
   })
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    if (import.meta.env.MODE === 'development') {
+    if (
+      import.meta.env.MODE === 'development' ||
+      import.meta.env.VITE_VERCEL_ENV === 'preview'
+    ) {
       const { error } = await supabase.auth.signInWithOtp({
         email: values.email,
+        options: {
+          emailRedirectTo: location.origin,
+        },
       })
 
       if (error) {
