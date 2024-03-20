@@ -125,6 +125,8 @@ function parseDataRow(
       .replace("%", "")
       .replace(",", "");
 
+    if (!valueAsString) return [];
+
     const cleanNumber = Number(valueAsString);
 
     if (isNaN(Number(cleanNumber))) return [];
@@ -167,8 +169,9 @@ function parseValueAsString(
   }
 }
 
-// To invoke:
-// curl -i --location --request POST 'http://localhost:54321/functions/v1/import-data' \
-//   --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImV4cCI6MTk4MzgxMjk5Nn0.EGIM96RAZx35lJzdJsyH-qQwv8Hdp7fsn3W0YpN81IU' \
-//   --header 'Content-Type: application/json' \
-//   --data '{"metricId":"9e96cb04-b06b-41bd-8293-2fce98f71d3c"}'
+/* To invoke:
+ curl -i --location --request POST 'http://localhost:54321/functions/v1/import-data' \
+   --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImV4cCI6MTk4MzgxMjk5Nn0.EGIM96RAZx35lJzdJsyH-qQwv8Hdp7fsn3W0YpN81IU' \
+   --header 'Content-Type: application/json' \
+   --data '{"importId":"9e96cb04-b06b-41bd-8293-2fce98f71d3c"}'
+*/
