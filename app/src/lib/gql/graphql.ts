@@ -442,8 +442,6 @@ export type Mutation = {
   deleteFromMetricsDataPointsCollection: MetricsDataPointsDeleteResponse
   /** Deletes zero or more records from the `MetricsOwners` collection */
   deleteFromMetricsOwnersCollection: MetricsOwnersDeleteResponse
-  /** Deletes zero or more records from the `Notifications` collection */
-  deleteFromNotificationsCollection: NotificationsDeleteResponse
   /** Deletes zero or more records from the `TeamMembers` collection */
   deleteFromTeamMembersCollection: TeamMembersDeleteResponse
   /** Deletes zero or more records from the `Teams` collection */
@@ -460,8 +458,6 @@ export type Mutation = {
   insertIntoMetricsDataPointsCollection?: Maybe<MetricsDataPointsInsertResponse>
   /** Adds one or more `MetricsOwners` records to the collection */
   insertIntoMetricsOwnersCollection?: Maybe<MetricsOwnersInsertResponse>
-  /** Adds one or more `Notifications` records to the collection */
-  insertIntoNotificationsCollection?: Maybe<NotificationsInsertResponse>
   /** Adds one or more `Teams` records to the collection */
   insertIntoTeamsCollection?: Maybe<TeamsInsertResponse>
   locf?: Maybe<Scalars['Opaque']['output']>
@@ -485,8 +481,6 @@ export type Mutation = {
   updateMetricsCollection: MetricsUpdateResponse
   /** Updates zero or more records in the `MetricsOwners` collection */
   updateMetricsOwnersCollection: MetricsOwnersUpdateResponse
-  /** Updates zero or more records in the `Notifications` collection */
-  updateNotificationsCollection: NotificationsUpdateResponse
   /** Updates zero or more records in the `Profiles` collection */
   updateProfilesCollection: ProfilesUpdateResponse
   /** Updates zero or more records in the `Teams` collection */
@@ -604,12 +598,6 @@ export type MutationDeleteFromMetricsOwnersCollectionArgs = {
 }
 
 /** The root type for creating and mutating data */
-export type MutationDeleteFromNotificationsCollectionArgs = {
-  atMost?: Scalars['Int']['input']
-  filter?: InputMaybe<NotificationsFilter>
-}
-
-/** The root type for creating and mutating data */
 export type MutationDeleteFromTeamMembersCollectionArgs = {
   atMost?: Scalars['Int']['input']
   filter?: InputMaybe<TeamMembersFilter>
@@ -671,11 +659,6 @@ export type MutationInsertIntoMetricsDataPointsCollectionArgs = {
 /** The root type for creating and mutating data */
 export type MutationInsertIntoMetricsOwnersCollectionArgs = {
   objects: Array<MetricsOwnersInsertInput>
-}
-
-/** The root type for creating and mutating data */
-export type MutationInsertIntoNotificationsCollectionArgs = {
-  objects: Array<NotificationsInsertInput>
 }
 
 /** The root type for creating and mutating data */
@@ -791,13 +774,6 @@ export type MutationUpdateMetricsOwnersCollectionArgs = {
 }
 
 /** The root type for creating and mutating data */
-export type MutationUpdateNotificationsCollectionArgs = {
-  atMost?: Scalars['Int']['input']
-  filter?: InputMaybe<NotificationsFilter>
-  set: NotificationsUpdateInput
-}
-
-/** The root type for creating and mutating data */
 export type MutationUpdateProfilesCollectionArgs = {
   atMost?: Scalars['Int']['input']
   filter?: InputMaybe<ProfilesFilter>
@@ -814,91 +790,6 @@ export type MutationUpdateTeamsCollectionArgs = {
 export type Node = {
   /** Retrieves a record by `ID` */
   nodeId: Scalars['ID']['output']
-}
-
-export type Notifications = Node & {
-  __typename?: 'Notifications'
-  createdAt?: Maybe<Scalars['Datetime']['output']>
-  id: Scalars['UUID']['output']
-  metadata?: Maybe<Scalars['JSON']['output']>
-  /** Globally Unique Record Identifier */
-  nodeId: Scalars['ID']['output']
-  profile: Profiles
-  profileId: Scalars['UUID']['output']
-  text?: Maybe<Scalars['String']['output']>
-}
-
-export type NotificationsConnection = {
-  __typename?: 'NotificationsConnection'
-  edges: Array<NotificationsEdge>
-  pageInfo: PageInfo
-}
-
-export type NotificationsDeleteResponse = {
-  __typename?: 'NotificationsDeleteResponse'
-  /** Count of the records impacted by the mutation */
-  affectedCount: Scalars['Int']['output']
-  /** Array of records impacted by the mutation */
-  records: Array<Notifications>
-}
-
-export type NotificationsEdge = {
-  __typename?: 'NotificationsEdge'
-  cursor: Scalars['String']['output']
-  node: Notifications
-}
-
-export type NotificationsFilter = {
-  /** Returns true only if all its inner filters are true, otherwise returns false */
-  and?: InputMaybe<Array<NotificationsFilter>>
-  createdAt?: InputMaybe<DatetimeFilter>
-  id?: InputMaybe<UuidFilter>
-  nodeId?: InputMaybe<IdFilter>
-  /** Negates a filter */
-  not?: InputMaybe<NotificationsFilter>
-  /** Returns true if at least one of its inner filters is true, otherwise returns false */
-  or?: InputMaybe<Array<NotificationsFilter>>
-  profileId?: InputMaybe<UuidFilter>
-  text?: InputMaybe<StringFilter>
-}
-
-export type NotificationsInsertInput = {
-  createdAt?: InputMaybe<Scalars['Datetime']['input']>
-  id?: InputMaybe<Scalars['UUID']['input']>
-  metadata?: InputMaybe<Scalars['JSON']['input']>
-  profileId?: InputMaybe<Scalars['UUID']['input']>
-  text?: InputMaybe<Scalars['String']['input']>
-}
-
-export type NotificationsInsertResponse = {
-  __typename?: 'NotificationsInsertResponse'
-  /** Count of the records impacted by the mutation */
-  affectedCount: Scalars['Int']['output']
-  /** Array of records impacted by the mutation */
-  records: Array<Notifications>
-}
-
-export type NotificationsOrderBy = {
-  createdAt?: InputMaybe<OrderByDirection>
-  id?: InputMaybe<OrderByDirection>
-  profileId?: InputMaybe<OrderByDirection>
-  text?: InputMaybe<OrderByDirection>
-}
-
-export type NotificationsUpdateInput = {
-  createdAt?: InputMaybe<Scalars['Datetime']['input']>
-  id?: InputMaybe<Scalars['UUID']['input']>
-  metadata?: InputMaybe<Scalars['JSON']['input']>
-  profileId?: InputMaybe<Scalars['UUID']['input']>
-  text?: InputMaybe<Scalars['String']['input']>
-}
-
-export type NotificationsUpdateResponse = {
-  __typename?: 'NotificationsUpdateResponse'
-  /** Count of the records impacted by the mutation */
-  affectedCount: Scalars['Int']['output']
-  /** Array of records impacted by the mutation */
-  records: Array<Notifications>
 }
 
 /** Boolean expression comparing fields on type "Opaque" */
@@ -937,7 +828,6 @@ export type Profiles = Node & {
   name: Scalars['String']['output']
   /** Globally Unique Record Identifier */
   nodeId: Scalars['ID']['output']
-  notificationsCollection?: Maybe<NotificationsConnection>
   teamMembersCollection?: Maybe<TeamMembersConnection>
   updatedAt: Scalars['Datetime']['output']
 }
@@ -958,15 +848,6 @@ export type ProfilesMetricsOwnersCollectionArgs = {
   first?: InputMaybe<Scalars['Int']['input']>
   last?: InputMaybe<Scalars['Int']['input']>
   orderBy?: InputMaybe<Array<MetricsOwnersOrderBy>>
-}
-
-export type ProfilesNotificationsCollectionArgs = {
-  after?: InputMaybe<Scalars['Cursor']['input']>
-  before?: InputMaybe<Scalars['Cursor']['input']>
-  filter?: InputMaybe<NotificationsFilter>
-  first?: InputMaybe<Scalars['Int']['input']>
-  last?: InputMaybe<Scalars['Int']['input']>
-  orderBy?: InputMaybe<Array<NotificationsOrderBy>>
 }
 
 export type ProfilesTeamMembersCollectionArgs = {
@@ -1038,8 +919,6 @@ export type Query = {
   metricsOwnersCollection?: Maybe<MetricsOwnersConnection>
   /** Retrieve a record by its `ID` */
   node?: Maybe<Node>
-  /** A pagable collection of type `Notifications` */
-  notificationsCollection?: Maybe<NotificationsConnection>
   /** A pagable collection of type `Profiles` */
   profilesCollection?: Maybe<ProfilesConnection>
   /** A pagable collection of type `TeamMembers` */
@@ -1086,16 +965,6 @@ export type QueryMetricsOwnersCollectionArgs = {
 /** The root type for querying data */
 export type QueryNodeArgs = {
   nodeId: Scalars['ID']['input']
-}
-
-/** The root type for querying data */
-export type QueryNotificationsCollectionArgs = {
-  after?: InputMaybe<Scalars['Cursor']['input']>
-  before?: InputMaybe<Scalars['Cursor']['input']>
-  filter?: InputMaybe<NotificationsFilter>
-  first?: InputMaybe<Scalars['Int']['input']>
-  last?: InputMaybe<Scalars['Int']['input']>
-  orderBy?: InputMaybe<Array<NotificationsOrderBy>>
 }
 
 /** The root type for querying data */
@@ -1318,21 +1187,6 @@ export type UuidFilter = {
   in?: InputMaybe<Array<Scalars['UUID']['input']>>
   is?: InputMaybe<FilterIs>
   neq?: InputMaybe<Scalars['UUID']['input']>
-}
-
-export enum UserEvent {
-  AddDataPoint = 'add_data_point',
-  AddMetric = 'add_metric',
-  UpdateAvatar = 'update_avatar',
-  ViewPage = 'view_page',
-}
-
-/** Boolean expression comparing fields on type "UserEvent" */
-export type UserEventFilter = {
-  eq?: InputMaybe<UserEvent>
-  in?: InputMaybe<Array<UserEvent>>
-  is?: InputMaybe<FilterIs>
-  neq?: InputMaybe<UserEvent>
 }
 
 export type TeamMembersSelector_QueryQueryVariables = Exact<{
@@ -1569,7 +1423,6 @@ export type MetricDetailsQueryQuery = {
       }
     | { __typename: 'MetricsDataPoints'; nodeId: string }
     | { __typename: 'MetricsOwners'; nodeId: string }
-    | { __typename: 'Notifications'; nodeId: string }
     | { __typename: 'Profiles'; nodeId: string }
     | { __typename: 'TeamMembers'; nodeId: string }
     | { __typename: 'Teams'; nodeId: string }
