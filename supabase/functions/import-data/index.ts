@@ -82,14 +82,14 @@ serve(async (req) => {
 
   const { error: errorInsertingMetrics } = await supabaseClient
     .from("metrics_data_points")
-    .insert(
+    .upsert(
       dataRows.map((dataRow) => ({
         time: dataRow.timestamp.toISOString(),
         metric_id: dataRow.metricId,
         value: dataRow.value,
         reported_by: importData.uploaded_by,
       })),
-      { skipDuplicates: true }
+      { ignoreDuplicates: true }
     );
 
   if (errorInsertingMetrics) throw errorInsertingMetrics;

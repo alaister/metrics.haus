@@ -2,7 +2,7 @@ import { Save } from 'lucide-react'
 import { Button } from '~/components/ui/Button'
 import { useToast } from '~/lib/hooks/use-toast'
 import { useRef, useState, ChangeEvent, FormEvent } from 'react'
-import { useAppDispatch, useAppSelector } from '~/stores'
+import { useAppSelector } from '~/stores'
 import supabase from '~/lib/supabase'
 
 export interface ImportFormProps {
@@ -11,7 +11,6 @@ export interface ImportFormProps {
 
 const ImportForm = ({ onSuccess }: ImportFormProps) => {
   const { toast } = useToast()
-  const dispatch = useAppDispatch()
   const selectedTeamId = useAppSelector((state) => state.team.selectedTeamId)
 
   const uploadButtonRef = useRef<HTMLInputElement>(null)
@@ -90,10 +89,7 @@ const ImportForm = ({ onSuccess }: ImportFormProps) => {
           <button
             type="button"
             className="flex items-center px-4 py-2 space-x-2 text-sm text-gray-600 border-gray-300 transition bg-white border rounded-md dark:bg-transparent dark:border-slate-500 dark:text-gray-300 dark:hover:text-gray-100 dark:hover:border-slate-400 hover:text-gray-800 hover:border-gray-400"
-            onClick={() => {
-              uploadButtonRef?.current?.click()
-              console.log(uploadButtonRef)
-            }}
+            onClick={() => uploadButtonRef?.current?.click()}
             disabled={isSubmitting}
           >
             Select a file

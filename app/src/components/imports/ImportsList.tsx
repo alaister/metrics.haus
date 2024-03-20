@@ -27,9 +27,6 @@ const ImportsList = () => {
   const { data } = useQuery(ImportsQuery)
   const imports = data?.importsCollection?.edges ?? []
 
-  console.log('abc')
-  console.log({ imports })
-
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       {imports.length > 0 &&

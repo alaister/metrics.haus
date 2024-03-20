@@ -88,8 +88,8 @@ const MetricDetailsSection = ({ metricNodeId }: MetricDetailsProps) => {
       {dataPoints.length > 0 && (
         <div className="flex gap-x-4">
           <span className="text-2xl font-bold">
-            {data.unitShort || '-'}
-            {lastDataPoint?.value || '-'}
+            {data.unitShort || ''}
+            {lastDataPoint?.value?.toLocaleString() || '-'}
           </span>
           <GrowthBadge dataPoints={dataPoints} />
         </div>

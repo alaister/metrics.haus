@@ -63,7 +63,7 @@ const MetricCard = memo(function MetricCard({ metricNodeId }: MetricCardProps) {
             <div>
               <span className="text-2xl font-bold">
                 {data.unitShort || ''}
-                {lastDataPoint?.value || '-'}
+                {lastDataPoint?.value?.toLocaleString() || '-'}
               </span>
             </div>
           </div>

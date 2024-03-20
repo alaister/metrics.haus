@@ -13,10 +13,11 @@ const GrowthBadge = ({ dataPoints }: Props) => {
   const percentage = useMemo(() => {
     if (!firstDataPoint || !lastDataPoint) return 0
 
-    return (
+    const percentage =
       ((lastDataPoint.value - firstDataPoint.value) / firstDataPoint.value) *
       100
-    )
+
+    return percentage.toLocaleString()
   }, [firstDataPoint, lastDataPoint])
 
   const hasNoDataPoints = dataPoints?.length === 0
