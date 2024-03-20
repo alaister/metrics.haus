@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "preview": "vite preview",
     "prettier": "prettier --write . --ignore-path .prettierignore",
-    "codegen": "graphql-codegen --config codegen.ts"
+    "codegen": "graphql-codegen --config codegen.ts",
+    "gen:database": "supabase gen types typescript --local > src/lib/database.types.ts"
   },
   "dependencies": {
     "@apollo/client": "^3.8.8",
