@@ -81,7 +81,11 @@ const ImportDetails = () => {
 
   useEffect(() => {
     if (!loading && importDetails) {
-      const mappings = JSON.parse(importDetails?.node?.mapping || '{}')
+      const mappings = JSON.parse(
+        importDetails?.node?.__typename === 'Imports'
+          ? importDetails?.node?.mapping || '{}'
+          : '{}',
+      )
 
       form.setValue(
         'timestampMapping',
