@@ -1,12 +1,10 @@
 import { Suspense } from 'react'
 import { Link } from '~/lib/router'
 import { UserAvatar } from '../UserAvatar'
-import { CmdKDialog } from '../cmdk/CmdKDialog'
 import { Notifications } from '../notifications'
 import TeamSelector from '../teams/TeamSelector'
 
 const Header = () => {
-
   return (
     <header className="sticky top-0 border-b bg-white z-10">
       <div className="flex h-16 justify-between items-center px-4">
@@ -18,8 +16,6 @@ const Header = () => {
             <TeamSelector />
           </Suspense>
         </div>
-
-        <CmdKDialog />
 
         <div className="flex pr-6 gap-3">
           <Notifications />
