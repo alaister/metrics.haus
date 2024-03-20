@@ -518,6 +518,8 @@ export type Mutation = {
   deleteFromMetricsDataPointsCollection: MetricsDataPointsDeleteResponse;
   /** Deletes zero or more records from the `MetricsOwners` collection */
   deleteFromMetricsOwnersCollection: MetricsOwnersDeleteResponse;
+  /** Deletes zero or more records from the `Notifications` collection */
+  deleteFromNotificationsCollection: NotificationsDeleteResponse;
   /** Deletes zero or more records from the `Threads` collection */
   deleteFromThreadsCollection: ThreadsDeleteResponse;
   /** Adds one or more `Comments` records to the collection */
@@ -528,12 +530,16 @@ export type Mutation = {
   insertIntoMetricsDataPointsCollection?: Maybe<MetricsDataPointsInsertResponse>;
   /** Adds one or more `MetricsOwners` records to the collection */
   insertIntoMetricsOwnersCollection?: Maybe<MetricsOwnersInsertResponse>;
+  /** Adds one or more `Notifications` records to the collection */
+  insertIntoNotificationsCollection?: Maybe<NotificationsInsertResponse>;
   /** Adds one or more `Threads` records to the collection */
   insertIntoThreadsCollection?: Maybe<ThreadsInsertResponse>;
   /** Updates zero or more records in the `Comments` collection */
   updateCommentsCollection: CommentsUpdateResponse;
   /** Updates zero or more records in the `Metrics` collection */
   updateMetricsCollection: MetricsUpdateResponse;
+  /** Updates zero or more records in the `Notifications` collection */
+  updateNotificationsCollection: NotificationsUpdateResponse;
   /** Updates zero or more records in the `Profiles` collection */
   updateProfilesCollection: ProfilesUpdateResponse;
   /** Updates zero or more records in the `Teams` collection */
@@ -572,6 +578,13 @@ export type MutationDeleteFromMetricsOwnersCollectionArgs = {
 
 
 /** The root type for creating and mutating data */
+export type MutationDeleteFromNotificationsCollectionArgs = {
+  atMost?: Scalars['Int']['input'];
+  filter?: InputMaybe<NotificationsFilter>;
+};
+
+
+/** The root type for creating and mutating data */
 export type MutationDeleteFromThreadsCollectionArgs = {
   atMost?: Scalars['Int']['input'];
   filter?: InputMaybe<ThreadsFilter>;
@@ -603,6 +616,12 @@ export type MutationInsertIntoMetricsOwnersCollectionArgs = {
 
 
 /** The root type for creating and mutating data */
+export type MutationInsertIntoNotificationsCollectionArgs = {
+  objects: Array<NotificationsInsertInput>;
+};
+
+
+/** The root type for creating and mutating data */
 export type MutationInsertIntoThreadsCollectionArgs = {
   objects: Array<ThreadsInsertInput>;
 };
@@ -621,6 +640,14 @@ export type MutationUpdateMetricsCollectionArgs = {
   atMost?: Scalars['Int']['input'];
   filter?: InputMaybe<MetricsFilter>;
   set: MetricsUpdateInput;
+};
+
+
+/** The root type for creating and mutating data */
+export type MutationUpdateNotificationsCollectionArgs = {
+  atMost?: Scalars['Int']['input'];
+  filter?: InputMaybe<NotificationsFilter>;
+  set: NotificationsUpdateInput;
 };
 
 
@@ -650,6 +677,91 @@ export type MutationUpdateThreadsCollectionArgs = {
 export type Node = {
   /** Retrieves a record by `ID` */
   nodeId: Scalars['ID']['output'];
+};
+
+export type Notifications = Node & {
+  __typename?: 'Notifications';
+  createdAt?: Maybe<Scalars['Datetime']['output']>;
+  id: Scalars['UUID']['output'];
+  metadata?: Maybe<Scalars['JSON']['output']>;
+  /** Globally Unique Record Identifier */
+  nodeId: Scalars['ID']['output'];
+  profile: Profiles;
+  profileId: Scalars['UUID']['output'];
+  text?: Maybe<Scalars['String']['output']>;
+};
+
+export type NotificationsConnection = {
+  __typename?: 'NotificationsConnection';
+  edges: Array<NotificationsEdge>;
+  pageInfo: PageInfo;
+};
+
+export type NotificationsDeleteResponse = {
+  __typename?: 'NotificationsDeleteResponse';
+  /** Count of the records impacted by the mutation */
+  affectedCount: Scalars['Int']['output'];
+  /** Array of records impacted by the mutation */
+  records: Array<Notifications>;
+};
+
+export type NotificationsEdge = {
+  __typename?: 'NotificationsEdge';
+  cursor: Scalars['String']['output'];
+  node: Notifications;
+};
+
+export type NotificationsFilter = {
+  /** Returns true only if all its inner filters are true, otherwise returns false */
+  and?: InputMaybe<Array<NotificationsFilter>>;
+  createdAt?: InputMaybe<DatetimeFilter>;
+  id?: InputMaybe<UuidFilter>;
+  nodeId?: InputMaybe<IdFilter>;
+  /** Negates a filter */
+  not?: InputMaybe<NotificationsFilter>;
+  /** Returns true if at least one of its inner filters is true, otherwise returns false */
+  or?: InputMaybe<Array<NotificationsFilter>>;
+  profileId?: InputMaybe<UuidFilter>;
+  text?: InputMaybe<StringFilter>;
+};
+
+export type NotificationsInsertInput = {
+  createdAt?: InputMaybe<Scalars['Datetime']['input']>;
+  id?: InputMaybe<Scalars['UUID']['input']>;
+  metadata?: InputMaybe<Scalars['JSON']['input']>;
+  profileId?: InputMaybe<Scalars['UUID']['input']>;
+  text?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type NotificationsInsertResponse = {
+  __typename?: 'NotificationsInsertResponse';
+  /** Count of the records impacted by the mutation */
+  affectedCount: Scalars['Int']['output'];
+  /** Array of records impacted by the mutation */
+  records: Array<Notifications>;
+};
+
+export type NotificationsOrderBy = {
+  createdAt?: InputMaybe<OrderByDirection>;
+  id?: InputMaybe<OrderByDirection>;
+  profileId?: InputMaybe<OrderByDirection>;
+  text?: InputMaybe<OrderByDirection>;
+};
+
+export type NotificationsUpdateInput = {
+  createdAt?: InputMaybe<Scalars['Datetime']['input']>;
+  id?: InputMaybe<Scalars['UUID']['input']>;
+  metadata?: InputMaybe<Scalars['JSON']['input']>;
+  profileId?: InputMaybe<Scalars['UUID']['input']>;
+  text?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type NotificationsUpdateResponse = {
+  __typename?: 'NotificationsUpdateResponse';
+  /** Count of the records impacted by the mutation */
+  affectedCount: Scalars['Int']['output'];
+  /** Array of records impacted by the mutation */
+  records: Array<Notifications>;
 };
 
 /** Boolean expression comparing fields on type "Opaque" */
@@ -689,6 +801,7 @@ export type Profiles = Node & {
   name: Scalars['String']['output'];
   /** Globally Unique Record Identifier */
   nodeId: Scalars['ID']['output'];
+  notificationsCollection?: Maybe<NotificationsConnection>;
   teamMembersCollection?: Maybe<TeamMembersConnection>;
   threadsCollection?: Maybe<ThreadsConnection>;
   updatedAt: Scalars['Datetime']['output'];
@@ -722,6 +835,16 @@ export type ProfilesMetricsOwnersCollectionArgs = {
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Array<MetricsOwnersOrderBy>>;
+};
+
+
+export type ProfilesNotificationsCollectionArgs = {
+  after?: InputMaybe<Scalars['Cursor']['input']>;
+  before?: InputMaybe<Scalars['Cursor']['input']>;
+  filter?: InputMaybe<NotificationsFilter>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Array<NotificationsOrderBy>>;
 };
 
 
@@ -804,6 +927,8 @@ export type Query = {
   metricsOwnersCollection?: Maybe<MetricsOwnersConnection>;
   /** Retrieve a record by its `ID` */
   node?: Maybe<Node>;
+  /** A pagable collection of type `Notifications` */
+  notificationsCollection?: Maybe<NotificationsConnection>;
   /** A pagable collection of type `Profiles` */
   profilesCollection?: Maybe<ProfilesConnection>;
   /** A pagable collection of type `TeamMembers` */
@@ -862,6 +987,17 @@ export type QueryMetricsOwnersCollectionArgs = {
 /** The root type for querying data */
 export type QueryNodeArgs = {
   nodeId: Scalars['ID']['input'];
+};
+
+
+/** The root type for querying data */
+export type QueryNotificationsCollectionArgs = {
+  after?: InputMaybe<Scalars['Cursor']['input']>;
+  before?: InputMaybe<Scalars['Cursor']['input']>;
+  filter?: InputMaybe<NotificationsFilter>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Array<NotificationsOrderBy>>;
 };
 
 
@@ -1261,14 +1397,14 @@ export type MetricDetailsQueryQueryVariables = Exact<{
 }>;
 
 
-export type MetricDetailsQueryQuery = { __typename: 'Query', node?: { __typename: 'Comments', nodeId: string } | { __typename: 'Metrics', id: string, name: string, icon?: string | null, unitShort?: string | null, description?: string | null, nodeId: string, threadsCollection?: { __typename: 'ThreadsConnection', pageInfo: { __typename: 'PageInfo', hasNextPage: boolean, endCursor?: string | null }, edges: Array<{ __typename: 'ThreadsEdge', cursor: string, node: { __typename: 'Threads', nodeId: string, id: string, createdAt?: string | null, title: string, fromTimestamp?: string | null, toTimestamp?: string | null } }> } | null, metricsDataPointsCollection?: { __typename: 'MetricsDataPointsConnection', totalCount: number, edges: Array<{ __typename: 'MetricsDataPointsEdge', node: { __typename: 'MetricsDataPoints', nodeId: string, time: string, value: number } }> } | null } | { __typename: 'MetricsDataPoints', nodeId: string } | { __typename: 'MetricsOwners', nodeId: string } | { __typename: 'Profiles', nodeId: string } | { __typename: 'TeamMembers', nodeId: string } | { __typename: 'Teams', nodeId: string } | { __typename: 'Threads', nodeId: string } | null };
+export type MetricDetailsQueryQuery = { __typename: 'Query', node?: { __typename: 'Comments', nodeId: string } | { __typename: 'Metrics', id: string, name: string, icon?: string | null, unitShort?: string | null, description?: string | null, nodeId: string, threadsCollection?: { __typename: 'ThreadsConnection', pageInfo: { __typename: 'PageInfo', hasNextPage: boolean, endCursor?: string | null }, edges: Array<{ __typename: 'ThreadsEdge', cursor: string, node: { __typename: 'Threads', nodeId: string, id: string, createdAt?: string | null, title: string, fromTimestamp?: string | null, toTimestamp?: string | null } }> } | null, metricsDataPointsCollection?: { __typename: 'MetricsDataPointsConnection', totalCount: number, edges: Array<{ __typename: 'MetricsDataPointsEdge', node: { __typename: 'MetricsDataPoints', nodeId: string, time: string, value: number } }> } | null } | { __typename: 'MetricsDataPoints', nodeId: string } | { __typename: 'MetricsOwners', nodeId: string } | { __typename: 'Notifications', nodeId: string } | { __typename: 'Profiles', nodeId: string } | { __typename: 'TeamMembers', nodeId: string } | { __typename: 'Teams', nodeId: string } | { __typename: 'Threads', nodeId: string } | null };
 
 export type ThreadQueryQueryVariables = Exact<{
   nodeId: Scalars['ID']['input'];
 }>;
 
 
-export type ThreadQueryQuery = { __typename: 'Query', node?: { __typename: 'Comments', nodeId: string } | { __typename: 'Metrics', nodeId: string } | { __typename: 'MetricsDataPoints', nodeId: string } | { __typename: 'MetricsOwners', nodeId: string } | { __typename: 'Profiles', nodeId: string } | { __typename: 'TeamMembers', nodeId: string } | { __typename: 'Teams', nodeId: string } | { __typename: 'Threads', nodeId: string, id: string, createdAt?: string | null, title: string, fromTimestamp?: string | null, toTimestamp?: string | null, commentsCollection?: { __typename: 'CommentsConnection', pageInfo: { __typename: 'PageInfo', hasNextPage: boolean, endCursor?: string | null }, edges: Array<{ __typename: 'CommentsEdge', cursor: string, node: { __typename: 'Comments', nodeId: string, id: string, createdAt?: string | null, updatedAt?: string | null, body: string, profile: { __typename: 'Profiles', nodeId: string, id: string, name: string, avatarPath?: string | null } } }> } | null } | null };
+export type ThreadQueryQuery = { __typename: 'Query', node?: { __typename: 'Comments', nodeId: string } | { __typename: 'Metrics', nodeId: string } | { __typename: 'MetricsDataPoints', nodeId: string } | { __typename: 'MetricsOwners', nodeId: string } | { __typename: 'Notifications', nodeId: string } | { __typename: 'Profiles', nodeId: string } | { __typename: 'TeamMembers', nodeId: string } | { __typename: 'Teams', nodeId: string } | { __typename: 'Threads', nodeId: string, id: string, createdAt?: string | null, title: string, fromTimestamp?: string | null, toTimestamp?: string | null, commentsCollection?: { __typename: 'CommentsConnection', pageInfo: { __typename: 'PageInfo', hasNextPage: boolean, endCursor?: string | null }, edges: Array<{ __typename: 'CommentsEdge', cursor: string, node: { __typename: 'Comments', nodeId: string, id: string, createdAt?: string | null, updatedAt?: string | null, body: string, profile: { __typename: 'Profiles', nodeId: string, id: string, name: string, avatarPath?: string | null } } }> } | null } | null };
 
 export const CommentFragmentFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CommentFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Comments"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"nodeId"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"body"}},{"kind":"Field","name":{"kind":"Name","value":"profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"nodeId"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"avatarPath"}}]}}]}}]} as unknown as DocumentNode<CommentFragmentFragment, unknown>;
 export const ThreadFragmentFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ThreadFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Threads"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"nodeId"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"fromTimestamp"}},{"kind":"Field","name":{"kind":"Name","value":"toTimestamp"}}]}}]} as unknown as DocumentNode<ThreadFragmentFragment, unknown>;

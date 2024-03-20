@@ -6,7 +6,7 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[]
 
-export interface Database {
+export type Database = {
   graphql_public: {
     Tables: {
       [_ in never]: never
@@ -34,32 +34,6 @@ export interface Database {
   }
   public: {
     Tables: {
-      commentable_entities: {
-        Row: {
-          id: string
-          team_id: string
-          type: Database['public']['Enums']['commentable_entity_type']
-        }
-        Insert: {
-          id?: string
-          team_id: string
-          type: Database['public']['Enums']['commentable_entity_type']
-        }
-        Update: {
-          id?: string
-          team_id?: string
-          type?: Database['public']['Enums']['commentable_entity_type']
-        }
-        Relationships: [
-          {
-            foreignKeyName: 'commentable_entities_team_id_fkey'
-            columns: ['team_id']
-            isOneToOne: false
-            referencedRelation: 'teams'
-            referencedColumns: ['id']
-          },
-        ]
-      }
       comments: {
         Row: {
           body: string
@@ -90,37 +64,36 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'comments_profile_id_fkey'
-            columns: ['profile_id']
+            foreignKeyName: "comments_profile_id_fkey"
+            columns: ["profile_id"]
             isOneToOne: false
-            referencedRelation: 'profiles'
-            referencedColumns: ['id']
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'comments_reply_to_comment_id_fkey'
-            columns: ['reply_to_comment_id']
+            foreignKeyName: "comments_reply_to_comment_id_fkey"
+            columns: ["reply_to_comment_id"]
             isOneToOne: false
-            referencedRelation: 'comments'
-            referencedColumns: ['id']
+            referencedRelation: "comments"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'comments_thread_id_fkey'
-            columns: ['thread_id']
+            foreignKeyName: "comments_thread_id_fkey"
+            columns: ["thread_id"]
             isOneToOne: false
-            referencedRelation: 'threads'
-            referencedColumns: ['id']
+            referencedRelation: "threads"
+            referencedColumns: ["id"]
           },
         ]
       }
       metrics: {
         Row: {
           archived: boolean | null
-          commentable_entity_id: string | null
           created_at: string
           description: string | null
           icon: string | null
           id: string
-          interval: Database['public']['Enums']['metric_interval']
+          interval: Database["public"]["Enums"]["metric_interval"]
           name: string
           team_id: string
           unit_short: string | null
@@ -128,12 +101,11 @@ export interface Database {
         }
         Insert: {
           archived?: boolean | null
-          commentable_entity_id?: string | null
           created_at?: string
           description?: string | null
           icon?: string | null
           id?: string
-          interval: Database['public']['Enums']['metric_interval']
+          interval: Database["public"]["Enums"]["metric_interval"]
           name: string
           team_id: string
           unit_short?: string | null
@@ -141,12 +113,11 @@ export interface Database {
         }
         Update: {
           archived?: boolean | null
-          commentable_entity_id?: string | null
           created_at?: string
           description?: string | null
           icon?: string | null
           id?: string
-          interval?: Database['public']['Enums']['metric_interval']
+          interval?: Database["public"]["Enums"]["metric_interval"]
           name?: string
           team_id?: string
           unit_short?: string | null
@@ -154,38 +125,28 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'metrics_commentable_entity_id_fkey'
-            columns: ['commentable_entity_id']
+            foreignKeyName: "metrics_team_id_fkey"
+            columns: ["team_id"]
             isOneToOne: false
-            referencedRelation: 'commentable_entities'
-            referencedColumns: ['id']
-          },
-          {
-            foreignKeyName: 'metrics_team_id_fkey'
-            columns: ['team_id']
-            isOneToOne: false
-            referencedRelation: 'teams'
-            referencedColumns: ['id']
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
           },
         ]
       }
       metrics_data_points: {
         Row: {
-          commentable_entity_id: string | null
           metric_id: string
           reported_by: string
           time: string
           value: number
         }
         Insert: {
-          commentable_entity_id?: string | null
           metric_id: string
           reported_by?: string
           time: string
           value: number
         }
         Update: {
-          commentable_entity_id?: string | null
           metric_id?: string
           reported_by?: string
           time?: string
@@ -193,25 +154,18 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'metrics_data_points_commentable_entity_id_fkey'
-            columns: ['commentable_entity_id']
+            foreignKeyName: "metrics_data_points_metric_id_fkey"
+            columns: ["metric_id"]
             isOneToOne: false
-            referencedRelation: 'commentable_entities'
-            referencedColumns: ['id']
+            referencedRelation: "metrics"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'metrics_data_points_metric_id_fkey'
-            columns: ['metric_id']
+            foreignKeyName: "metrics_data_points_reported_by_fkey"
+            columns: ["reported_by"]
             isOneToOne: false
-            referencedRelation: 'metrics'
-            referencedColumns: ['id']
-          },
-          {
-            foreignKeyName: 'metrics_data_points_reported_by_fkey'
-            columns: ['reported_by']
-            isOneToOne: false
-            referencedRelation: 'profiles'
-            referencedColumns: ['id']
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -233,63 +187,50 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'metrics_owners_metric_id_fkey'
-            columns: ['metric_id']
+            foreignKeyName: "metrics_owners_metric_id_fkey"
+            columns: ["metric_id"]
             isOneToOne: false
-            referencedRelation: 'metrics'
-            referencedColumns: ['id']
+            referencedRelation: "metrics"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'metrics_owners_profile_id_fkey'
-            columns: ['profile_id']
+            foreignKeyName: "metrics_owners_profile_id_fkey"
+            columns: ["profile_id"]
             isOneToOne: false
-            referencedRelation: 'profiles'
-            referencedColumns: ['id']
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
           },
         ]
       }
       notifications: {
         Row: {
-          body: string | null
           created_at: string | null
           id: string
           metadata: Json | null
           profile_id: string
-          seen_at: string | null
-          team_id: string
+          text: string | null
         }
         Insert: {
-          body?: string | null
           created_at?: string | null
           id?: string
           metadata?: Json | null
           profile_id: string
-          seen_at?: string | null
-          team_id: string
+          text?: string | null
         }
         Update: {
-          body?: string | null
           created_at?: string | null
           id?: string
           metadata?: Json | null
           profile_id?: string
-          seen_at?: string | null
-          team_id?: string
+          text?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: 'notifications_profile_id_fkey'
-            columns: ['profile_id']
+            foreignKeyName: "notifications_profile_id_fkey"
+            columns: ["profile_id"]
             isOneToOne: false
-            referencedRelation: 'profiles'
-            referencedColumns: ['id']
-          },
-          {
-            foreignKeyName: 'notifications_team_id_fkey'
-            columns: ['team_id']
-            isOneToOne: false
-            referencedRelation: 'teams'
-            referencedColumns: ['id']
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -317,11 +258,11 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'profiles_id_fkey'
-            columns: ['id']
+            foreignKeyName: "profiles_id_fkey"
+            columns: ["id"]
             isOneToOne: true
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -346,18 +287,18 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'team_members_profile_id_fkey'
-            columns: ['profile_id']
+            foreignKeyName: "team_members_profile_id_fkey"
+            columns: ["profile_id"]
             isOneToOne: false
-            referencedRelation: 'profiles'
-            referencedColumns: ['id']
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'team_members_team_id_fkey'
-            columns: ['team_id']
+            foreignKeyName: "team_members_team_id_fkey"
+            columns: ["team_id"]
             isOneToOne: false
-            referencedRelation: 'teams'
-            referencedColumns: ['id']
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -387,112 +328,71 @@ export interface Database {
       }
       threads: {
         Row: {
-          commentable_entity_id: string
           created_at: string | null
           created_by: string
+          from_timestamp: string | null
           id: string
+          metric_id: string
           team_id: string
           title: string
+          to_timestamp: string | null
           updated_at: string | null
         }
         Insert: {
-          commentable_entity_id: string
           created_at?: string | null
           created_by?: string
+          from_timestamp?: string | null
           id?: string
+          metric_id: string
           team_id: string
           title: string
+          to_timestamp?: string | null
           updated_at?: string | null
         }
         Update: {
-          commentable_entity_id?: string
           created_at?: string | null
           created_by?: string
+          from_timestamp?: string | null
           id?: string
+          metric_id?: string
           team_id?: string
           title?: string
+          to_timestamp?: string | null
           updated_at?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: 'threads_commentable_entity_id_fkey'
-            columns: ['commentable_entity_id']
+            foreignKeyName: "threads_created_by_fkey"
+            columns: ["created_by"]
             isOneToOne: false
-            referencedRelation: 'commentable_entities'
-            referencedColumns: ['id']
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'threads_created_by_fkey'
-            columns: ['created_by']
+            foreignKeyName: "threads_metric_id_fkey"
+            columns: ["metric_id"]
             isOneToOne: false
-            referencedRelation: 'profiles'
-            referencedColumns: ['id']
+            referencedRelation: "metrics"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'threads_team_id_fkey'
-            columns: ['team_id']
+            foreignKeyName: "threads_team_id_fkey"
+            columns: ["team_id"]
             isOneToOne: false
-            referencedRelation: 'teams'
-            referencedColumns: ['id']
-          },
-        ]
-      }
-      user_events: {
-        Row: {
-          event: Database['public']['Enums']['user_event']
-          id: string
-          meta: Json | null
-          ts: string
-          user_id: string
-          value: string | null
-        }
-        Insert: {
-          event: Database['public']['Enums']['user_event']
-          id?: string
-          meta?: Json | null
-          ts?: string
-          user_id?: string
-          value?: string | null
-        }
-        Update: {
-          event?: Database['public']['Enums']['user_event']
-          id?: string
-          meta?: Json | null
-          ts?: string
-          user_id?: string
-          value?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: 'profile_events_profile_id_fkey'
-            columns: ['user_id']
-            isOneToOne: false
-            referencedRelation: 'profiles'
-            referencedColumns: ['id']
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
           },
         ]
       }
     }
     Views: {
-      user_stats: {
-        Row: {
-          count: number | null
-          event: string | null
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Functions: {
       [_ in never]: never
     }
     Enums: {
-      commentable_entity_type: 'METRIC' | 'METRIC_DATA_POINT'
-      metric_interval: 'minute' | 'hour' | 'day' | 'week' | 'month'
-      user_event:
-        | 'view_page'
-        | 'add_metric'
-        | 'add_data_point'
-        | 'update_avatar'
+      metric_interval: "minute" | "hour" | "day" | "week" | "month"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -602,11 +502,11 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'objects_bucketId_fkey'
-            columns: ['bucket_id']
+            foreignKeyName: "objects_bucketId_fkey"
+            columns: ["bucket_id"]
             isOneToOne: false
-            referencedRelation: 'buckets'
-            referencedColumns: ['id']
+            referencedRelation: "buckets"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -679,25 +579,27 @@ export interface Database {
   }
 }
 
+type PublicSchema = Database[Extract<keyof Database, "public">]
+
 export type Tables<
   PublicTableNameOrOptions extends
-    | keyof (Database['public']['Tables'] & Database['public']['Views'])
+    | keyof (PublicSchema["Tables"] & PublicSchema["Views"])
     | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof (Database[PublicTableNameOrOptions['schema']]['Tables'] &
-        Database[PublicTableNameOrOptions['schema']]['Views'])
+    ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
+        Database[PublicTableNameOrOptions["schema"]]["Views"])
     : never = never,
 > = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? (Database[PublicTableNameOrOptions['schema']]['Tables'] &
-      Database[PublicTableNameOrOptions['schema']]['Views'])[TableName] extends {
+  ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
+      Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {
       Row: infer R
     }
     ? R
     : never
-  : PublicTableNameOrOptions extends keyof (Database['public']['Tables'] &
-        Database['public']['Views'])
-    ? (Database['public']['Tables'] &
-        Database['public']['Views'])[PublicTableNameOrOptions] extends {
+  : PublicTableNameOrOptions extends keyof (PublicSchema["Tables"] &
+        PublicSchema["Views"])
+    ? (PublicSchema["Tables"] &
+        PublicSchema["Views"])[PublicTableNameOrOptions] extends {
         Row: infer R
       }
       ? R
@@ -706,19 +608,19 @@ export type Tables<
 
 export type TablesInsert<
   PublicTableNameOrOptions extends
-    | keyof Database['public']['Tables']
+    | keyof PublicSchema["Tables"]
     | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicTableNameOrOptions['schema']]['Tables']
+    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
     : never = never,
 > = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicTableNameOrOptions['schema']]['Tables'][TableName] extends {
+  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Insert: infer I
     }
     ? I
     : never
-  : PublicTableNameOrOptions extends keyof Database['public']['Tables']
-    ? Database['public']['Tables'][PublicTableNameOrOptions] extends {
+  : PublicTableNameOrOptions extends keyof PublicSchema["Tables"]
+    ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
         Insert: infer I
       }
       ? I
@@ -727,19 +629,19 @@ export type TablesInsert<
 
 export type TablesUpdate<
   PublicTableNameOrOptions extends
-    | keyof Database['public']['Tables']
+    | keyof PublicSchema["Tables"]
     | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicTableNameOrOptions['schema']]['Tables']
+    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
     : never = never,
 > = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicTableNameOrOptions['schema']]['Tables'][TableName] extends {
+  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Update: infer U
     }
     ? U
     : never
-  : PublicTableNameOrOptions extends keyof Database['public']['Tables']
-    ? Database['public']['Tables'][PublicTableNameOrOptions] extends {
+  : PublicTableNameOrOptions extends keyof PublicSchema["Tables"]
+    ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
         Update: infer U
       }
       ? U
@@ -748,13 +650,14 @@ export type TablesUpdate<
 
 export type Enums<
   PublicEnumNameOrOptions extends
-    | keyof Database['public']['Enums']
+    | keyof PublicSchema["Enums"]
     | { schema: keyof Database },
   EnumName extends PublicEnumNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicEnumNameOrOptions['schema']]['Enums']
+    ? keyof Database[PublicEnumNameOrOptions["schema"]]["Enums"]
     : never = never,
 > = PublicEnumNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicEnumNameOrOptions['schema']]['Enums'][EnumName]
-  : PublicEnumNameOrOptions extends keyof Database['public']['Enums']
-    ? Database['public']['Enums'][PublicEnumNameOrOptions]
+  ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : PublicEnumNameOrOptions extends keyof PublicSchema["Enums"]
+    ? PublicSchema["Enums"][PublicEnumNameOrOptions]
     : never
+
