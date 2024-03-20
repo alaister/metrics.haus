@@ -1,5 +1,6 @@
 import { useMutation } from '@apollo/client'
 import { format } from 'date-fns'
+import { useMemo } from 'react'
 import { graphql } from '~/lib/gql'
 import { useToast } from '~/lib/hooks/use-toast'
 import { Button } from '../ui/Button'
@@ -32,6 +33,14 @@ const DeleteDataPointMutation = graphql(/* GraphQL */ `
 `)
 
 const DataPointsTable = ({ dataPoints, metricId }: DataPointsTableProps) => {
+  const sortedDataPoints = useMemo(
+    () =>
+      [...dataPoints].sort(
+        (a, b) => new Date(b.time).getTime() - new Date(a.time).getTime(),
+      ),
+    [dataPoints],
+  )
+
   const [deleteDataPointMutation] = useMutation(DeleteDataPointMutation)
   const { toast } = useToast()
 
@@ -71,12 +80,12 @@ const DataPointsTable = ({ dataPoints, metricId }: DataPointsTableProps) => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {dataPoints.length === 0 && (
+        {sortedDataPoints.length === 0 && (
           <TableRow>
             <TableCell colSpan={3}>No data yet</TableCell>
           </TableRow>
         )}
-        {dataPoints.map((dataPoint) => (
+        {sortedDataPoints.map((dataPoint) => (
           <TableRow key={dataPoint.time}>
             <TableCell className="font-medium">
               {format(new Date(dataPoint.time), 'yyyy-MM-dd HH:mm:ss')}

@@ -6,6 +6,7 @@ import {
 } from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
 import { relayStylePagination } from '@apollo/client/utilities'
+import possibleTypes from '~/lib/gql/possible-types.json'
 import { SUPABASE_ANON_KEY, SUPABASE_URL } from './config'
 import supabase from './supabase'
 
@@ -17,7 +18,7 @@ const cache = new InMemoryCache({
 
     return defaultDataIdFromObject(responseObject)
   },
-  possibleTypes: { Node: ['Todos'] },
+  possibleTypes,
   typePolicies: {
     Query: {
       fields: {
@@ -31,6 +32,16 @@ const cache = new InMemoryCache({
             return ref
           },
         },
+      },
+    },
+    Metrics: {
+      fields: {
+        threadsCollection: relayStylePagination(),
+      },
+    },
+    Threads: {
+      fields: {
+        commentsCollection: relayStylePagination(),
       },
     },
   },

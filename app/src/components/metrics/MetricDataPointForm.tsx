@@ -20,8 +20,8 @@ import {
   MetricsListQueryDocument,
 } from '~/lib/gql/graphql'
 import { useToast } from '~/lib/hooks/use-toast'
+import { toGlobalId } from '~/lib/ids'
 import { DateTimePicker } from '../ui/DateTimePicker'
-import { toGlobalId } from '~/lib/graphql'
 
 const MetricDataPointInsertMutation = graphql(/* GraphQL */ `
   mutation MetricDataPointFormMutation($input: MetricsDataPointsInsertInput!) {
@@ -68,12 +68,15 @@ const MetricForm = ({ onSuccess, metricId }: MetricFormProps) => {
           },
           (data) =>
             produce(data, (draft) => {
-              if (draft?.node?.__typename === 'Metrics') {
-                draft.node.metricsDataPointsCollection?.edges.push({
+              if (
+                draft?.node?.__typename === 'Metrics' &&
+                draft.node.metricsDataPointsCollection
+              ) {
+                draft.node.metricsDataPointsCollection.edges.push({
                   __typename: 'MetricsDataPointsEdge' as const,
                   node: record,
                 })
-                draft.node.metricsDataPointsCollection?.edges.sort((a, b) => {
+                draft.node.metricsDataPointsCollection.edges.sort((a, b) => {
                   return (
                     new Date(a.node.time).getTime() -
                     new Date(b.node.time).getTime()

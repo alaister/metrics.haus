@@ -1,10 +1,11 @@
 import { useQuery } from '@apollo/client'
 import { Plus } from 'lucide-react'
+// import Thread from '~/components/comments/Thread'
 import IntervalPicker from '~/components/common/IntervalPicker'
 import MetricDetailsSection from '~/components/metrics/MetricDetailsSection'
 import { Button } from '~/components/ui/Button'
 import { graphql } from '~/lib/gql'
-import { toGlobalId } from '~/lib/graphql'
+import { toGlobalId } from '~/lib/ids'
 import { useModals, useParams } from '~/lib/router'
 
 export const MetricDetailsQuery = graphql(/* GraphQL */ `
@@ -17,6 +18,19 @@ export const MetricDetailsQuery = graphql(/* GraphQL */ `
         icon
         unitShort
         description
+        threadsCollection {
+          pageInfo {
+            hasNextPage
+            endCursor
+          }
+          edges {
+            cursor
+            node {
+              nodeId
+              ...ThreadFragment
+            }
+          }
+        }
         ...MetricDetailsSectionItem
       }
     }
@@ -65,6 +79,11 @@ const MetricDetailsPage = () => {
       {data?.node ? (
         <div className="mt-5">
           <MetricDetailsSection metricNodeId={data.node.nodeId} />
+          {/* for when we turn comments back on */}
+          {/* {data.node.__typename === 'Metrics' &&
+            data.node.threadsCollection?.edges.map((edge) => (
+              <Thread key={edge.node.id} threadNodeId={edge.node.nodeId} />
+            ))} */}
         </div>
       ) : (
         <div>Not Found</div>

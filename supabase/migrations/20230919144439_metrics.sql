@@ -1,6 +1,3 @@
--- Enable the "timescaledb" extension
-create extension timescaledb;
-
 create type metric_interval as enum('minute', 'hour', 'day', 'week', 'month');
 
 create table
@@ -19,26 +16,29 @@ create table
 
 alter table public.metrics enable row level security;
 
-create policy "user can see metrics for teams they are in" on public.metrics for all using (
-    exists (
-        select
-            1
-        from
-            public.team_members
-        where
-            team_id = public.metrics.team_id
-    )
-);
+create policy "can manage metrics from accessible teams" on public.metrics for all to authenticated using (private.is_current_user_in_team (team_id));
 
 revoke
+select
+,
+    insert,
 update,
-insert on public.metrics
+delete on public.metrics
 from
-    public,
     anon,
     authenticated;
 
 grant
+select
+,
+    insert (
+        name,
+        interval,
+        team_id,
+        unit_short,
+        description,
+        icon
+    ),
 update (
     name,
     interval,
@@ -47,15 +47,7 @@ update (
     icon,
     archived
 ),
-insert (
-    name,
-    interval,
-    team_id,
-    unit_short,
-    description,
-    icon
-) on public.metrics to public,
-authenticated;
+delete on public.metrics to authenticated;
 
 create table
     public.metrics_data_points (
@@ -68,24 +60,24 @@ create table
 
 comment on table public.metrics_data_points is e'@graphql({"totalCount": {"enabled": true}})';
 
-select
-    create_hypertable ('metrics_data_points', 'time');
-
 revoke
+select
+,
 update,
 insert on public.metrics_data_points
 from
-    public,
     anon,
     authenticated;
 
-grant insert (time, metric_id, value),
-delete on public.metrics_data_points to public,
-authenticated;
+grant
+select
+,
+    insert (time, metric_id, value),
+    delete on public.metrics_data_points to authenticated;
 
 alter table public.metrics_data_points enable row level security;
 
-create policy "user can manage data points from accessible metrics" on public.metrics_data_points for all using (
+create policy "user can manage data points from accessible metrics" on public.metrics_data_points for all to authenticated using (
     exists (
         select
             1
@@ -104,13 +96,29 @@ create table
     public.metrics_owners (
         metric_id uuid not null references public.metrics ("id") on delete cascade on update cascade,
         profile_id uuid not null references public.profiles ("id") on delete cascade on update cascade,
-        "created_at" timestamp with time zone not null default now(),
+        created_at timestamp with time zone not null default now(),
         primary key (metric_id, profile_id)
     );
 
+revoke
+select
+,
+    insert,
+update,
+delete on public.metrics_owners
+from
+    anon,
+    authenticated;
+
+grant
+select
+,
+    insert (metric_id, profile_id),
+    delete on public.metrics_owners to authenticated;
+
 alter table public.metrics_owners enable row level security;
 
-create policy "user can manage metric owners from accessible metrics" on public.metrics_owners using (
+create policy "user can manage metric owners from accessible metrics" on public.metrics_owners for all to authenticated using (
     exists (
         select
             1
