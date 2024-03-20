@@ -28,7 +28,7 @@ const documents = {
     "\n  query MetricsListQuery {\n    metricsCollection(\n      orderBy: [{ createdAt: DescNullsLast }]\n      filter: { archived: { eq: false } }\n    ) {\n      pageInfo {\n        hasNextPage\n        endCursor\n      }\n      edges {\n        cursor\n        node {\n          nodeId\n          ...MetricCardItem @nonreactive\n        }\n      }\n    }\n  }\n": types.MetricsListQueryDocument,
     "\n  query TeamSelectorQuery {\n    teamsCollection {\n      edges {\n        node {\n          nodeId\n          id\n          name\n        }\n      }\n    }\n  }\n": types.TeamSelectorQueryDocument,
     "\n  query MetricDetailsQuery($nodeId: ID!) {\n    node(nodeId: $nodeId) {\n      nodeId\n      ... on Metrics {\n        id\n        name\n        icon\n        unitShort\n        description\n        threadsCollection {\n          pageInfo {\n            hasNextPage\n            endCursor\n          }\n          edges {\n            cursor\n            node {\n              nodeId\n              ...ThreadFragment\n            }\n          }\n        }\n        ...MetricDetailsSectionItem\n      }\n    }\n  }\n": types.MetricDetailsQueryDocument,
-    "\n  query ImportsQuery($nodeId: ID!) {\n    node(nodeId: $nodeId) {\n      nodeId\n      ... on Imports {\n        nodeId\n        id\n        mapping\n      }\n    }\n  }\n": types.ImportsQueryDocument,
+    "\n  query ImportsQuery($nodeId: ID!) {\n    node(nodeId: $nodeId) {\n      nodeId\n      ... on Imports {\n        nodeId\n        id\n        mapping\n        status\n        createdAt\n        fileName\n      }\n    }\n  }\n": types.ImportsQueryDocument,
     "\n  query ThreadQuery($nodeId: ID!) {\n    node(nodeId: $nodeId) {\n      nodeId\n      ... on Threads {\n        nodeId\n        id\n        createdAt\n        title\n        fromTimestamp\n        toTimestamp\n        commentsCollection(orderBy: { createdAt: AscNullsLast }) {\n          pageInfo {\n            hasNextPage\n            endCursor\n          }\n          edges {\n            cursor\n            node {\n              nodeId\n              ...CommentFragment\n            }\n          }\n        }\n      }\n    }\n  }\n": types.ThreadQueryDocument,
 };
 
@@ -109,7 +109,7 @@ export function graphql(source: "\n  query MetricDetailsQuery($nodeId: ID!) {\n 
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query ImportsQuery($nodeId: ID!) {\n    node(nodeId: $nodeId) {\n      nodeId\n      ... on Imports {\n        nodeId\n        id\n        mapping\n      }\n    }\n  }\n"): (typeof documents)["\n  query ImportsQuery($nodeId: ID!) {\n    node(nodeId: $nodeId) {\n      nodeId\n      ... on Imports {\n        nodeId\n        id\n        mapping\n      }\n    }\n  }\n"];
+export function graphql(source: "\n  query ImportsQuery($nodeId: ID!) {\n    node(nodeId: $nodeId) {\n      nodeId\n      ... on Imports {\n        nodeId\n        id\n        mapping\n        status\n        createdAt\n        fileName\n      }\n    }\n  }\n"): (typeof documents)["\n  query ImportsQuery($nodeId: ID!) {\n    node(nodeId: $nodeId) {\n      nodeId\n      ... on Imports {\n        nodeId\n        id\n        mapping\n        status\n        createdAt\n        fileName\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

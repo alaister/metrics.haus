@@ -14,10 +14,11 @@ import { Textarea } from '~/components/ui/Textarea'
 import supabase from '~/lib/supabase'
 import { useToast } from '~/lib/hooks/use-toast'
 import { useParams } from '~/lib/router'
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useQuery } from '@apollo/client'
 import { urlIdToGlobalId } from '~/lib/ids'
 import { graphql } from '~/lib/gql'
+import { SUPABASE_FUNCTIONS_BASE_URL } from '~/lib/config'
 
 const formSchema = z.object({
   columnSeparator: z.string(),
@@ -33,6 +34,9 @@ export const ImportQuery = graphql(/* GraphQL */ `
         nodeId
         id
         mapping
+        status
+        createdAt
+        fileName
       }
     }
   }
@@ -47,6 +51,16 @@ const ImportDetails = () => {
       nodeId: urlIdToGlobalId(id, 'imports'),
     },
   })
+
+  const importDetailsNode = useMemo(() => {
+    if (importDetails?.node?.__typename === 'Imports') {
+      return importDetails.node
+    } else {
+      return null
+    }
+  }, [importDetails])
+
+  console.log(importDetailsNode)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -70,7 +84,7 @@ const ImportDetails = () => {
               type: 'name',
               name: 'WADB',
             },
-            metricId: 'ccbd813f-4970-4760-929b-8752217e96da',
+            metricId: '',
           },
         ],
         null,
@@ -80,12 +94,10 @@ const ImportDetails = () => {
   })
 
   useEffect(() => {
-    if (!loading && importDetails) {
-      const mappings = JSON.parse(
-        importDetails?.node?.__typename === 'Imports'
-          ? importDetails?.node?.mapping || '{}'
-          : '{}',
-      )
+    if (importDetailsNode) {
+      const mappings = JSON.parse(importDetailsNode.mapping || '{}')
+
+      console.log(mappings)
 
       form.setValue(
         'timestampMapping',
@@ -97,7 +109,7 @@ const ImportDetails = () => {
         JSON.stringify(mappings.metricMappings, null, 2),
       )
     }
-  }, [importDetails, loading])
+  }, [importDetailsNode])
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const timestampParsed = JSON.parse(values.timestampMapping)
@@ -116,7 +128,22 @@ const ImportDetails = () => {
       .eq('id', id)
 
     toast({
-      description: 'Import updated',
+      description: 'Import saved',
+    })
+  }
+
+  async function runImport() {
+    const session = await supabase.auth.getSession()
+
+    fetch(`${SUPABASE_FUNCTIONS_BASE_URL}/functions/v1/import-data`, {
+      method: 'POST',
+      body: JSON.stringify({
+        importId: id,
+      }),
+      headers: {
+        Authorization: `Bearer ${session.data.session?.access_token}`,
+        'Content-Type': 'application/json',
+      },
     })
   }
 
@@ -124,10 +151,37 @@ const ImportDetails = () => {
     <>
       <div>
         <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="grid grid-cols-5 gap-4 items-center"
-          >
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            <div className="grid md:grid-cols-3 gap-4">
+              <FormItem>
+                <FormLabel>File</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder=";"
+                    type="text"
+                    value={importDetailsNode?.fileName || ''}
+                    autoFocus={true}
+                    readOnly
+                    disabled
+                  />
+                </FormControl>
+              </FormItem>
+
+              <FormItem>
+                <FormLabel>Status</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder=";"
+                    type="text"
+                    value={importDetailsNode?.status || ''}
+                    autoFocus={true}
+                    readOnly
+                    disabled
+                  />
+                </FormControl>
+              </FormItem>
+            </div>
+
             <FormField
               control={form.control}
               name="columnSeparator"
@@ -146,34 +200,66 @@ const ImportDetails = () => {
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="timestampMapping"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Timestamp Mapping</FormLabel>
-                  <FormControl>
-                    <Textarea {...field} className="h-60" disabled={loading} />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
+            <div>
+              <FormField
+                control={form.control}
+                name="timestampMapping"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Timestamp Mapping</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        {...field}
+                        className="h-40"
+                        disabled={loading}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
 
-            <FormField
-              control={form.control}
-              name="metricMappings"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Metric Mappings</FormLabel>
-                  <FormControl>
-                    <Textarea {...field} className="h-60" disabled={loading} />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
+              <FormField
+                control={form.control}
+                name="metricMappings"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Metric Mappings</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        {...field}
+                        className="h-72"
+                        disabled={loading}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            </div>
 
-            <div className="mt-4">
-              <Button type="submit">Import</Button>
+            <div className="mt-4 space-x-2">
+              <Button
+                type="submit"
+                disabled={
+                  !['file_uploaded', 'failed'].includes(
+                    importDetailsNode?.status as string,
+                  )
+                }
+              >
+                Save
+              </Button>
+
+              <Button
+                type="button"
+                disabled={
+                  !['file_uploaded', 'failed'].includes(
+                    importDetailsNode?.status as string,
+                  )
+                }
+                variant={'destructive'}
+                onClick={() => runImport()}
+              >
+                Run Import
+              </Button>
             </div>
           </form>
         </Form>

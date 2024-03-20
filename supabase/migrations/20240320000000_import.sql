@@ -1,9 +1,7 @@
 create type import_status as enum(
     'file_uploaded', -- File was initially parsed to ensure it is in a valid format and to let the user map columns
-    'ready_for_import', -- User has reviewed the file and mapping, it is ready for data import
     'data_importing', -- Data is being imported into the database
     'finished', -- Data was imported into the database
-    'canceled', -- Data import was canceled
     'failed' -- Data import failed
 );
 

@@ -6,6 +6,12 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { parse as parseCsv } from "https://deno.land/std@0.168.0/encoding/csv.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
+export const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type",
+};
+
 interface ImportUserMappings {
   csvOptions: CsvOptions;
   timestamp: CsvTimestampMapping;
@@ -39,6 +45,11 @@ type CsvColumnMappingName = CsvColumnMapping & {
 };
 
 serve(async (req) => {
+  // This is needed if you're planning to invoke your function from a browser.
+  if (req.method === "OPTIONS") {
+    return new Response("ok", { headers: corsHeaders });
+  }
+
   const { importId } = await req.json();
 
   const supabaseClient = createClient(
@@ -54,15 +65,35 @@ serve(async (req) => {
     .select("*")
     .eq("id", importId)
     .single();
-  if (error) throw error;
+  if (error) {
+    console.error(error);
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+    });
+  }
+
+  if (importData.status === "finished") {
+    console.log("Already finished");
+    return new Response(JSON.stringify({ error: "Import already finished" }), {
+      status: 400,
+    });
+  }
 
   const userMappings = importData.mapping as ImportUserMappings;
 
   if (!userMappings) {
+    console.log("No mappings found");
     return new Response(JSON.stringify({ error: "No mappings found" }), {
       status: 400,
     });
   }
+
+  await supabaseClient
+    .from("imports")
+    .update({
+      status: "data_importing",
+    })
+    .eq("id", importId);
 
   const { data: file } = await supabaseClient.storage
     .from("imports")
@@ -92,7 +123,30 @@ serve(async (req) => {
       { ignoreDuplicates: true }
     );
 
-  if (errorInsertingMetrics) throw errorInsertingMetrics;
+  if (errorInsertingMetrics) {
+    await supabaseClient
+      .from("imports")
+      .update({
+        status: "failed",
+      })
+      .eq("id", importId);
+
+    console.error(errorInsertingMetrics);
+
+    return new Response(
+      JSON.stringify({ error: errorInsertingMetrics.message }),
+      {
+        status: 500,
+      }
+    );
+  }
+
+  await supabaseClient
+    .from("imports")
+    .update({
+      status: "finished",
+    })
+    .eq("id", importId);
 
   return new Response(JSON.stringify({ dataRows }), {
     headers: { "Content-Type": "application/json" },
@@ -171,7 +225,7 @@ function parseValueAsString(
 
 /* To invoke:
  curl -i --location --request POST 'http://localhost:54321/functions/v1/import-data' \
-   --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImV4cCI6MTk4MzgxMjk5Nn0.EGIM96RAZx35lJzdJsyH-qQwv8Hdp7fsn3W0YpN81IU' \
+   --header 'Authorization: Bearer ...' \
    --header 'Content-Type: application/json' \
    --data '{"importId":"9e96cb04-b06b-41bd-8293-2fce98f71d3c"}'
 */

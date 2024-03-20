@@ -489,10 +489,8 @@ export interface Database {
     Enums: {
       import_status:
         | "file_uploaded"
-        | "ready_for_import"
         | "data_importing"
         | "finished"
-        | "canceled"
         | "failed"
       metric_interval: "minute" | "hour" | "day" | "week" | "month"
       user_event:
