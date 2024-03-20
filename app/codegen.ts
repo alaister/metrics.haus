@@ -1,5 +1,6 @@
 import type { CodegenConfig } from '@graphql-codegen/cli'
 import { addTypenameSelectionDocumentTransform } from '@graphql-codegen/client-preset'
+import 'dotenv/config'
 
 const SUPABASE_URL =
   process.env.NEXT_PUBLIC_SUPABASE_URL || 'http://localhost:54321'

@@ -7,9 +7,11 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "typecheck": "tsc --noEmit",
     "preview": "vite preview",
     "prettier": "prettier --write . --ignore-path .prettierignore",
-    "codegen": "graphql-codegen --config codegen.ts"
+    "codegen": "graphql-codegen --config codegen.ts",
+    "gen:database": "supabase gen types typescript --local > src/lib/database.types.ts"
   },
   "dependencies": {
     "@apollo/client": "^3.8.8",
@@ -28,7 +30,6 @@
     "@supabase/supabase-js": "^2.33.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
-    "cmdk": "^0.2.0",
     "date-fns": "^2.30.0",
     "graphql": "^16.8.1",
     "immer": "^10.0.3",
@@ -36,7 +37,6 @@
     "lucide-react": "^0.279.0",
     "luxon": "^3.4.3",
     "react": "^18.2.0",
-    "react-confetti-explosion": "^2.1.2",
     "react-day-picker": "^8.8.2",
     "react-dom": "^18.2.0",
     "react-error-boundary": "^4.0.11",
