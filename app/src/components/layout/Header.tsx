@@ -1,7 +1,6 @@
 import { Suspense } from 'react'
 import { Link } from '~/lib/router'
 import { UserAvatar } from '../UserAvatar'
-import { Notifications } from '../notifications'
 import TeamSelector from '../teams/TeamSelector'
 
 const Header = () => {
@@ -18,7 +17,7 @@ const Header = () => {
         </div>
 
         <div className="flex pr-6 gap-3">
-          <Notifications />
+          {/* <Notifications /> */}
           <UserAvatar />
         </div>
       </div>
