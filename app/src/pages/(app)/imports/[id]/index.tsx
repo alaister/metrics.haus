@@ -60,8 +60,6 @@ const ImportDetails = () => {
     }
   }, [importDetails])
 
-  console.log(importDetailsNode)
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -160,7 +158,6 @@ const ImportDetails = () => {
                     placeholder=";"
                     type="text"
                     value={importDetailsNode?.fileName || ''}
-                    autoFocus={true}
                     readOnly
                     disabled
                   />
@@ -174,7 +171,6 @@ const ImportDetails = () => {
                     placeholder=";"
                     type="text"
                     value={importDetailsNode?.status || ''}
-                    autoFocus={true}
                     readOnly
                     disabled
                   />

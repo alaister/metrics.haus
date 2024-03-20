@@ -10,6 +10,13 @@ export const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
     "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Methods": "GET, POST",
+};
+
+export const defaultHeaders = {
+  ...corsHeaders,
+  "Content-Type": "application/json",
+  "Cache-Control": "no-cache",
 };
 
 interface ImportUserMappings {
@@ -69,6 +76,7 @@ serve(async (req) => {
     console.error(error);
     return new Response(JSON.stringify({ error: error.message }), {
       status: 500,
+      headers: defaultHeaders,
     });
   }
 
@@ -76,6 +84,7 @@ serve(async (req) => {
     console.log("Already finished");
     return new Response(JSON.stringify({ error: "Import already finished" }), {
       status: 400,
+      headers: defaultHeaders,
     });
   }
 
@@ -85,6 +94,7 @@ serve(async (req) => {
     console.log("No mappings found");
     return new Response(JSON.stringify({ error: "No mappings found" }), {
       status: 400,
+      headers: defaultHeaders,
     });
   }
 
@@ -137,6 +147,7 @@ serve(async (req) => {
       JSON.stringify({ error: errorInsertingMetrics.message }),
       {
         status: 500,
+        headers: defaultHeaders,
       }
     );
   }
@@ -152,7 +163,7 @@ serve(async (req) => {
     .eq("id", importId);
 
   return new Response(JSON.stringify({ dataRows }), {
-    headers: { "Content-Type": "application/json" },
+    headers: defaultHeaders,
   });
 });
 
