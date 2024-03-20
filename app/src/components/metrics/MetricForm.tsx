@@ -26,8 +26,7 @@ import { graphql } from '~/lib/gql'
 import { MetricInterval, MetricsListQueryDocument } from '~/lib/gql/graphql'
 import { useToast } from '~/lib/hooks/use-toast'
 import { emitUserEvent } from '~/lib/userEvents'
-import { useAppDispatch, useAppSelector } from '~/stores'
-import { refreshPoints } from '~/stores/points-slice'
+import { useAppSelector } from '~/stores'
 
 const MetricInsertMutation = graphql(/* GraphQL */ `
   mutation MetricFormMutation($input: MetricsInsertInput!) {
@@ -63,7 +62,6 @@ export interface MetricFormProps {
 
 const MetricForm = ({ onSuccess }: MetricFormProps) => {
   const selectedTeamId = useAppSelector((state) => state.team.selectedTeamId)
-  const dispatch = useAppDispatch()
 
   const { toast } = useToast()
 
@@ -120,9 +118,7 @@ const MetricForm = ({ onSuccess }: MetricFormProps) => {
             unitShort: '',
           })
           onSuccess?.()
-          emitUserEvent('add_metric', values.name).then(() => {
-            dispatch(refreshPoints(true))
-          })
+          emitUserEvent('add_metric', values.name)
         }
 
         if (values.members && values.members.length > 0) {

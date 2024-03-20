@@ -2,8 +2,6 @@ import { useMutation } from '@apollo/client'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { produce } from 'immer'
 import { Save } from 'lucide-react'
-import { useState } from 'react'
-import ConfettiExplosion from 'react-confetti-explosion'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { Button } from '~/components/ui/Button'
@@ -23,8 +21,6 @@ import {
 } from '~/lib/gql/graphql'
 import { useToast } from '~/lib/hooks/use-toast'
 import { emitUserEvent } from '~/lib/userEvents'
-import { useAppDispatch } from '~/stores'
-import { refreshPoints } from '~/stores/points-slice'
 import { DateTimePicker } from '../ui/DateTimePicker'
 import { toGlobalId } from '~/lib/graphql'
 
@@ -53,8 +49,6 @@ export interface MetricFormProps {
 
 const MetricForm = ({ onSuccess, metricId }: MetricFormProps) => {
   const { toast } = useToast()
-
-  const dispatch = useAppDispatch()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -115,8 +109,6 @@ const MetricForm = ({ onSuccess, metricId }: MetricFormProps) => {
     },
   })
 
-  const [isExploding, setIsExploding] = useState(false)
-
   async function onSubmit(values: z.infer<typeof formSchema>) {
     mutate({
       variables: {
@@ -143,12 +135,9 @@ const MetricForm = ({ onSuccess, metricId }: MetricFormProps) => {
           value: undefined,
         })
 
-        setIsExploding(true)
         onSuccess?.()
 
-        emitUserEvent('add_data_point').then(() => {
-          dispatch(refreshPoints(true))
-        })
+        emitUserEvent('add_data_point')
       },
     })
   }
@@ -201,7 +190,6 @@ const MetricForm = ({ onSuccess, metricId }: MetricFormProps) => {
           disabled={form.formState.isSubmitting}
         >
           <Save className="w-4 h-4" />
-          {isExploding && <ConfettiExplosion zIndex={1000} />}
           <span>Save</span>
         </Button>
       </form>

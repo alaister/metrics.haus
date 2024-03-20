@@ -4,12 +4,10 @@ import { Button } from '~/components/ui/Button'
 import { getAvatarUrl } from '~/lib/avatars'
 import supabase from '~/lib/supabase'
 import { emitUserEvent } from '~/lib/userEvents'
-import { useAppDispatch, useAppSelector } from '~/stores'
-import { refreshPoints } from '~/stores/points-slice'
+import { useAppSelector } from '~/stores'
 
 const AccountPage = () => {
   const user = useAppSelector((state) => state.auth.user)
-  const dispatch = useAppDispatch()
   const uploadButtonRef = useRef<HTMLInputElement>(null)
 
   const [uploadedFile, setUploadedFile] = useState<File>()
@@ -30,9 +28,7 @@ const AccountPage = () => {
     if (file) {
       setUploadedFile(file)
       reader.readAsDataURL(file)
-      emitUserEvent('update_avatar').then(() => {
-        dispatch(refreshPoints(true))
-      })
+      emitUserEvent('update_avatar')
     }
   }
 
