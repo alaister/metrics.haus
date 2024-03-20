@@ -12,16 +12,18 @@ create table
         "id" uuid primary key not null default gen_random_uuid (),
         "created_at" timestamp with time zone not null default now(),
         "updated_at" timestamp with time zone not null default now(),
-        status import_status not null default 'file_uploaded',
-        file_path text not null,
-        file_name text not null,
-        file_type text not null,
-        metadata jsonb,
-        mapping jsonb,
-        errors jsonb,
-        team_id uuid not null references public.teams ("id") on delete cascade on update cascade,
-        uploaded_by uuid default auth.uid() references public.profiles ("id") on delete set null on update cascade
+        "status" import_status not null default 'file_uploaded',
+        "team_id" uuid not null references public.teams ("id") on delete cascade on update cascade,
+        "uploaded_by" uuid default auth.uid () references public.profiles ("id") on delete set null on update cascade,
+        "file_path" text not null,
+        "file_name" text not null,
+        "file_type" text not null,
+        "metadata" jsonb,
+        "mapping" jsonb,
+        "errors" jsonb
     );
+
+create index on public.imports (team_id);
 
 alter table public.imports enable row level security;
 
@@ -70,7 +72,7 @@ values
         '{text/*}'
     );
 
-create policy storage_imports_select_policy on storage.objects as permissive for all using (
+create policy storage_imports_all_policy on storage.objects as permissive for all using (
     bucket_id = 'imports'
     and exists (
         select
