@@ -14,33 +14,45 @@ import { Textarea } from '~/components/ui/Textarea'
 import supabase from '~/lib/supabase'
 import { useToast } from '~/lib/hooks/use-toast'
 import { useParams } from '~/lib/router'
+import { useState } from 'react'
 
 const formSchema = z.object({
   columnSeparator: z.string(),
 })
 
-const columnMappings = {
-  timestamp: {
-    columnMapping: {
-      type: 'index',
-      index: 0,
-    },
-    timezone: 'Europe/Berlin',
-  },
-  metricMappings: [
-    {
-      columnMapping: {
-        type: 'name',
-        name: 'WADB',
-      },
-      metricId: 'ccbd813f-4970-4760-929b-8752217e96da',
-    },
-  ],
-}
-
 const ImportDetails = () => {
   const { id } = useParams('/imports/:id')
   const { toast } = useToast()
+
+  const [timestampMapping, setTimestampMapping] = useState(
+    JSON.stringify(
+      {
+        columnMapping: {
+          type: 'index',
+          index: 0,
+        },
+        timezone: 'Europe/Berlin',
+      },
+      null,
+      2,
+    ),
+  )
+
+  const [metricMappings, setMetricMappings] = useState(
+    JSON.stringify(
+      [
+        {
+          columnMapping: {
+            type: 'name',
+            name: 'WADB',
+          },
+          metricId: 'ccbd813f-4970-4760-929b-8752217e96da',
+        },
+      ],
+      null,
+      2,
+    ),
+  )
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -54,6 +66,8 @@ const ImportDetails = () => {
   }
 
   const updateMappings = async () => {
+    const timestampParsed = JSON.parse(timestampMapping)
+    const metricMappingsParsed = JSON.parse(metricMappings)
     await supabase
       .from('imports')
       .update({
@@ -61,7 +75,8 @@ const ImportDetails = () => {
           csvOptions: {
             columnSeparator: form.getValues('columnSeparator'),
           },
-          ...columnMappings,
+          timestamp: timestampParsed,
+          metricMappings: metricMappingsParsed,
         },
       })
       .eq('id', id)
@@ -103,8 +118,14 @@ const ImportDetails = () => {
       <div className="mt-4">
         <div>
           <Textarea
-            value={JSON.stringify(columnMappings, null, 2)}
-            readOnly={true}
+            value={timestampMapping}
+            onChange={(e) => setTimestampMapping(e.target.value)}
+            className="h-60"
+          />
+
+          <Textarea
+            value={metricMappings}
+            onChange={(e) => setMetricMappings(e.target.value)}
             className="h-60"
           />
         </div>
