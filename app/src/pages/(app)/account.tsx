@@ -3,7 +3,6 @@ import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react'
 import { Button } from '~/components/ui/Button'
 import { getAvatarUrl } from '~/lib/avatars'
 import supabase from '~/lib/supabase'
-import { emitUserEvent } from '~/lib/userEvents'
 import { useAppSelector } from '~/stores'
 
 const AccountPage = () => {
@@ -28,7 +27,6 @@ const AccountPage = () => {
     if (file) {
       setUploadedFile(file)
       reader.readAsDataURL(file)
-      emitUserEvent('update_avatar')
     }
   }
 

@@ -20,7 +20,6 @@ import {
   MetricsListQueryDocument,
 } from '~/lib/gql/graphql'
 import { useToast } from '~/lib/hooks/use-toast'
-import { emitUserEvent } from '~/lib/userEvents'
 import { DateTimePicker } from '../ui/DateTimePicker'
 import { toGlobalId } from '~/lib/graphql'
 
@@ -136,8 +135,6 @@ const MetricForm = ({ onSuccess, metricId }: MetricFormProps) => {
         })
 
         onSuccess?.()
-
-        emitUserEvent('add_data_point')
       },
     })
   }

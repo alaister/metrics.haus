@@ -25,7 +25,6 @@ import {
 import { graphql } from '~/lib/gql'
 import { MetricInterval, MetricsListQueryDocument } from '~/lib/gql/graphql'
 import { useToast } from '~/lib/hooks/use-toast'
-import { emitUserEvent } from '~/lib/userEvents'
 import { useAppSelector } from '~/stores'
 
 const MetricInsertMutation = graphql(/* GraphQL */ `
@@ -118,7 +117,6 @@ const MetricForm = ({ onSuccess }: MetricFormProps) => {
             unitShort: '',
           })
           onSuccess?.()
-          emitUserEvent('add_metric', values.name)
         }
 
         if (values.members && values.members.length > 0) {
