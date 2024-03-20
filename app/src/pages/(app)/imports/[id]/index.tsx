@@ -18,7 +18,6 @@ import { useEffect, useMemo } from 'react'
 import { useQuery } from '@apollo/client'
 import { urlIdToGlobalId } from '~/lib/ids'
 import { graphql } from '~/lib/gql'
-import { SUPABASE_FUNCTIONS_BASE_URL } from '~/lib/config'
 
 const formSchema = z.object({
   columnSeparator: z.string(),
@@ -131,17 +130,11 @@ const ImportDetails = () => {
   }
 
   async function runImport() {
-    const session = await supabase.auth.getSession()
-
-    fetch(`${SUPABASE_FUNCTIONS_BASE_URL}/functions/v1/import-data`, {
-      method: 'POST',
-      body: JSON.stringify({
+    await supabase.functions.invoke('import-data', {
+      body: {
         importId: id,
-      }),
-      headers: {
-        Authorization: `Bearer ${session.data.session?.access_token}`,
-        'Content-Type': 'application/json',
       },
+      method: 'POST',
     })
   }
 
