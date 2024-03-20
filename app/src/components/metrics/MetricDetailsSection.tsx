@@ -1,4 +1,5 @@
 import { useFragment, useMutation } from '@apollo/client'
+import { useState } from 'react'
 import { graphql } from '~/lib/gql'
 import { useToast } from '~/lib/hooks/use-toast'
 import { useNavigate } from '~/lib/router'
@@ -54,6 +55,8 @@ const MetricDetailsSection = ({ metricNodeId }: MetricDetailsProps) => {
   const { toast } = useToast()
   const navigate = useNavigate()
 
+  const [tab, setTab] = useState('graph')
+
   if (!complete) {
     return null
   }
@@ -95,7 +98,7 @@ const MetricDetailsSection = ({ metricNodeId }: MetricDetailsProps) => {
         </div>
       )}
 
-      <Tabs defaultValue="graph">
+      <Tabs defaultValue="graph" value={tab} onValueChange={setTab}>
         <TabsList>
           <TabsTrigger value="graph">Graph</TabsTrigger>
           <TabsTrigger value="table">Table</TabsTrigger>
