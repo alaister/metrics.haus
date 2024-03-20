@@ -54,7 +54,7 @@ const ImportForm = ({ onSuccess }: ImportFormProps) => {
         const { data: newImport, error: errorStartingImport } = await supabase
           .from('imports')
           .insert({
-            team_id: selectedTeamId,
+            team_id: selectedTeamId!,
             file_path: path,
             file_name: uploadedFile.name,
             file_type: `text/${extension}`,
@@ -74,7 +74,7 @@ const ImportForm = ({ onSuccess }: ImportFormProps) => {
           dispatch(refreshPoints(true))
         })
 
-        onSuccess(newImport!.id!)
+        onSuccess?.(newImport!.id!)
       }
     } finally {
       setIsSubmitting(false)
@@ -96,7 +96,10 @@ const ImportForm = ({ onSuccess }: ImportFormProps) => {
           <button
             type="button"
             className="flex items-center px-4 py-2 space-x-2 text-sm text-gray-600 border-gray-300 transition bg-white border rounded-md dark:bg-transparent dark:border-slate-500 dark:text-gray-300 dark:hover:text-gray-100 dark:hover:border-slate-400 hover:text-gray-800 hover:border-gray-400"
-            onClick={() => uploadButtonRef?.current?.click()}
+            onClick={() => {
+              uploadButtonRef?.current?.click()
+              console.log(uploadButtonRef)
+            }}
             disabled={isSubmitting}
           >
             Select a file

@@ -1,5 +1,3 @@
-import { usePreloadedQuery } from 'react-relay'
-import importDetailsRoute, { query } from './imports-details-route'
 import {
   FormControl,
   FormItem,
@@ -15,6 +13,7 @@ import { Button } from '~/components/ui/Button'
 import { Textarea } from '~/components/ui/Textarea'
 import supabase from '~/lib/supabase'
 import { useToast } from '~/lib/hooks/use-toast'
+import { useParams } from '~/lib/router'
 
 const formSchema = z.object({
   columnSeparator: z.string(),
@@ -39,10 +38,8 @@ const columnMappings = {
   ],
 }
 
-const ImportDetails: (typeof importDetailsRoute)['options']['component'] = ({
-  useParams,
-}) => {
-  const { importId } = useParams()
+const ImportDetails = () => {
+  const { id } = useParams('/imports/:id')
   const { toast } = useToast()
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -52,7 +49,9 @@ const ImportDetails: (typeof importDetailsRoute)['options']['component'] = ({
     },
   })
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {}
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    console.log(values)
+  }
 
   const updateMappings = async () => {
     await supabase
@@ -65,7 +64,7 @@ const ImportDetails: (typeof importDetailsRoute)['options']['component'] = ({
           ...columnMappings,
         },
       })
-      .eq('id', importId)
+      .eq('id', id)
 
     toast({
       description: 'Import updated',

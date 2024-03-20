@@ -1,4 +1,4 @@
-import { useNavigate } from '@tanstack/react-router'
+import { useNavigate } from '~/lib/router'
 import ImportForm from '~/components/imports/ImportForm'
 
 const ImportsNew = () => {
@@ -11,10 +11,7 @@ const ImportsNew = () => {
       asdasds
       <ImportForm
         onSuccess={(importId) => {
-          navigate({
-            to: '/imports/$importId',
-            params: { importId },
-          })
+          navigate('/imports/:id', { params: { id: importId } })
         }}
       />
     </div>

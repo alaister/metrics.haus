@@ -1,6 +1,7 @@
-import { Link, Outlet } from '@tanstack/react-router'
 import { Plus } from 'lucide-react'
-import { Button } from '../ui/Button'
+import { Button } from '../../../components/ui/Button'
+import { Link } from '~/lib/router'
+import { Outlet } from 'react-router-dom'
 
 const ImportLayout = () => {
   return (
@@ -11,17 +12,12 @@ const ImportLayout = () => {
         </h1>
 
         <Button variant="outline" asChild>
-          <Link
-            search={{ showNewImportModal: true }}
-            mask={{ to: '/imports/new' }}
-          >
+          <Link to="/imports/new">
             <Plus className="w-4 h-4" />
             <span>New Import</span>
           </Link>
         </Button>
       </div>
-
-      <hr />
 
       <Outlet />
     </div>
