@@ -9,6 +9,10 @@
       "path": "app"
     },
     {
+      "name": "supabase-migrations",
+      "path": "supabase/migrations"
+    },
+    {
       "name": "supabase-functions",
       "path": "supabase/functions"
     }

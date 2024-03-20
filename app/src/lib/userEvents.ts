@@ -1,9 +1,12 @@
 import supabase from '~/lib/supabase'
+import { Database, Json } from './database.types'
+
+export type Event = Database['public']['Enums']['user_event']
 
 export function emitUserEvent(
-  event: string,
+  event: Event,
   value: string | null = null,
-  meta: unknown | null = null,
+  meta: Json | null = null,
 ) {
   return supabase
     .from('user_events')
