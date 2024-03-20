@@ -90,7 +90,7 @@ const DataPointsTable = ({ dataPoints, metricId }: DataPointsTableProps) => {
             <TableCell className="font-medium">
               {format(new Date(dataPoint.time), 'yyyy-MM-dd HH:mm:ss')}
             </TableCell>
-            <TableCell>{dataPoint.value}</TableCell>
+            <TableCell>{dataPoint.value.toLocaleString()}</TableCell>
             <TableCell className="text-right">
               <Button
                 variant="destructive"

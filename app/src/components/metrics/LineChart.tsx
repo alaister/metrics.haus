@@ -1,11 +1,9 @@
-import { subDays } from 'date-fns'
-import { useState } from 'react'
+import { format, subDays } from 'date-fns'
 import {
   Area,
   AreaChart,
   Line,
   LineChart as RechartsLineChart,
-  ReferenceDot,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -13,7 +11,6 @@ import {
 } from 'recharts'
 import { cn } from '~/lib/utils'
 import { createTickDates, timestampToLabel } from '../../lib/chart-helpers'
-import { Button } from '../ui/Button'
 
 const MAX_TICKS = 5
 
@@ -37,19 +34,6 @@ export function LineChart({
   containerClassName,
 }: LineChartProps) {
   const isEmpty = dataPoints.length == 0
-
-  const [threads, setThreads] = useState<Thread[]>([])
-
-  function addThread(timestamp: Date) {
-    setThreads((ts) =>
-      ts.concat({
-        user: '342384283492834',
-        comment: 'Another Threaddd',
-        timestamp,
-        id: Math.random().toString(),
-      }),
-    )
-  }
 
   const dataForChart = isEmpty ? getRandomData() : dataPoints
 
@@ -94,10 +78,7 @@ export function LineChart({
             />
 
             {!preview && !isEmpty && (
-              <Tooltip
-                content={<CustomTooltip handleClick={addThread} />}
-                trigger="click"
-              />
+              <Tooltip content={<CustomTooltip />} trigger="hover" />
             )}
 
             {!preview && (
@@ -121,7 +102,9 @@ export function LineChart({
                 type="number"
                 padding={{ bottom: 16 }}
                 tickMargin={8}
-                tickFormatter={(t) => (isEmpty ? '' : t || '')}
+                tickFormatter={(t) =>
+                  isEmpty ? '' : Number(t).toLocaleString() || ''
+                }
                 tick={{
                   fontSize: 12,
                 }}
@@ -157,18 +140,6 @@ export function LineChart({
                 domain={['dataMin', 'dataMax']}
               />
 
-              {threads.map((t) => (
-                <ReferenceDot
-                  className="cursor-pointer"
-                  key={t.id}
-                  r={6}
-                  stroke=""
-                  fill="#333"
-                  y={0.6}
-                  x={t.timestamp.getTime()}
-                  onClick={() => alert(t.comment + ' TODO')}
-                />
-              ))}
               <Line dataKey="value" opacity={0} />
             </RechartsLineChart>
           </ResponsiveContainer>
@@ -180,31 +151,22 @@ export function LineChart({
 
 type TooltipProps = {
   active: boolean
-  payload: { payload: { ts: number } }[]
-  handleClick: (d: Date) => void
+  payload: { payload: { ts: number; value: number } }[]
 }
+
 function CustomTooltip(props: Partial<TooltipProps>) {
   // handling mf recharts + typescript
-  const { active, payload, handleClick } = props as TooltipProps
-  if (!active || !payload?.length) return null
-
-  const { ts } = payload[0].payload
+  const { active, payload } = props as TooltipProps
+  if (!active || !payload?.length) return <span></span>
 
   return (
-    <Button
-      className="pointer-events-auto"
-      onClick={() => handleClick(new Date(ts))}
-    >
-      Add Comment
-    </Button>
+    <div className="bg-gray-900 py-2 px-2 text-white bg-gray-900 py-2 px-2 text-white rounded-md">
+      {payload[0].payload.value.toLocaleString()}
+      <p className="text-xs text-gray-400">
+        {format(new Date(payload[0].payload.ts), 'LLL dd, y')}
+      </p>
+    </div>
   )
-}
-
-type Thread = {
-  comment: string
-  user: string
-  timestamp: Date
-  id: string
 }
 
 function getRandomData() {
