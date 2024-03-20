@@ -33,7 +33,7 @@ const columnMappings = {
         type: 'name',
         name: 'WADB',
       },
-      metricId: '101fc575-2edd-49e6-8016-3a6c97fd57c0',
+      metricId: 'ccbd813f-4970-4760-929b-8752217e96da',
     },
   ],
 }

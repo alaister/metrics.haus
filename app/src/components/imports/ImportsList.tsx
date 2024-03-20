@@ -27,6 +27,7 @@ const ImportsList = () => {
   const { data } = useQuery(ImportsQuery)
   const imports = data?.importsCollection?.edges ?? []
 
+  console.log('abc')
   console.log({ imports })
 
   return (
@@ -35,7 +36,10 @@ const ImportsList = () => {
         imports.map(({ node }) => (
           <Link key={node.nodeId} to="/imports/:id" params={{ id: node.id }}>
             <div className="rounded-lg border shadow pt-4 cursor-pointer">
-              <div className="px-4 pb-4 border-b">{node.fileName}</div>
+              <div className="px-4 pb-4 border-b">
+                {node.fileName}
+                <p>{node.status}</p>
+              </div>
             </div>
           </Link>
         ))}

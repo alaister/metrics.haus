@@ -4,11 +4,8 @@ import ImportForm from '~/components/imports/ImportForm'
 const ImportsNew = () => {
   const navigate = useNavigate()
 
-  console.log('in new')
-
   return (
     <div>
-      asdasds
       <ImportForm
         onSuccess={(importId) => {
           navigate('/imports/:id', { params: { id: importId } })
