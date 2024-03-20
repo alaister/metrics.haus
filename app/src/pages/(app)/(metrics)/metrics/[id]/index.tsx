@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client'
 import { Plus } from 'lucide-react'
-import Thread from '~/components/comments/Thread'
+// import Thread from '~/components/comments/Thread'
 import IntervalPicker from '~/components/common/IntervalPicker'
 import MetricDetailsSection from '~/components/metrics/MetricDetailsSection'
 import { Button } from '~/components/ui/Button'
@@ -79,10 +79,11 @@ const MetricDetailsPage = () => {
       {data?.node ? (
         <div className="mt-5">
           <MetricDetailsSection metricNodeId={data.node.nodeId} />
-          {data.node.__typename === 'Metrics' &&
+          {/* for when we turn comments back on */}
+          {/* {data.node.__typename === 'Metrics' &&
             data.node.threadsCollection?.edges.map((edge) => (
               <Thread key={edge.node.id} threadNodeId={edge.node.nodeId} />
-            ))}
+            ))} */}
         </div>
       ) : (
         <div>Not Found</div>
