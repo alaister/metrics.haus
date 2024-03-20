@@ -77,90 +77,6 @@ export type BooleanFilter = {
   is?: InputMaybe<FilterIs>
 }
 
-export type CommentableEntities = Node & {
-  __typename?: 'CommentableEntities'
-  id: Scalars['UUID']['output']
-  metricsCollection?: Maybe<MetricsConnection>
-  metricsDataPointsCollection?: Maybe<MetricsDataPointsConnection>
-  /** Globally Unique Record Identifier */
-  nodeId: Scalars['ID']['output']
-  team: Teams
-  teamId: Scalars['UUID']['output']
-  threadsCollection?: Maybe<ThreadsConnection>
-  type: CommentableEntityType
-}
-
-export type CommentableEntitiesMetricsCollectionArgs = {
-  after?: InputMaybe<Scalars['Cursor']['input']>
-  before?: InputMaybe<Scalars['Cursor']['input']>
-  filter?: InputMaybe<MetricsFilter>
-  first?: InputMaybe<Scalars['Int']['input']>
-  last?: InputMaybe<Scalars['Int']['input']>
-  orderBy?: InputMaybe<Array<MetricsOrderBy>>
-}
-
-export type CommentableEntitiesMetricsDataPointsCollectionArgs = {
-  after?: InputMaybe<Scalars['Cursor']['input']>
-  before?: InputMaybe<Scalars['Cursor']['input']>
-  filter?: InputMaybe<MetricsDataPointsFilter>
-  first?: InputMaybe<Scalars['Int']['input']>
-  last?: InputMaybe<Scalars['Int']['input']>
-  orderBy?: InputMaybe<Array<MetricsDataPointsOrderBy>>
-}
-
-export type CommentableEntitiesThreadsCollectionArgs = {
-  after?: InputMaybe<Scalars['Cursor']['input']>
-  before?: InputMaybe<Scalars['Cursor']['input']>
-  filter?: InputMaybe<ThreadsFilter>
-  first?: InputMaybe<Scalars['Int']['input']>
-  last?: InputMaybe<Scalars['Int']['input']>
-  orderBy?: InputMaybe<Array<ThreadsOrderBy>>
-}
-
-export type CommentableEntitiesConnection = {
-  __typename?: 'CommentableEntitiesConnection'
-  edges: Array<CommentableEntitiesEdge>
-  pageInfo: PageInfo
-}
-
-export type CommentableEntitiesEdge = {
-  __typename?: 'CommentableEntitiesEdge'
-  cursor: Scalars['String']['output']
-  node: CommentableEntities
-}
-
-export type CommentableEntitiesFilter = {
-  /** Returns true only if all its inner filters are true, otherwise returns false */
-  and?: InputMaybe<Array<CommentableEntitiesFilter>>
-  id?: InputMaybe<UuidFilter>
-  nodeId?: InputMaybe<IdFilter>
-  /** Negates a filter */
-  not?: InputMaybe<CommentableEntitiesFilter>
-  /** Returns true if at least one of its inner filters is true, otherwise returns false */
-  or?: InputMaybe<Array<CommentableEntitiesFilter>>
-  teamId?: InputMaybe<UuidFilter>
-  type?: InputMaybe<CommentableEntityTypeFilter>
-}
-
-export type CommentableEntitiesOrderBy = {
-  id?: InputMaybe<OrderByDirection>
-  teamId?: InputMaybe<OrderByDirection>
-  type?: InputMaybe<OrderByDirection>
-}
-
-export enum CommentableEntityType {
-  Metric = 'METRIC',
-  MetricDataPoint = 'METRIC_DATA_POINT',
-}
-
-/** Boolean expression comparing fields on type "CommentableEntityType" */
-export type CommentableEntityTypeFilter = {
-  eq?: InputMaybe<CommentableEntityType>
-  in?: InputMaybe<Array<CommentableEntityType>>
-  is?: InputMaybe<FilterIs>
-  neq?: InputMaybe<CommentableEntityType>
-}
-
 export type Comments = Node & {
   __typename?: 'Comments'
   body: Scalars['String']['output']
@@ -337,8 +253,6 @@ export type MetricIntervalFilter = {
 export type Metrics = Node & {
   __typename?: 'Metrics'
   archived?: Maybe<Scalars['Boolean']['output']>
-  commentableEntity?: Maybe<CommentableEntities>
-  commentableEntityId?: Maybe<Scalars['UUID']['output']>
   createdAt: Scalars['Datetime']['output']
   description?: Maybe<Scalars['String']['output']>
   icon?: Maybe<Scalars['String']['output']>
@@ -351,6 +265,7 @@ export type Metrics = Node & {
   nodeId: Scalars['ID']['output']
   team: Teams
   teamId: Scalars['UUID']['output']
+  threadsCollection?: Maybe<ThreadsConnection>
   unitShort?: Maybe<Scalars['String']['output']>
   updatedAt: Scalars['Datetime']['output']
 }
@@ -373,6 +288,15 @@ export type MetricsMetricsOwnersCollectionArgs = {
   orderBy?: InputMaybe<Array<MetricsOwnersOrderBy>>
 }
 
+export type MetricsThreadsCollectionArgs = {
+  after?: InputMaybe<Scalars['Cursor']['input']>
+  before?: InputMaybe<Scalars['Cursor']['input']>
+  filter?: InputMaybe<ThreadsFilter>
+  first?: InputMaybe<Scalars['Int']['input']>
+  last?: InputMaybe<Scalars['Int']['input']>
+  orderBy?: InputMaybe<Array<ThreadsOrderBy>>
+}
+
 export type MetricsConnection = {
   __typename?: 'MetricsConnection'
   edges: Array<MetricsEdge>
@@ -381,8 +305,6 @@ export type MetricsConnection = {
 
 export type MetricsDataPoints = Node & {
   __typename?: 'MetricsDataPoints'
-  commentableEntity?: Maybe<CommentableEntities>
-  commentableEntityId?: Maybe<Scalars['UUID']['output']>
   metric: Metrics
   metricId: Scalars['UUID']['output']
   /** Globally Unique Record Identifier */
@@ -418,7 +340,6 @@ export type MetricsDataPointsEdge = {
 export type MetricsDataPointsFilter = {
   /** Returns true only if all its inner filters are true, otherwise returns false */
   and?: InputMaybe<Array<MetricsDataPointsFilter>>
-  commentableEntityId?: InputMaybe<UuidFilter>
   metricId?: InputMaybe<UuidFilter>
   nodeId?: InputMaybe<IdFilter>
   /** Negates a filter */
@@ -445,7 +366,6 @@ export type MetricsDataPointsInsertResponse = {
 }
 
 export type MetricsDataPointsOrderBy = {
-  commentableEntityId?: InputMaybe<OrderByDirection>
   metricId?: InputMaybe<OrderByDirection>
   reportedBy?: InputMaybe<OrderByDirection>
   time?: InputMaybe<OrderByDirection>
@@ -470,7 +390,6 @@ export type MetricsFilter = {
   /** Returns true only if all its inner filters are true, otherwise returns false */
   and?: InputMaybe<Array<MetricsFilter>>
   archived?: InputMaybe<BooleanFilter>
-  commentableEntityId?: InputMaybe<UuidFilter>
   createdAt?: InputMaybe<DatetimeFilter>
   description?: InputMaybe<StringFilter>
   icon?: InputMaybe<StringFilter>
@@ -506,7 +425,6 @@ export type MetricsInsertResponse = {
 
 export type MetricsOrderBy = {
   archived?: InputMaybe<OrderByDirection>
-  commentableEntityId?: InputMaybe<OrderByDirection>
   createdAt?: InputMaybe<OrderByDirection>
   description?: InputMaybe<OrderByDirection>
   icon?: InputMaybe<OrderByDirection>
@@ -965,8 +883,6 @@ export type ProfilesUpdateResponse = {
 /** The root type for querying data */
 export type Query = {
   __typename?: 'Query'
-  /** A pagable collection of type `CommentableEntities` */
-  commentableEntitiesCollection?: Maybe<CommentableEntitiesConnection>
   /** A pagable collection of type `Comments` */
   commentsCollection?: Maybe<CommentsConnection>
   /** A pagable collection of type `Metrics` */
@@ -989,16 +905,6 @@ export type Query = {
   threadsCollection?: Maybe<ThreadsConnection>
   /** A pagable collection of type `UserEvents` */
   userEventsCollection?: Maybe<UserEventsConnection>
-}
-
-/** The root type for querying data */
-export type QueryCommentableEntitiesCollectionArgs = {
-  after?: InputMaybe<Scalars['Cursor']['input']>
-  before?: InputMaybe<Scalars['Cursor']['input']>
-  filter?: InputMaybe<CommentableEntitiesFilter>
-  first?: InputMaybe<Scalars['Int']['input']>
-  last?: InputMaybe<Scalars['Int']['input']>
-  orderBy?: InputMaybe<Array<CommentableEntitiesOrderBy>>
 }
 
 /** The root type for querying data */
@@ -1170,7 +1076,6 @@ export type TeamMembersOrderBy = {
 
 export type Teams = Node & {
   __typename?: 'Teams'
-  commentableEntitiesCollection?: Maybe<CommentableEntitiesConnection>
   createdAt: Scalars['Datetime']['output']
   id: Scalars['UUID']['output']
   metricsCollection?: Maybe<MetricsConnection>
@@ -1182,15 +1087,6 @@ export type Teams = Node & {
   teamMembersCollection?: Maybe<TeamMembersConnection>
   threadsCollection?: Maybe<ThreadsConnection>
   updatedAt: Scalars['Datetime']['output']
-}
-
-export type TeamsCommentableEntitiesCollectionArgs = {
-  after?: InputMaybe<Scalars['Cursor']['input']>
-  before?: InputMaybe<Scalars['Cursor']['input']>
-  filter?: InputMaybe<CommentableEntitiesFilter>
-  first?: InputMaybe<Scalars['Int']['input']>
-  last?: InputMaybe<Scalars['Int']['input']>
-  orderBy?: InputMaybe<Array<CommentableEntitiesOrderBy>>
 }
 
 export type TeamsMetricsCollectionArgs = {
@@ -1278,18 +1174,20 @@ export type TeamsUpdateResponse = {
 
 export type Threads = Node & {
   __typename?: 'Threads'
-  commentableEntity: CommentableEntities
-  commentableEntityId: Scalars['UUID']['output']
   commentsCollection?: Maybe<CommentsConnection>
   createdAt?: Maybe<Scalars['Datetime']['output']>
   createdBy: Scalars['UUID']['output']
+  fromTimestamp?: Maybe<Scalars['Datetime']['output']>
   id: Scalars['UUID']['output']
+  metric: Metrics
+  metricId: Scalars['UUID']['output']
   /** Globally Unique Record Identifier */
   nodeId: Scalars['ID']['output']
   profiles: Profiles
   team: Teams
   teamId: Scalars['UUID']['output']
   title: Scalars['String']['output']
+  toTimestamp?: Maybe<Scalars['Datetime']['output']>
   updatedAt?: Maybe<Scalars['Datetime']['output']>
 }
 
@@ -1325,10 +1223,11 @@ export type ThreadsEdge = {
 export type ThreadsFilter = {
   /** Returns true only if all its inner filters are true, otherwise returns false */
   and?: InputMaybe<Array<ThreadsFilter>>
-  commentableEntityId?: InputMaybe<UuidFilter>
   createdAt?: InputMaybe<DatetimeFilter>
   createdBy?: InputMaybe<UuidFilter>
+  fromTimestamp?: InputMaybe<DatetimeFilter>
   id?: InputMaybe<UuidFilter>
+  metricId?: InputMaybe<UuidFilter>
   nodeId?: InputMaybe<IdFilter>
   /** Negates a filter */
   not?: InputMaybe<ThreadsFilter>
@@ -1336,12 +1235,16 @@ export type ThreadsFilter = {
   or?: InputMaybe<Array<ThreadsFilter>>
   teamId?: InputMaybe<UuidFilter>
   title?: InputMaybe<StringFilter>
+  toTimestamp?: InputMaybe<DatetimeFilter>
   updatedAt?: InputMaybe<DatetimeFilter>
 }
 
 export type ThreadsInsertInput = {
+  fromTimestamp?: InputMaybe<Scalars['Datetime']['input']>
+  metricId?: InputMaybe<Scalars['UUID']['input']>
   teamId?: InputMaybe<Scalars['UUID']['input']>
   title?: InputMaybe<Scalars['String']['input']>
+  toTimestamp?: InputMaybe<Scalars['Datetime']['input']>
 }
 
 export type ThreadsInsertResponse = {
@@ -1353,12 +1256,14 @@ export type ThreadsInsertResponse = {
 }
 
 export type ThreadsOrderBy = {
-  commentableEntityId?: InputMaybe<OrderByDirection>
   createdAt?: InputMaybe<OrderByDirection>
   createdBy?: InputMaybe<OrderByDirection>
+  fromTimestamp?: InputMaybe<OrderByDirection>
   id?: InputMaybe<OrderByDirection>
+  metricId?: InputMaybe<OrderByDirection>
   teamId?: InputMaybe<OrderByDirection>
   title?: InputMaybe<OrderByDirection>
+  toTimestamp?: InputMaybe<OrderByDirection>
   updatedAt?: InputMaybe<OrderByDirection>
 }
 
@@ -1471,23 +1376,20 @@ export type UserEventsOrderBy = {
   value?: InputMaybe<OrderByDirection>
 }
 
-export type TeamMembersSelector_QueryQueryVariables = Exact<{
-  teamId: Scalars['UUID']['input']
-}>
-
-export type TeamMembersSelector_QueryQuery = {
-  __typename: 'Query'
-  teamMembersCollection?: {
-    __typename: 'TeamMembersConnection'
-    edges: Array<{
-      __typename: 'TeamMembersEdge'
-      node: {
-        __typename: 'TeamMembers'
-        nodeId: string
-        profile: { __typename: 'Profiles'; id: string; name: string }
-      }
-    }>
-  } | null
+export type CommentFragmentFragment = {
+  __typename: 'Comments'
+  nodeId: string
+  id: string
+  createdAt?: string | null
+  updatedAt?: string | null
+  body: string
+  profile: {
+    __typename: 'Profiles'
+    nodeId: string
+    id: string
+    name: string
+    avatarPath?: string | null
+  }
 }
 
 export type CommentsFormInsertMutationMutationVariables = Exact<{
@@ -1503,13 +1405,45 @@ export type CommentsFormInsertMutationMutation = {
       __typename: 'Comments'
       nodeId: string
       id: string
-      body: string
       createdAt?: string | null
-      replyToComment?: {
-        __typename: 'Comments'
+      updatedAt?: string | null
+      body: string
+      profile: {
+        __typename: 'Profiles'
         nodeId: string
         id: string
-      } | null
+        name: string
+        avatarPath?: string | null
+      }
+    }>
+  } | null
+}
+
+export type ThreadFragmentFragment = {
+  __typename: 'Threads'
+  nodeId: string
+  id: string
+  createdAt?: string | null
+  title: string
+  fromTimestamp?: string | null
+  toTimestamp?: string | null
+}
+
+export type TeamMembersSelector_QueryQueryVariables = Exact<{
+  teamId: Scalars['UUID']['input']
+}>
+
+export type TeamMembersSelector_QueryQuery = {
+  __typename: 'Query'
+  teamMembersCollection?: {
+    __typename: 'TeamMembersConnection'
+    edges: Array<{
+      __typename: 'TeamMembersEdge'
+      node: {
+        __typename: 'TeamMembers'
+        nodeId: string
+        profile: { __typename: 'Profiles'; id: string; name: string }
+      }
     }>
   } | null
 }
@@ -1705,7 +1639,6 @@ export type MetricDetailsQueryQueryVariables = Exact<{
 export type MetricDetailsQueryQuery = {
   __typename: 'Query'
   node?:
-    | { __typename: 'CommentableEntities'; nodeId: string }
     | { __typename: 'Comments'; nodeId: string }
     | {
         __typename: 'Metrics'
@@ -1715,6 +1648,27 @@ export type MetricDetailsQueryQuery = {
         unitShort?: string | null
         description?: string | null
         nodeId: string
+        threadsCollection?: {
+          __typename: 'ThreadsConnection'
+          pageInfo: {
+            __typename: 'PageInfo'
+            hasNextPage: boolean
+            endCursor?: string | null
+          }
+          edges: Array<{
+            __typename: 'ThreadsEdge'
+            cursor: string
+            node: {
+              __typename: 'Threads'
+              nodeId: string
+              id: string
+              createdAt?: string | null
+              title: string
+              fromTimestamp?: string | null
+              toTimestamp?: string | null
+            }
+          }>
+        } | null
         metricsDataPointsCollection?: {
           __typename: 'MetricsDataPointsConnection'
           totalCount: number
@@ -1740,6 +1694,124 @@ export type MetricDetailsQueryQuery = {
     | null
 }
 
+export type ThreadQueryQueryVariables = Exact<{
+  nodeId: Scalars['ID']['input']
+}>
+
+export type ThreadQueryQuery = {
+  __typename: 'Query'
+  node?:
+    | { __typename: 'Comments'; nodeId: string }
+    | { __typename: 'Metrics'; nodeId: string }
+    | { __typename: 'MetricsDataPoints'; nodeId: string }
+    | { __typename: 'MetricsOwners'; nodeId: string }
+    | { __typename: 'Notifications'; nodeId: string }
+    | { __typename: 'Profiles'; nodeId: string }
+    | { __typename: 'TeamMembers'; nodeId: string }
+    | { __typename: 'Teams'; nodeId: string }
+    | {
+        __typename: 'Threads'
+        nodeId: string
+        id: string
+        createdAt?: string | null
+        title: string
+        fromTimestamp?: string | null
+        toTimestamp?: string | null
+        commentsCollection?: {
+          __typename: 'CommentsConnection'
+          pageInfo: {
+            __typename: 'PageInfo'
+            hasNextPage: boolean
+            endCursor?: string | null
+          }
+          edges: Array<{
+            __typename: 'CommentsEdge'
+            cursor: string
+            node: {
+              __typename: 'Comments'
+              nodeId: string
+              id: string
+              createdAt?: string | null
+              updatedAt?: string | null
+              body: string
+              profile: {
+                __typename: 'Profiles'
+                nodeId: string
+                id: string
+                name: string
+                avatarPath?: string | null
+              }
+            }
+          }>
+        } | null
+      }
+    | { __typename: 'UserEvents'; nodeId: string }
+    | null
+}
+
+export const CommentFragmentFragmentDoc = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'CommentFragment' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'Comments' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: '__typename' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'nodeId' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'body' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'profile' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: '__typename' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'nodeId' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'avatarPath' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<CommentFragmentFragment, unknown>
+export const ThreadFragmentFragmentDoc = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'ThreadFragment' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'Threads' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: '__typename' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'nodeId' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'title' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'fromTimestamp' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'toTimestamp' } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<ThreadFragmentFragment, unknown>
 export const MetricCardItemFragmentDoc = {
   kind: 'Document',
   definitions: [
@@ -1925,6 +1997,124 @@ export const MetricDetailsSectionItemFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<MetricDetailsSectionItemFragment, unknown>
+export const CommentsFormInsertMutationDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'CommentsFormInsertMutation' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'input' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'CommentsInsertInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: '__typename' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'insertIntoCommentsCollection' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'objects' },
+                value: {
+                  kind: 'ListValue',
+                  values: [
+                    {
+                      kind: 'Variable',
+                      name: { kind: 'Name', value: 'input' },
+                    },
+                  ],
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: '__typename' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'affectedCount' },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'records' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: '__typename' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'nodeId' },
+                      },
+                      {
+                        kind: 'FragmentSpread',
+                        name: { kind: 'Name', value: 'CommentFragment' },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'CommentFragment' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'Comments' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: '__typename' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'nodeId' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'body' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'profile' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: '__typename' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'nodeId' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'avatarPath' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  CommentsFormInsertMutationMutation,
+  CommentsFormInsertMutationMutationVariables
+>
 export const TeamMembersSelector_QueryDocument = {
   kind: 'Document',
   definitions: [
@@ -2045,114 +2235,6 @@ export const TeamMembersSelector_QueryDocument = {
 } as unknown as DocumentNode<
   TeamMembersSelector_QueryQuery,
   TeamMembersSelector_QueryQueryVariables
->
-export const CommentsFormInsertMutationDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'mutation',
-      name: { kind: 'Name', value: 'CommentsFormInsertMutation' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'input' },
-          },
-          type: {
-            kind: 'NonNullType',
-            type: {
-              kind: 'NamedType',
-              name: { kind: 'Name', value: 'CommentsInsertInput' },
-            },
-          },
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          { kind: 'Field', name: { kind: 'Name', value: '__typename' } },
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'insertIntoCommentsCollection' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'objects' },
-                value: {
-                  kind: 'ListValue',
-                  values: [
-                    {
-                      kind: 'Variable',
-                      name: { kind: 'Name', value: 'input' },
-                    },
-                  ],
-                },
-              },
-            ],
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: '__typename' } },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'affectedCount' },
-                },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'records' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: '__typename' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'nodeId' },
-                      },
-                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'body' } },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'replyToComment' },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: '__typename' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'nodeId' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'id' },
-                            },
-                          ],
-                        },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'createdAt' },
-                      },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<
-  CommentsFormInsertMutationMutation,
-  CommentsFormInsertMutationMutationVariables
 >
 export const DataPointsTable_Delete_MutationDocument = {
   kind: 'Document',
@@ -3007,6 +3089,90 @@ export const MetricDetailsQueryDocument = {
                         name: { kind: 'Name', value: 'description' },
                       },
                       {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'threadsCollection' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: '__typename' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'pageInfo' },
+                              selectionSet: {
+                                kind: 'SelectionSet',
+                                selections: [
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: '__typename' },
+                                  },
+                                  {
+                                    kind: 'Field',
+                                    name: {
+                                      kind: 'Name',
+                                      value: 'hasNextPage',
+                                    },
+                                  },
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'endCursor' },
+                                  },
+                                ],
+                              },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'edges' },
+                              selectionSet: {
+                                kind: 'SelectionSet',
+                                selections: [
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: '__typename' },
+                                  },
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'cursor' },
+                                  },
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'node' },
+                                    selectionSet: {
+                                      kind: 'SelectionSet',
+                                      selections: [
+                                        {
+                                          kind: 'Field',
+                                          name: {
+                                            kind: 'Name',
+                                            value: '__typename',
+                                          },
+                                        },
+                                        {
+                                          kind: 'Field',
+                                          name: {
+                                            kind: 'Name',
+                                            value: 'nodeId',
+                                          },
+                                        },
+                                        {
+                                          kind: 'FragmentSpread',
+                                          name: {
+                                            kind: 'Name',
+                                            value: 'ThreadFragment',
+                                          },
+                                        },
+                                      ],
+                                    },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                      {
                         kind: 'FragmentSpread',
                         name: {
                           kind: 'Name',
@@ -3019,6 +3185,26 @@ export const MetricDetailsQueryDocument = {
               ],
             },
           },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'ThreadFragment' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'Threads' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: '__typename' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'nodeId' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'title' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'fromTimestamp' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'toTimestamp' } },
         ],
       },
     },
@@ -3113,3 +3299,223 @@ export const MetricDetailsQueryDocument = {
   MetricDetailsQueryQuery,
   MetricDetailsQueryQueryVariables
 >
+export const ThreadQueryDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'ThreadQuery' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'nodeId' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'ID' } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: '__typename' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'node' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'nodeId' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'nodeId' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: '__typename' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'nodeId' } },
+                {
+                  kind: 'InlineFragment',
+                  typeCondition: {
+                    kind: 'NamedType',
+                    name: { kind: 'Name', value: 'Threads' },
+                  },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: '__typename' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'nodeId' },
+                      },
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'createdAt' },
+                      },
+                      { kind: 'Field', name: { kind: 'Name', value: 'title' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'fromTimestamp' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'toTimestamp' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'commentsCollection' },
+                        arguments: [
+                          {
+                            kind: 'Argument',
+                            name: { kind: 'Name', value: 'orderBy' },
+                            value: {
+                              kind: 'ObjectValue',
+                              fields: [
+                                {
+                                  kind: 'ObjectField',
+                                  name: { kind: 'Name', value: 'createdAt' },
+                                  value: {
+                                    kind: 'EnumValue',
+                                    value: 'AscNullsLast',
+                                  },
+                                },
+                              ],
+                            },
+                          },
+                        ],
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: '__typename' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'pageInfo' },
+                              selectionSet: {
+                                kind: 'SelectionSet',
+                                selections: [
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: '__typename' },
+                                  },
+                                  {
+                                    kind: 'Field',
+                                    name: {
+                                      kind: 'Name',
+                                      value: 'hasNextPage',
+                                    },
+                                  },
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'endCursor' },
+                                  },
+                                ],
+                              },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'edges' },
+                              selectionSet: {
+                                kind: 'SelectionSet',
+                                selections: [
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: '__typename' },
+                                  },
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'cursor' },
+                                  },
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'node' },
+                                    selectionSet: {
+                                      kind: 'SelectionSet',
+                                      selections: [
+                                        {
+                                          kind: 'Field',
+                                          name: {
+                                            kind: 'Name',
+                                            value: '__typename',
+                                          },
+                                        },
+                                        {
+                                          kind: 'Field',
+                                          name: {
+                                            kind: 'Name',
+                                            value: 'nodeId',
+                                          },
+                                        },
+                                        {
+                                          kind: 'FragmentSpread',
+                                          name: {
+                                            kind: 'Name',
+                                            value: 'CommentFragment',
+                                          },
+                                        },
+                                      ],
+                                    },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'CommentFragment' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'Comments' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: '__typename' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'nodeId' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'body' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'profile' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: '__typename' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'nodeId' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'avatarPath' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<ThreadQueryQuery, ThreadQueryQueryVariables>

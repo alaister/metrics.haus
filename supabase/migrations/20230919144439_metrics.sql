@@ -1,8 +1,3 @@
--- Enable the "timescaledb" extension
-create extension timescaledb
-with
-    schema extensions;
-
 create type metric_interval as enum('minute', 'hour', 'day', 'week', 'month');
 
 create table
@@ -64,9 +59,6 @@ create table
     );
 
 comment on table public.metrics_data_points is e'@graphql({"totalCount": {"enabled": true}})';
-
-select
-    create_hypertable ('metrics_data_points', 'time');
 
 revoke
 select

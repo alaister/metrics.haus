@@ -1,10 +1,13 @@
 import { useMutation } from '@apollo/client'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { produce } from 'immer'
 import { useEffect, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { graphql } from '~/lib/gql'
+import { ThreadQueryDocument } from '~/lib/gql/graphql'
 import { useToast } from '~/lib/hooks/use-toast'
+import { toGlobalId } from '~/lib/ids'
 import { Button } from '../ui/Button'
 import {
   Form,
@@ -22,13 +25,7 @@ const CommentsInsertMutation = graphql(/* GraphQL */ `
       affectedCount
       records {
         nodeId
-        id
-        body
-        replyToComment {
-          nodeId
-          id
-        }
-        createdAt
+        ...CommentFragment
       }
     }
   }
@@ -38,17 +35,13 @@ const commentSchema = z.object({
   comment: z.string().min(1, "Can't be empty"),
 })
 
-type CommentsFormProps = {
-  date: Date
-  onSuccess?: () => void
-  metricId: string
+export interface CommentsFormProps {
+  threadId: string
   replyTo?: string
+  onSuccess?: () => void
 }
 
-// date,
-// metricId,
-// replyTo,
-const CommentsForm = ({ onSuccess }: CommentsFormProps) => {
+const CommentsForm = ({ threadId, onSuccess }: CommentsFormProps) => {
   const { toast } = useToast()
 
   const form = useForm<z.infer<typeof commentSchema>>({
@@ -58,7 +51,29 @@ const CommentsForm = ({ onSuccess }: CommentsFormProps) => {
     },
   })
 
-  const [mutate] = useMutation(CommentsInsertMutation)
+  const [mutate] = useMutation(CommentsInsertMutation, {
+    update(cache, { data }) {
+      const record = data?.insertIntoCommentsCollection?.records[0]
+      if (record) {
+        cache.updateQuery(
+          {
+            query: ThreadQueryDocument,
+            variables: { nodeId: toGlobalId(threadId, 'threads') },
+          },
+          (prevData) =>
+            produce(prevData, (draft) => {
+              if (draft?.node?.__typename === 'Threads') {
+                draft.node.commentsCollection?.edges.push({
+                  __typename: 'CommentsEdge' as const,
+                  cursor: '',
+                  node: record,
+                })
+              }
+            }),
+        )
+      }
+    },
+  })
 
   const inputRef = useRef<HTMLInputElement | null>(null)
   useEffect(() => {
@@ -71,6 +86,7 @@ const CommentsForm = ({ onSuccess }: CommentsFormProps) => {
       variables: {
         input: {
           body: values.comment,
+          threadId,
         },
       },
       onError(error) {
@@ -98,7 +114,7 @@ const CommentsForm = ({ onSuccess }: CommentsFormProps) => {
           name="comment"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Name</FormLabel>
+              <FormLabel>Comment</FormLabel>
               <FormControl>
                 <Input
                   className="w-full"

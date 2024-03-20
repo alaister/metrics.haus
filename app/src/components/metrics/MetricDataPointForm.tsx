@@ -22,11 +22,11 @@ import {
   MetricsListQueryDocument,
 } from '~/lib/gql/graphql'
 import { useToast } from '~/lib/hooks/use-toast'
+import { toGlobalId } from '~/lib/ids'
 import { emitUserEvent } from '~/lib/userEvents'
 import { useAppDispatch } from '~/stores'
 import { refreshPoints } from '~/stores/points-slice'
 import { DateTimePicker } from '../ui/DateTimePicker'
-import { toGlobalId } from '~/lib/graphql'
 
 const MetricDataPointInsertMutation = graphql(/* GraphQL */ `
   mutation MetricDataPointFormMutation($input: MetricsDataPointsInsertInput!) {

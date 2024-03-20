@@ -4,3 +4,4 @@ dist
 .idea
 .vscode
 src/lib/database.types.ts
+src/lib/gql/possible-types.json

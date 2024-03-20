@@ -13,10 +13,14 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
+  '\n  fragment CommentFragment on Comments {\n    nodeId\n    id\n    createdAt\n    updatedAt\n    body\n    profile {\n      nodeId\n      id\n      name\n      avatarPath\n    }\n  }\n':
+    types.CommentFragmentFragmentDoc,
+  '\n  mutation CommentsFormInsertMutation($input: CommentsInsertInput!) {\n    insertIntoCommentsCollection(objects: [$input]) {\n      affectedCount\n      records {\n        nodeId\n        ...CommentFragment\n      }\n    }\n  }\n':
+    types.CommentsFormInsertMutationDocument,
+  '\n  fragment ThreadFragment on Threads {\n    nodeId\n    id\n    createdAt\n    title\n    fromTimestamp\n    toTimestamp\n  }\n':
+    types.ThreadFragmentFragmentDoc,
   '\n  query TeamMembersSelector_Query($teamId: UUID!) {\n    teamMembersCollection(filter: { teamId: { eq: $teamId } }) {\n      edges {\n        node {\n          nodeId\n          profile {\n            id\n            name\n          }\n        }\n      }\n    }\n  }\n':
     types.TeamMembersSelector_QueryDocument,
-  '\n  mutation CommentsFormInsertMutation($input: CommentsInsertInput!) {\n    insertIntoCommentsCollection(objects: [$input]) {\n      affectedCount\n      records {\n        nodeId\n        id\n        body\n        replyToComment {\n          nodeId\n          id\n        }\n        createdAt\n      }\n    }\n  }\n':
-    types.CommentsFormInsertMutationDocument,
   '\n  mutation DataPointsTable_Delete_Mutation($filter: MetricsDataPointsFilter!) {\n    deleteFromMetricsDataPointsCollection(filter: $filter) {\n      affectedCount\n      records {\n        nodeId\n      }\n    }\n  }\n':
     types.DataPointsTable_Delete_MutationDocument,
   '\n  fragment MetricCardItem on Metrics {\n    id\n    name\n    icon\n    unitShort\n    createdAt\n    metricsDataPointsCollection(orderBy: [{ time: AscNullsLast }]) {\n      totalCount\n      edges {\n        node {\n          nodeId\n          time\n          value\n        }\n      }\n    }\n  }\n':
@@ -35,8 +39,10 @@ const documents = {
     types.MetricsListQueryDocument,
   '\n  query TeamSelectorQuery {\n    teamsCollection {\n      edges {\n        node {\n          nodeId\n          id\n          name\n        }\n      }\n    }\n  }\n':
     types.TeamSelectorQueryDocument,
-  '\n  query MetricDetailsQuery($nodeId: ID!) {\n    node(nodeId: $nodeId) {\n      nodeId\n      ... on Metrics {\n        id\n        name\n        icon\n        unitShort\n        description\n        ...MetricDetailsSectionItem\n      }\n    }\n  }\n':
+  '\n  query MetricDetailsQuery($nodeId: ID!) {\n    node(nodeId: $nodeId) {\n      nodeId\n      ... on Metrics {\n        id\n        name\n        icon\n        unitShort\n        description\n        threadsCollection {\n          pageInfo {\n            hasNextPage\n            endCursor\n          }\n          edges {\n            cursor\n            node {\n              nodeId\n              ...ThreadFragment\n            }\n          }\n        }\n        ...MetricDetailsSectionItem\n      }\n    }\n  }\n':
     types.MetricDetailsQueryDocument,
+  '\n  query ThreadQuery($nodeId: ID!) {\n    node(nodeId: $nodeId) {\n      nodeId\n      ... on Threads {\n        nodeId\n        id\n        createdAt\n        title\n        fromTimestamp\n        toTimestamp\n        commentsCollection(orderBy: { createdAt: AscNullsLast }) {\n          pageInfo {\n            hasNextPage\n            endCursor\n          }\n          edges {\n            cursor\n            node {\n              nodeId\n              ...CommentFragment\n            }\n          }\n        }\n      }\n    }\n  }\n':
+    types.ThreadQueryDocument,
 }
 
 /**
@@ -57,14 +63,26 @@ export function graphql(source: string): unknown
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  query TeamMembersSelector_Query($teamId: UUID!) {\n    teamMembersCollection(filter: { teamId: { eq: $teamId } }) {\n      edges {\n        node {\n          nodeId\n          profile {\n            id\n            name\n          }\n        }\n      }\n    }\n  }\n',
-): (typeof documents)['\n  query TeamMembersSelector_Query($teamId: UUID!) {\n    teamMembersCollection(filter: { teamId: { eq: $teamId } }) {\n      edges {\n        node {\n          nodeId\n          profile {\n            id\n            name\n          }\n        }\n      }\n    }\n  }\n']
+  source: '\n  fragment CommentFragment on Comments {\n    nodeId\n    id\n    createdAt\n    updatedAt\n    body\n    profile {\n      nodeId\n      id\n      name\n      avatarPath\n    }\n  }\n',
+): (typeof documents)['\n  fragment CommentFragment on Comments {\n    nodeId\n    id\n    createdAt\n    updatedAt\n    body\n    profile {\n      nodeId\n      id\n      name\n      avatarPath\n    }\n  }\n']
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  mutation CommentsFormInsertMutation($input: CommentsInsertInput!) {\n    insertIntoCommentsCollection(objects: [$input]) {\n      affectedCount\n      records {\n        nodeId\n        id\n        body\n        replyToComment {\n          nodeId\n          id\n        }\n        createdAt\n      }\n    }\n  }\n',
-): (typeof documents)['\n  mutation CommentsFormInsertMutation($input: CommentsInsertInput!) {\n    insertIntoCommentsCollection(objects: [$input]) {\n      affectedCount\n      records {\n        nodeId\n        id\n        body\n        replyToComment {\n          nodeId\n          id\n        }\n        createdAt\n      }\n    }\n  }\n']
+  source: '\n  mutation CommentsFormInsertMutation($input: CommentsInsertInput!) {\n    insertIntoCommentsCollection(objects: [$input]) {\n      affectedCount\n      records {\n        nodeId\n        ...CommentFragment\n      }\n    }\n  }\n',
+): (typeof documents)['\n  mutation CommentsFormInsertMutation($input: CommentsInsertInput!) {\n    insertIntoCommentsCollection(objects: [$input]) {\n      affectedCount\n      records {\n        nodeId\n        ...CommentFragment\n      }\n    }\n  }\n']
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  fragment ThreadFragment on Threads {\n    nodeId\n    id\n    createdAt\n    title\n    fromTimestamp\n    toTimestamp\n  }\n',
+): (typeof documents)['\n  fragment ThreadFragment on Threads {\n    nodeId\n    id\n    createdAt\n    title\n    fromTimestamp\n    toTimestamp\n  }\n']
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query TeamMembersSelector_Query($teamId: UUID!) {\n    teamMembersCollection(filter: { teamId: { eq: $teamId } }) {\n      edges {\n        node {\n          nodeId\n          profile {\n            id\n            name\n          }\n        }\n      }\n    }\n  }\n',
+): (typeof documents)['\n  query TeamMembersSelector_Query($teamId: UUID!) {\n    teamMembersCollection(filter: { teamId: { eq: $teamId } }) {\n      edges {\n        node {\n          nodeId\n          profile {\n            id\n            name\n          }\n        }\n      }\n    }\n  }\n']
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -123,8 +141,14 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  query MetricDetailsQuery($nodeId: ID!) {\n    node(nodeId: $nodeId) {\n      nodeId\n      ... on Metrics {\n        id\n        name\n        icon\n        unitShort\n        description\n        ...MetricDetailsSectionItem\n      }\n    }\n  }\n',
-): (typeof documents)['\n  query MetricDetailsQuery($nodeId: ID!) {\n    node(nodeId: $nodeId) {\n      nodeId\n      ... on Metrics {\n        id\n        name\n        icon\n        unitShort\n        description\n        ...MetricDetailsSectionItem\n      }\n    }\n  }\n']
+  source: '\n  query MetricDetailsQuery($nodeId: ID!) {\n    node(nodeId: $nodeId) {\n      nodeId\n      ... on Metrics {\n        id\n        name\n        icon\n        unitShort\n        description\n        threadsCollection {\n          pageInfo {\n            hasNextPage\n            endCursor\n          }\n          edges {\n            cursor\n            node {\n              nodeId\n              ...ThreadFragment\n            }\n          }\n        }\n        ...MetricDetailsSectionItem\n      }\n    }\n  }\n',
+): (typeof documents)['\n  query MetricDetailsQuery($nodeId: ID!) {\n    node(nodeId: $nodeId) {\n      nodeId\n      ... on Metrics {\n        id\n        name\n        icon\n        unitShort\n        description\n        threadsCollection {\n          pageInfo {\n            hasNextPage\n            endCursor\n          }\n          edges {\n            cursor\n            node {\n              nodeId\n              ...ThreadFragment\n            }\n          }\n        }\n        ...MetricDetailsSectionItem\n      }\n    }\n  }\n']
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query ThreadQuery($nodeId: ID!) {\n    node(nodeId: $nodeId) {\n      nodeId\n      ... on Threads {\n        nodeId\n        id\n        createdAt\n        title\n        fromTimestamp\n        toTimestamp\n        commentsCollection(orderBy: { createdAt: AscNullsLast }) {\n          pageInfo {\n            hasNextPage\n            endCursor\n          }\n          edges {\n            cursor\n            node {\n              nodeId\n              ...CommentFragment\n            }\n          }\n        }\n      }\n    }\n  }\n',
+): (typeof documents)['\n  query ThreadQuery($nodeId: ID!) {\n    node(nodeId: $nodeId) {\n      nodeId\n      ... on Threads {\n        nodeId\n        id\n        createdAt\n        title\n        fromTimestamp\n        toTimestamp\n        commentsCollection(orderBy: { createdAt: AscNullsLast }) {\n          pageInfo {\n            hasNextPage\n            endCursor\n          }\n          edges {\n            cursor\n            node {\n              nodeId\n              ...CommentFragment\n            }\n          }\n        }\n      }\n    }\n  }\n']
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {}

@@ -1,90 +1,3 @@
--- Commentable Entities
-create type commentable_entity_type as enum('METRIC', 'METRIC_DATA_POINT');
-
-create table
-  public.commentable_entities (
-    id uuid primary key default gen_random_uuid (),
-    team_id uuid not null references public.teams (id) on update cascade on delete cascade,
-    type commentable_entity_type not null
-  );
-
-create index on public.commentable_entities (team_id);
-
-alter table public.metrics
-add column commentable_entity_id uuid references public.commentable_entities (id) on update cascade on delete cascade;
-
-alter table public.metrics_data_points
-add column commentable_entity_id uuid references public.commentable_entities (id) on update cascade on delete cascade;
-
-create function private.insert_commentable_entity_for_metrics () returns trigger as $$
-declare
-  v_commentable_entity_id uuid;
-begin
-  insert into public.commentable_entities (team_id, type) values (new.team_id, 'METRIC') returning id into v_commentable_entity_id;
-  
-  update public.metrics set commentable_entity_id = v_commentable_entity_id where id = new.id;
-
-  return new;
-end;
-$$ language plpgsql security definer;
-
-create function private.insert_commentable_entity_for_metrics_data_points () returns trigger as $$
-declare
-  v_team_id uuid := (select m.team_id from public.metrics m where m.id = new.metric_id);
-  v_commentable_entity_id uuid;
-begin
-  insert into public.commentable_entities (team_id, type) values (v_team_id, 'METRIC_DATA_POINT') returning id into v_commentable_entity_id;
-  
-  update public.metrics_data_points dp set commentable_entity_id = v_commentable_entity_id where dp.metric_id = new.metric_id and dp.time = new.time;
-
-  return new;
-end;
-$$ language plpgsql security definer;
-
-create function private.delete_commentable_entity () returns trigger as $$
-begin
-  delete from public.commentable_entities where id = old.commentable_entity_id;
-
-  return old;
-end;
-$$ language plpgsql security definer;
-
-create trigger metrics_insert_commentable_entity
-after insert on public.metrics for each row
-execute procedure private.insert_commentable_entity_for_metrics ();
-
-create trigger metrics_delete_commentable_entity
-after delete on public.metrics for each row
-execute procedure private.delete_commentable_entity ();
-
-create trigger metrics_data_points_insert_commentable_entity
-after insert on public.metrics_data_points for each row
-execute procedure private.insert_commentable_entity_for_metrics_data_points ();
-
-create trigger metrics_data_points_delete_commentable_entity
-after delete on public.metrics_data_points for each row
-execute procedure private.delete_commentable_entity ();
-
-revoke
-select
-,
-  insert,
-update,
-delete on public.commentable_entities
-from
-  anon,
-  authenticated;
-
-grant
-select
-  on public.commentable_entities to authenticated;
-
-alter table public.commentable_entities enable row level security;
-
-create policy "can select commentable entities from accessible teams" on public.commentable_entities for
-select
-  to authenticated using (private.is_current_user_in_team (team_id));
-
 -- Threads
 create table
   public.threads (
@@ -92,14 +5,16 @@ create table
     created_at timestamptz default now(),
     updated_at timestamptz default now(),
     team_id uuid not null references public.teams (id) on update cascade on delete cascade,
-    commentable_entity_id uuid not null references public.commentable_entities (id) on update cascade on delete cascade,
+    metric_id uuid not null references public.metrics (id) on update cascade on delete cascade,
+    from_timestamp timestamptz,
+    to_timestamp timestamptz,
     created_by uuid default auth.uid () references public.profiles (id) on update cascade on delete cascade not null,
     title text not null
   );
 
 create index on public.threads (team_id);
 
-create index on public.threads (commentable_entity_id);
+create unique index on public.threads (metric_id, from_timestamp, to_timestamp);
 
 create index on public.threads (created_by);
 
@@ -120,7 +35,13 @@ from
 grant
 select
 ,
-  insert (team_id, title),
+  insert (
+    team_id,
+    metric_id,
+    from_timestamp,
+    to_timestamp,
+    title
+  ),
 update (title),
 delete on public.threads to authenticated;
 
