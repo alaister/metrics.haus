@@ -1,10 +1,8 @@
 import { Save } from 'lucide-react'
 import { Button } from '~/components/ui/Button'
 import { useToast } from '~/lib/hooks/use-toast'
-import { emitUserEvent } from '~/lib/userEvents'
 import { useRef, useState, ChangeEvent, FormEvent } from 'react'
 import { useAppDispatch, useAppSelector } from '~/stores'
-import { refreshPoints } from '~/stores/points-slice'
 import supabase from '~/lib/supabase'
 
 export interface ImportFormProps {
@@ -69,10 +67,6 @@ const ImportForm = ({ onSuccess }: ImportFormProps) => {
           })
           return
         }
-
-        emitUserEvent('import').then(() => {
-          dispatch(refreshPoints(true))
-        })
 
         onSuccess?.(newImport!.id!)
       }

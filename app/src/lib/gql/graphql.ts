@@ -210,6 +210,122 @@ export type IdFilter = {
   eq?: InputMaybe<Scalars['ID']['input']>;
 };
 
+export enum ImportStatus {
+  Canceled = 'canceled',
+  DataImporting = 'data_importing',
+  Failed = 'failed',
+  FileUploaded = 'file_uploaded',
+  Finished = 'finished',
+  ReadyForImport = 'ready_for_import'
+}
+
+/** Boolean expression comparing fields on type "ImportStatus" */
+export type ImportStatusFilter = {
+  eq?: InputMaybe<ImportStatus>;
+  in?: InputMaybe<Array<ImportStatus>>;
+  is?: InputMaybe<FilterIs>;
+  neq?: InputMaybe<ImportStatus>;
+};
+
+export type Imports = Node & {
+  __typename?: 'Imports';
+  createdAt: Scalars['Datetime']['output'];
+  errors?: Maybe<Scalars['JSON']['output']>;
+  fileName: Scalars['String']['output'];
+  filePath: Scalars['String']['output'];
+  fileType: Scalars['String']['output'];
+  id: Scalars['UUID']['output'];
+  mapping?: Maybe<Scalars['JSON']['output']>;
+  metadata?: Maybe<Scalars['JSON']['output']>;
+  /** Globally Unique Record Identifier */
+  nodeId: Scalars['ID']['output'];
+  profiles?: Maybe<Profiles>;
+  status: ImportStatus;
+  team: Teams;
+  teamId: Scalars['UUID']['output'];
+  updatedAt: Scalars['Datetime']['output'];
+  uploadedBy?: Maybe<Scalars['UUID']['output']>;
+};
+
+export type ImportsConnection = {
+  __typename?: 'ImportsConnection';
+  edges: Array<ImportsEdge>;
+  pageInfo: PageInfo;
+};
+
+export type ImportsDeleteResponse = {
+  __typename?: 'ImportsDeleteResponse';
+  /** Count of the records impacted by the mutation */
+  affectedCount: Scalars['Int']['output'];
+  /** Array of records impacted by the mutation */
+  records: Array<Imports>;
+};
+
+export type ImportsEdge = {
+  __typename?: 'ImportsEdge';
+  cursor: Scalars['String']['output'];
+  node: Imports;
+};
+
+export type ImportsFilter = {
+  /** Returns true only if all its inner filters are true, otherwise returns false */
+  and?: InputMaybe<Array<ImportsFilter>>;
+  createdAt?: InputMaybe<DatetimeFilter>;
+  fileName?: InputMaybe<StringFilter>;
+  filePath?: InputMaybe<StringFilter>;
+  fileType?: InputMaybe<StringFilter>;
+  id?: InputMaybe<UuidFilter>;
+  nodeId?: InputMaybe<IdFilter>;
+  /** Negates a filter */
+  not?: InputMaybe<ImportsFilter>;
+  /** Returns true if at least one of its inner filters is true, otherwise returns false */
+  or?: InputMaybe<Array<ImportsFilter>>;
+  status?: InputMaybe<ImportStatusFilter>;
+  teamId?: InputMaybe<UuidFilter>;
+  updatedAt?: InputMaybe<DatetimeFilter>;
+  uploadedBy?: InputMaybe<UuidFilter>;
+};
+
+export type ImportsInsertInput = {
+  fileName?: InputMaybe<Scalars['String']['input']>;
+  filePath?: InputMaybe<Scalars['String']['input']>;
+  fileType?: InputMaybe<Scalars['String']['input']>;
+  mapping?: InputMaybe<Scalars['JSON']['input']>;
+  teamId?: InputMaybe<Scalars['UUID']['input']>;
+};
+
+export type ImportsInsertResponse = {
+  __typename?: 'ImportsInsertResponse';
+  /** Count of the records impacted by the mutation */
+  affectedCount: Scalars['Int']['output'];
+  /** Array of records impacted by the mutation */
+  records: Array<Imports>;
+};
+
+export type ImportsOrderBy = {
+  createdAt?: InputMaybe<OrderByDirection>;
+  fileName?: InputMaybe<OrderByDirection>;
+  filePath?: InputMaybe<OrderByDirection>;
+  fileType?: InputMaybe<OrderByDirection>;
+  id?: InputMaybe<OrderByDirection>;
+  status?: InputMaybe<OrderByDirection>;
+  teamId?: InputMaybe<OrderByDirection>;
+  updatedAt?: InputMaybe<OrderByDirection>;
+  uploadedBy?: InputMaybe<OrderByDirection>;
+};
+
+export type ImportsUpdateInput = {
+  mapping?: InputMaybe<Scalars['JSON']['input']>;
+};
+
+export type ImportsUpdateResponse = {
+  __typename?: 'ImportsUpdateResponse';
+  /** Count of the records impacted by the mutation */
+  affectedCount: Scalars['Int']['output'];
+  /** Array of records impacted by the mutation */
+  records: Array<Imports>;
+};
+
 /** Boolean expression comparing fields on type "Int" */
 export type IntFilter = {
   eq?: InputMaybe<Scalars['Int']['input']>;
@@ -300,8 +416,8 @@ export type MetricsDataPoints = Node & {
   metricId: Scalars['UUID']['output'];
   /** Globally Unique Record Identifier */
   nodeId: Scalars['ID']['output'];
-  profiles: Profiles;
-  reportedBy: Scalars['UUID']['output'];
+  profiles?: Maybe<Profiles>;
+  reportedBy?: Maybe<Scalars['UUID']['output']>;
   time: Scalars['Datetime']['output'];
   value: Scalars['Float']['output'];
 };
@@ -512,30 +628,34 @@ export type Mutation = {
   __typename?: 'Mutation';
   /** Deletes zero or more records from the `Comments` collection */
   deleteFromCommentsCollection: CommentsDeleteResponse;
+  /** Deletes zero or more records from the `Imports` collection */
+  deleteFromImportsCollection: ImportsDeleteResponse;
   /** Deletes zero or more records from the `Metrics` collection */
   deleteFromMetricsCollection: MetricsDeleteResponse;
   /** Deletes zero or more records from the `MetricsDataPoints` collection */
   deleteFromMetricsDataPointsCollection: MetricsDataPointsDeleteResponse;
   /** Deletes zero or more records from the `MetricsOwners` collection */
   deleteFromMetricsOwnersCollection: MetricsOwnersDeleteResponse;
-  /** Deletes zero or more records from the `Notifications` collection */
-  deleteFromNotificationsCollection: NotificationsDeleteResponse;
   /** Deletes zero or more records from the `Threads` collection */
   deleteFromThreadsCollection: ThreadsDeleteResponse;
   /** Adds one or more `Comments` records to the collection */
   insertIntoCommentsCollection?: Maybe<CommentsInsertResponse>;
+  /** Adds one or more `Imports` records to the collection */
+  insertIntoImportsCollection?: Maybe<ImportsInsertResponse>;
   /** Adds one or more `Metrics` records to the collection */
   insertIntoMetricsCollection?: Maybe<MetricsInsertResponse>;
   /** Adds one or more `MetricsDataPoints` records to the collection */
   insertIntoMetricsDataPointsCollection?: Maybe<MetricsDataPointsInsertResponse>;
   /** Adds one or more `MetricsOwners` records to the collection */
   insertIntoMetricsOwnersCollection?: Maybe<MetricsOwnersInsertResponse>;
-  /** Adds one or more `Notifications` records to the collection */
-  insertIntoNotificationsCollection?: Maybe<NotificationsInsertResponse>;
   /** Adds one or more `Threads` records to the collection */
   insertIntoThreadsCollection?: Maybe<ThreadsInsertResponse>;
+  /** Adds one or more `UserEvents` records to the collection */
+  insertIntoUserEventsCollection?: Maybe<UserEventsInsertResponse>;
   /** Updates zero or more records in the `Comments` collection */
   updateCommentsCollection: CommentsUpdateResponse;
+  /** Updates zero or more records in the `Imports` collection */
+  updateImportsCollection: ImportsUpdateResponse;
   /** Updates zero or more records in the `Metrics` collection */
   updateMetricsCollection: MetricsUpdateResponse;
   /** Updates zero or more records in the `Notifications` collection */
@@ -553,6 +673,13 @@ export type Mutation = {
 export type MutationDeleteFromCommentsCollectionArgs = {
   atMost?: Scalars['Int']['input'];
   filter?: InputMaybe<CommentsFilter>;
+};
+
+
+/** The root type for creating and mutating data */
+export type MutationDeleteFromImportsCollectionArgs = {
+  atMost?: Scalars['Int']['input'];
+  filter?: InputMaybe<ImportsFilter>;
 };
 
 
@@ -578,13 +705,6 @@ export type MutationDeleteFromMetricsOwnersCollectionArgs = {
 
 
 /** The root type for creating and mutating data */
-export type MutationDeleteFromNotificationsCollectionArgs = {
-  atMost?: Scalars['Int']['input'];
-  filter?: InputMaybe<NotificationsFilter>;
-};
-
-
-/** The root type for creating and mutating data */
 export type MutationDeleteFromThreadsCollectionArgs = {
   atMost?: Scalars['Int']['input'];
   filter?: InputMaybe<ThreadsFilter>;
@@ -594,6 +714,12 @@ export type MutationDeleteFromThreadsCollectionArgs = {
 /** The root type for creating and mutating data */
 export type MutationInsertIntoCommentsCollectionArgs = {
   objects: Array<CommentsInsertInput>;
+};
+
+
+/** The root type for creating and mutating data */
+export type MutationInsertIntoImportsCollectionArgs = {
+  objects: Array<ImportsInsertInput>;
 };
 
 
@@ -616,14 +742,14 @@ export type MutationInsertIntoMetricsOwnersCollectionArgs = {
 
 
 /** The root type for creating and mutating data */
-export type MutationInsertIntoNotificationsCollectionArgs = {
-  objects: Array<NotificationsInsertInput>;
+export type MutationInsertIntoThreadsCollectionArgs = {
+  objects: Array<ThreadsInsertInput>;
 };
 
 
 /** The root type for creating and mutating data */
-export type MutationInsertIntoThreadsCollectionArgs = {
-  objects: Array<ThreadsInsertInput>;
+export type MutationInsertIntoUserEventsCollectionArgs = {
+  objects: Array<UserEventsInsertInput>;
 };
 
 
@@ -632,6 +758,14 @@ export type MutationUpdateCommentsCollectionArgs = {
   atMost?: Scalars['Int']['input'];
   filter?: InputMaybe<CommentsFilter>;
   set: CommentsUpdateInput;
+};
+
+
+/** The root type for creating and mutating data */
+export type MutationUpdateImportsCollectionArgs = {
+  atMost?: Scalars['Int']['input'];
+  filter?: InputMaybe<ImportsFilter>;
+  set: ImportsUpdateInput;
 };
 
 
@@ -681,6 +815,7 @@ export type Node = {
 
 export type Notifications = Node & {
   __typename?: 'Notifications';
+  body?: Maybe<Scalars['String']['output']>;
   createdAt?: Maybe<Scalars['Datetime']['output']>;
   id: Scalars['UUID']['output'];
   metadata?: Maybe<Scalars['JSON']['output']>;
@@ -688,21 +823,15 @@ export type Notifications = Node & {
   nodeId: Scalars['ID']['output'];
   profile: Profiles;
   profileId: Scalars['UUID']['output'];
-  text?: Maybe<Scalars['String']['output']>;
+  seenAt?: Maybe<Scalars['Datetime']['output']>;
+  team: Teams;
+  teamId: Scalars['UUID']['output'];
 };
 
 export type NotificationsConnection = {
   __typename?: 'NotificationsConnection';
   edges: Array<NotificationsEdge>;
   pageInfo: PageInfo;
-};
-
-export type NotificationsDeleteResponse = {
-  __typename?: 'NotificationsDeleteResponse';
-  /** Count of the records impacted by the mutation */
-  affectedCount: Scalars['Int']['output'];
-  /** Array of records impacted by the mutation */
-  records: Array<Notifications>;
 };
 
 export type NotificationsEdge = {
@@ -714,6 +843,7 @@ export type NotificationsEdge = {
 export type NotificationsFilter = {
   /** Returns true only if all its inner filters are true, otherwise returns false */
   and?: InputMaybe<Array<NotificationsFilter>>;
+  body?: InputMaybe<StringFilter>;
   createdAt?: InputMaybe<DatetimeFilter>;
   id?: InputMaybe<UuidFilter>;
   nodeId?: InputMaybe<IdFilter>;
@@ -722,38 +852,21 @@ export type NotificationsFilter = {
   /** Returns true if at least one of its inner filters is true, otherwise returns false */
   or?: InputMaybe<Array<NotificationsFilter>>;
   profileId?: InputMaybe<UuidFilter>;
-  text?: InputMaybe<StringFilter>;
-};
-
-export type NotificationsInsertInput = {
-  createdAt?: InputMaybe<Scalars['Datetime']['input']>;
-  id?: InputMaybe<Scalars['UUID']['input']>;
-  metadata?: InputMaybe<Scalars['JSON']['input']>;
-  profileId?: InputMaybe<Scalars['UUID']['input']>;
-  text?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type NotificationsInsertResponse = {
-  __typename?: 'NotificationsInsertResponse';
-  /** Count of the records impacted by the mutation */
-  affectedCount: Scalars['Int']['output'];
-  /** Array of records impacted by the mutation */
-  records: Array<Notifications>;
+  seenAt?: InputMaybe<DatetimeFilter>;
+  teamId?: InputMaybe<UuidFilter>;
 };
 
 export type NotificationsOrderBy = {
+  body?: InputMaybe<OrderByDirection>;
   createdAt?: InputMaybe<OrderByDirection>;
   id?: InputMaybe<OrderByDirection>;
   profileId?: InputMaybe<OrderByDirection>;
-  text?: InputMaybe<OrderByDirection>;
+  seenAt?: InputMaybe<OrderByDirection>;
+  teamId?: InputMaybe<OrderByDirection>;
 };
 
 export type NotificationsUpdateInput = {
-  createdAt?: InputMaybe<Scalars['Datetime']['input']>;
-  id?: InputMaybe<Scalars['UUID']['input']>;
-  metadata?: InputMaybe<Scalars['JSON']['input']>;
-  profileId?: InputMaybe<Scalars['UUID']['input']>;
-  text?: InputMaybe<Scalars['String']['input']>;
+  seenAt?: InputMaybe<Scalars['Datetime']['input']>;
 };
 
 export type NotificationsUpdateResponse = {
@@ -796,6 +909,7 @@ export type Profiles = Node & {
   commentsCollection?: Maybe<CommentsConnection>;
   createdAt: Scalars['Datetime']['output'];
   id: Scalars['UUID']['output'];
+  importsCollection?: Maybe<ImportsConnection>;
   metricsDataPointsCollection?: Maybe<MetricsDataPointsConnection>;
   metricsOwnersCollection?: Maybe<MetricsOwnersConnection>;
   name: Scalars['String']['output'];
@@ -805,6 +919,7 @@ export type Profiles = Node & {
   teamMembersCollection?: Maybe<TeamMembersConnection>;
   threadsCollection?: Maybe<ThreadsConnection>;
   updatedAt: Scalars['Datetime']['output'];
+  userEventsCollection?: Maybe<UserEventsConnection>;
 };
 
 
@@ -815,6 +930,16 @@ export type ProfilesCommentsCollectionArgs = {
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Array<CommentsOrderBy>>;
+};
+
+
+export type ProfilesImportsCollectionArgs = {
+  after?: InputMaybe<Scalars['Cursor']['input']>;
+  before?: InputMaybe<Scalars['Cursor']['input']>;
+  filter?: InputMaybe<ImportsFilter>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Array<ImportsOrderBy>>;
 };
 
 
@@ -865,6 +990,16 @@ export type ProfilesThreadsCollectionArgs = {
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Array<ThreadsOrderBy>>;
+};
+
+
+export type ProfilesUserEventsCollectionArgs = {
+  after?: InputMaybe<Scalars['Cursor']['input']>;
+  before?: InputMaybe<Scalars['Cursor']['input']>;
+  filter?: InputMaybe<UserEventsFilter>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Array<UserEventsOrderBy>>;
 };
 
 export type ProfilesConnection = {
@@ -919,6 +1054,8 @@ export type Query = {
   __typename?: 'Query';
   /** A pagable collection of type `Comments` */
   commentsCollection?: Maybe<CommentsConnection>;
+  /** A pagable collection of type `Imports` */
+  importsCollection?: Maybe<ImportsConnection>;
   /** A pagable collection of type `Metrics` */
   metricsCollection?: Maybe<MetricsConnection>;
   /** A pagable collection of type `MetricsDataPoints` */
@@ -937,6 +1074,8 @@ export type Query = {
   teamsCollection?: Maybe<TeamsConnection>;
   /** A pagable collection of type `Threads` */
   threadsCollection?: Maybe<ThreadsConnection>;
+  /** A pagable collection of type `UserEvents` */
+  userEventsCollection?: Maybe<UserEventsConnection>;
 };
 
 
@@ -948,6 +1087,17 @@ export type QueryCommentsCollectionArgs = {
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Array<CommentsOrderBy>>;
+};
+
+
+/** The root type for querying data */
+export type QueryImportsCollectionArgs = {
+  after?: InputMaybe<Scalars['Cursor']['input']>;
+  before?: InputMaybe<Scalars['Cursor']['input']>;
+  filter?: InputMaybe<ImportsFilter>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Array<ImportsOrderBy>>;
 };
 
 
@@ -1044,6 +1194,17 @@ export type QueryThreadsCollectionArgs = {
   orderBy?: InputMaybe<Array<ThreadsOrderBy>>;
 };
 
+
+/** The root type for querying data */
+export type QueryUserEventsCollectionArgs = {
+  after?: InputMaybe<Scalars['Cursor']['input']>;
+  before?: InputMaybe<Scalars['Cursor']['input']>;
+  filter?: InputMaybe<UserEventsFilter>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Array<UserEventsOrderBy>>;
+};
+
 /** Boolean expression comparing fields on type "String" */
 export type StringFilter = {
   eq?: InputMaybe<Scalars['String']['input']>;
@@ -1110,14 +1271,26 @@ export type Teams = Node & {
   __typename?: 'Teams';
   createdAt: Scalars['Datetime']['output'];
   id: Scalars['UUID']['output'];
+  importsCollection?: Maybe<ImportsConnection>;
   metricsCollection?: Maybe<MetricsConnection>;
   name: Scalars['String']['output'];
   /** Globally Unique Record Identifier */
   nodeId: Scalars['ID']['output'];
+  notificationsCollection?: Maybe<NotificationsConnection>;
   ssoProviderId?: Maybe<Scalars['String']['output']>;
   teamMembersCollection?: Maybe<TeamMembersConnection>;
   threadsCollection?: Maybe<ThreadsConnection>;
   updatedAt: Scalars['Datetime']['output'];
+};
+
+
+export type TeamsImportsCollectionArgs = {
+  after?: InputMaybe<Scalars['Cursor']['input']>;
+  before?: InputMaybe<Scalars['Cursor']['input']>;
+  filter?: InputMaybe<ImportsFilter>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Array<ImportsOrderBy>>;
 };
 
 
@@ -1128,6 +1301,16 @@ export type TeamsMetricsCollectionArgs = {
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Array<MetricsOrderBy>>;
+};
+
+
+export type TeamsNotificationsCollectionArgs = {
+  after?: InputMaybe<Scalars['Cursor']['input']>;
+  before?: InputMaybe<Scalars['Cursor']['input']>;
+  filter?: InputMaybe<NotificationsFilter>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Array<NotificationsOrderBy>>;
 };
 
 
@@ -1325,6 +1508,84 @@ export type UuidFilter = {
   neq?: InputMaybe<Scalars['UUID']['input']>;
 };
 
+export enum UserEvent {
+  AddDataPoint = 'add_data_point',
+  AddMetric = 'add_metric',
+  Import = 'import',
+  UpdateAvatar = 'update_avatar',
+  ViewPage = 'view_page'
+}
+
+/** Boolean expression comparing fields on type "UserEvent" */
+export type UserEventFilter = {
+  eq?: InputMaybe<UserEvent>;
+  in?: InputMaybe<Array<UserEvent>>;
+  is?: InputMaybe<FilterIs>;
+  neq?: InputMaybe<UserEvent>;
+};
+
+export type UserEvents = Node & {
+  __typename?: 'UserEvents';
+  event: UserEvent;
+  id: Scalars['UUID']['output'];
+  meta?: Maybe<Scalars['JSON']['output']>;
+  /** Globally Unique Record Identifier */
+  nodeId: Scalars['ID']['output'];
+  ts: Scalars['Datetime']['output'];
+  user: Profiles;
+  userId: Scalars['UUID']['output'];
+  value?: Maybe<Scalars['String']['output']>;
+};
+
+export type UserEventsConnection = {
+  __typename?: 'UserEventsConnection';
+  edges: Array<UserEventsEdge>;
+  pageInfo: PageInfo;
+};
+
+export type UserEventsEdge = {
+  __typename?: 'UserEventsEdge';
+  cursor: Scalars['String']['output'];
+  node: UserEvents;
+};
+
+export type UserEventsFilter = {
+  /** Returns true only if all its inner filters are true, otherwise returns false */
+  and?: InputMaybe<Array<UserEventsFilter>>;
+  event?: InputMaybe<UserEventFilter>;
+  id?: InputMaybe<UuidFilter>;
+  nodeId?: InputMaybe<IdFilter>;
+  /** Negates a filter */
+  not?: InputMaybe<UserEventsFilter>;
+  /** Returns true if at least one of its inner filters is true, otherwise returns false */
+  or?: InputMaybe<Array<UserEventsFilter>>;
+  ts?: InputMaybe<DatetimeFilter>;
+  userId?: InputMaybe<UuidFilter>;
+  value?: InputMaybe<StringFilter>;
+};
+
+export type UserEventsInsertInput = {
+  event?: InputMaybe<UserEvent>;
+  meta?: InputMaybe<Scalars['JSON']['input']>;
+  value?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UserEventsInsertResponse = {
+  __typename?: 'UserEventsInsertResponse';
+  /** Count of the records impacted by the mutation */
+  affectedCount: Scalars['Int']['output'];
+  /** Array of records impacted by the mutation */
+  records: Array<UserEvents>;
+};
+
+export type UserEventsOrderBy = {
+  event?: InputMaybe<OrderByDirection>;
+  id?: InputMaybe<OrderByDirection>;
+  ts?: InputMaybe<OrderByDirection>;
+  userId?: InputMaybe<OrderByDirection>;
+  value?: InputMaybe<OrderByDirection>;
+};
+
 export type CommentFragmentFragment = { __typename: 'Comments', nodeId: string, id: string, createdAt?: string | null, updatedAt?: string | null, body: string, profile: { __typename: 'Profiles', nodeId: string, id: string, name: string, avatarPath?: string | null } };
 
 export type CommentsFormInsertMutationMutationVariables = Exact<{
@@ -1335,6 +1596,11 @@ export type CommentsFormInsertMutationMutationVariables = Exact<{
 export type CommentsFormInsertMutationMutation = { __typename: 'Mutation', insertIntoCommentsCollection?: { __typename: 'CommentsInsertResponse', affectedCount: number, records: Array<{ __typename: 'Comments', nodeId: string, id: string, createdAt?: string | null, updatedAt?: string | null, body: string, profile: { __typename: 'Profiles', nodeId: string, id: string, name: string, avatarPath?: string | null } }> } | null };
 
 export type ThreadFragmentFragment = { __typename: 'Threads', nodeId: string, id: string, createdAt?: string | null, title: string, fromTimestamp?: string | null, toTimestamp?: string | null };
+
+export type ImportsListQueryQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ImportsListQueryQuery = { __typename: 'Query', importsCollection?: { __typename: 'ImportsConnection', pageInfo: { __typename: 'PageInfo', hasNextPage: boolean, endCursor?: string | null }, edges: Array<{ __typename: 'ImportsEdge', cursor: string, node: { __typename: 'Imports', id: string, nodeId: string, status: ImportStatus, createdAt: string, fileName: string } }> } | null };
 
 export type TeamMembersSelector_QueryQueryVariables = Exact<{
   teamId: Scalars['UUID']['input'];
@@ -1397,20 +1663,21 @@ export type MetricDetailsQueryQueryVariables = Exact<{
 }>;
 
 
-export type MetricDetailsQueryQuery = { __typename: 'Query', node?: { __typename: 'Comments', nodeId: string } | { __typename: 'Metrics', id: string, name: string, icon?: string | null, unitShort?: string | null, description?: string | null, nodeId: string, threadsCollection?: { __typename: 'ThreadsConnection', pageInfo: { __typename: 'PageInfo', hasNextPage: boolean, endCursor?: string | null }, edges: Array<{ __typename: 'ThreadsEdge', cursor: string, node: { __typename: 'Threads', nodeId: string, id: string, createdAt?: string | null, title: string, fromTimestamp?: string | null, toTimestamp?: string | null } }> } | null, metricsDataPointsCollection?: { __typename: 'MetricsDataPointsConnection', totalCount: number, edges: Array<{ __typename: 'MetricsDataPointsEdge', node: { __typename: 'MetricsDataPoints', nodeId: string, time: string, value: number } }> } | null } | { __typename: 'MetricsDataPoints', nodeId: string } | { __typename: 'MetricsOwners', nodeId: string } | { __typename: 'Notifications', nodeId: string } | { __typename: 'Profiles', nodeId: string } | { __typename: 'TeamMembers', nodeId: string } | { __typename: 'Teams', nodeId: string } | { __typename: 'Threads', nodeId: string } | null };
+export type MetricDetailsQueryQuery = { __typename: 'Query', node?: { __typename: 'Comments', nodeId: string } | { __typename: 'Imports', nodeId: string } | { __typename: 'Metrics', id: string, name: string, icon?: string | null, unitShort?: string | null, description?: string | null, nodeId: string, threadsCollection?: { __typename: 'ThreadsConnection', pageInfo: { __typename: 'PageInfo', hasNextPage: boolean, endCursor?: string | null }, edges: Array<{ __typename: 'ThreadsEdge', cursor: string, node: { __typename: 'Threads', nodeId: string, id: string, createdAt?: string | null, title: string, fromTimestamp?: string | null, toTimestamp?: string | null } }> } | null, metricsDataPointsCollection?: { __typename: 'MetricsDataPointsConnection', totalCount: number, edges: Array<{ __typename: 'MetricsDataPointsEdge', node: { __typename: 'MetricsDataPoints', nodeId: string, time: string, value: number } }> } | null } | { __typename: 'MetricsDataPoints', nodeId: string } | { __typename: 'MetricsOwners', nodeId: string } | { __typename: 'Notifications', nodeId: string } | { __typename: 'Profiles', nodeId: string } | { __typename: 'TeamMembers', nodeId: string } | { __typename: 'Teams', nodeId: string } | { __typename: 'Threads', nodeId: string } | { __typename: 'UserEvents', nodeId: string } | null };
 
 export type ThreadQueryQueryVariables = Exact<{
   nodeId: Scalars['ID']['input'];
 }>;
 
 
-export type ThreadQueryQuery = { __typename: 'Query', node?: { __typename: 'Comments', nodeId: string } | { __typename: 'Metrics', nodeId: string } | { __typename: 'MetricsDataPoints', nodeId: string } | { __typename: 'MetricsOwners', nodeId: string } | { __typename: 'Notifications', nodeId: string } | { __typename: 'Profiles', nodeId: string } | { __typename: 'TeamMembers', nodeId: string } | { __typename: 'Teams', nodeId: string } | { __typename: 'Threads', nodeId: string, id: string, createdAt?: string | null, title: string, fromTimestamp?: string | null, toTimestamp?: string | null, commentsCollection?: { __typename: 'CommentsConnection', pageInfo: { __typename: 'PageInfo', hasNextPage: boolean, endCursor?: string | null }, edges: Array<{ __typename: 'CommentsEdge', cursor: string, node: { __typename: 'Comments', nodeId: string, id: string, createdAt?: string | null, updatedAt?: string | null, body: string, profile: { __typename: 'Profiles', nodeId: string, id: string, name: string, avatarPath?: string | null } } }> } | null } | null };
+export type ThreadQueryQuery = { __typename: 'Query', node?: { __typename: 'Comments', nodeId: string } | { __typename: 'Imports', nodeId: string } | { __typename: 'Metrics', nodeId: string } | { __typename: 'MetricsDataPoints', nodeId: string } | { __typename: 'MetricsOwners', nodeId: string } | { __typename: 'Notifications', nodeId: string } | { __typename: 'Profiles', nodeId: string } | { __typename: 'TeamMembers', nodeId: string } | { __typename: 'Teams', nodeId: string } | { __typename: 'Threads', nodeId: string, id: string, createdAt?: string | null, title: string, fromTimestamp?: string | null, toTimestamp?: string | null, commentsCollection?: { __typename: 'CommentsConnection', pageInfo: { __typename: 'PageInfo', hasNextPage: boolean, endCursor?: string | null }, edges: Array<{ __typename: 'CommentsEdge', cursor: string, node: { __typename: 'Comments', nodeId: string, id: string, createdAt?: string | null, updatedAt?: string | null, body: string, profile: { __typename: 'Profiles', nodeId: string, id: string, name: string, avatarPath?: string | null } } }> } | null } | { __typename: 'UserEvents', nodeId: string } | null };
 
 export const CommentFragmentFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CommentFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Comments"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"nodeId"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"body"}},{"kind":"Field","name":{"kind":"Name","value":"profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"nodeId"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"avatarPath"}}]}}]}}]} as unknown as DocumentNode<CommentFragmentFragment, unknown>;
 export const ThreadFragmentFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ThreadFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Threads"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"nodeId"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"fromTimestamp"}},{"kind":"Field","name":{"kind":"Name","value":"toTimestamp"}}]}}]} as unknown as DocumentNode<ThreadFragmentFragment, unknown>;
 export const MetricCardItemFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"MetricCardItem"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Metrics"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"icon"}},{"kind":"Field","name":{"kind":"Name","value":"unitShort"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"metricsDataPointsCollection"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"orderBy"},"value":{"kind":"ListValue","values":[{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"time"},"value":{"kind":"EnumValue","value":"AscNullsLast"}}]}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"totalCount"}},{"kind":"Field","name":{"kind":"Name","value":"edges"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"nodeId"}},{"kind":"Field","name":{"kind":"Name","value":"time"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}}]}}]}}]}}]} as unknown as DocumentNode<MetricCardItemFragment, unknown>;
 export const MetricDetailsSectionItemFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"MetricDetailsSectionItem"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Metrics"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"unitShort"}},{"kind":"Field","name":{"kind":"Name","value":"metricsDataPointsCollection"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"orderBy"},"value":{"kind":"ListValue","values":[{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"time"},"value":{"kind":"EnumValue","value":"AscNullsLast"}}]}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"totalCount"}},{"kind":"Field","name":{"kind":"Name","value":"edges"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"nodeId"}},{"kind":"Field","name":{"kind":"Name","value":"time"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}}]}}]}}]}}]} as unknown as DocumentNode<MetricDetailsSectionItemFragment, unknown>;
 export const CommentsFormInsertMutationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CommentsFormInsertMutation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CommentsInsertInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"insertIntoCommentsCollection"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"objects"},"value":{"kind":"ListValue","values":[{"kind":"Variable","name":{"kind":"Name","value":"input"}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"affectedCount"}},{"kind":"Field","name":{"kind":"Name","value":"records"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"nodeId"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"CommentFragment"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CommentFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Comments"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"nodeId"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"body"}},{"kind":"Field","name":{"kind":"Name","value":"profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"nodeId"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"avatarPath"}}]}}]}}]} as unknown as DocumentNode<CommentsFormInsertMutationMutation, CommentsFormInsertMutationMutationVariables>;
+export const ImportsListQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"ImportsListQuery"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"importsCollection"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"orderBy"},"value":{"kind":"ListValue","values":[{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"createdAt"},"value":{"kind":"EnumValue","value":"DescNullsLast"}}]}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"}},{"kind":"Field","name":{"kind":"Name","value":"endCursor"}}]}},{"kind":"Field","name":{"kind":"Name","value":"edges"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"cursor"}},{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"nodeId"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"fileName"}}]}}]}}]}}]}}]} as unknown as DocumentNode<ImportsListQueryQuery, ImportsListQueryQueryVariables>;
 export const TeamMembersSelector_QueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"TeamMembersSelector_Query"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"teamId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UUID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"teamMembersCollection"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"filter"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"teamId"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"teamId"}}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"edges"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"nodeId"}},{"kind":"Field","name":{"kind":"Name","value":"profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<TeamMembersSelector_QueryQuery, TeamMembersSelector_QueryQueryVariables>;
 export const DataPointsTable_Delete_MutationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DataPointsTable_Delete_Mutation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"filter"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"MetricsDataPointsFilter"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"deleteFromMetricsDataPointsCollection"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"filter"},"value":{"kind":"Variable","name":{"kind":"Name","value":"filter"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"affectedCount"}},{"kind":"Field","name":{"kind":"Name","value":"records"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"nodeId"}}]}}]}}]}}]} as unknown as DocumentNode<DataPointsTable_Delete_MutationMutation, DataPointsTable_Delete_MutationMutationVariables>;
 export const MetricDataPointFormMutationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"MetricDataPointFormMutation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"MetricsDataPointsInsertInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"insertIntoMetricsDataPointsCollection"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"objects"},"value":{"kind":"ListValue","values":[{"kind":"Variable","name":{"kind":"Name","value":"input"}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"affectedCount"}},{"kind":"Field","name":{"kind":"Name","value":"records"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"nodeId"}},{"kind":"Field","name":{"kind":"Name","value":"time"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}}]}}]}}]} as unknown as DocumentNode<MetricDataPointFormMutationMutation, MetricDataPointFormMutationMutationVariables>;

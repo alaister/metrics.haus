@@ -16,6 +16,7 @@ const documents = {
     "\n  fragment CommentFragment on Comments {\n    nodeId\n    id\n    createdAt\n    updatedAt\n    body\n    profile {\n      nodeId\n      id\n      name\n      avatarPath\n    }\n  }\n": types.CommentFragmentFragmentDoc,
     "\n  mutation CommentsFormInsertMutation($input: CommentsInsertInput!) {\n    insertIntoCommentsCollection(objects: [$input]) {\n      affectedCount\n      records {\n        nodeId\n        ...CommentFragment\n      }\n    }\n  }\n": types.CommentsFormInsertMutationDocument,
     "\n  fragment ThreadFragment on Threads {\n    nodeId\n    id\n    createdAt\n    title\n    fromTimestamp\n    toTimestamp\n  }\n": types.ThreadFragmentFragmentDoc,
+    "\n  query ImportsListQuery {\n    importsCollection(orderBy: [{ createdAt: DescNullsLast }]) {\n      pageInfo {\n        hasNextPage\n        endCursor\n      }\n      edges {\n        cursor\n        node {\n          id\n          nodeId\n          status\n          createdAt\n          fileName\n        }\n      }\n    }\n  }\n": types.ImportsListQueryDocument,
     "\n  query TeamMembersSelector_Query($teamId: UUID!) {\n    teamMembersCollection(filter: { teamId: { eq: $teamId } }) {\n      edges {\n        node {\n          nodeId\n          profile {\n            id\n            name\n          }\n        }\n      }\n    }\n  }\n": types.TeamMembersSelector_QueryDocument,
     "\n  mutation DataPointsTable_Delete_Mutation($filter: MetricsDataPointsFilter!) {\n    deleteFromMetricsDataPointsCollection(filter: $filter) {\n      affectedCount\n      records {\n        nodeId\n      }\n    }\n  }\n": types.DataPointsTable_Delete_MutationDocument,
     "\n  fragment MetricCardItem on Metrics {\n    id\n    name\n    icon\n    unitShort\n    createdAt\n    metricsDataPointsCollection(orderBy: [{ time: AscNullsLast }]) {\n      totalCount\n      edges {\n        node {\n          nodeId\n          time\n          value\n        }\n      }\n    }\n  }\n": types.MetricCardItemFragmentDoc,
@@ -56,6 +57,10 @@ export function graphql(source: "\n  mutation CommentsFormInsertMutation($input:
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  fragment ThreadFragment on Threads {\n    nodeId\n    id\n    createdAt\n    title\n    fromTimestamp\n    toTimestamp\n  }\n"): (typeof documents)["\n  fragment ThreadFragment on Threads {\n    nodeId\n    id\n    createdAt\n    title\n    fromTimestamp\n    toTimestamp\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query ImportsListQuery {\n    importsCollection(orderBy: [{ createdAt: DescNullsLast }]) {\n      pageInfo {\n        hasNextPage\n        endCursor\n      }\n      edges {\n        cursor\n        node {\n          id\n          nodeId\n          status\n          createdAt\n          fileName\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  query ImportsListQuery {\n    importsCollection(orderBy: [{ createdAt: DescNullsLast }]) {\n      pageInfo {\n        hasNextPage\n        endCursor\n      }\n      edges {\n        cursor\n        node {\n          id\n          nodeId\n          status\n          createdAt\n          fileName\n        }\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
