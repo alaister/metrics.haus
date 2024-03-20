@@ -16,7 +16,7 @@ const Header = () => {
           </Suspense>
         </div>
 
-        <div className="flex pr-6 gap-3">
+        <div className="flex gap-3">
           {/* <Notifications /> */}
           <UserAvatar />
         </div>
