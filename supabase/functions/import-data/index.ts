@@ -145,6 +145,9 @@ serve(async (req) => {
     .from("imports")
     .update({
       status: "finished",
+      metadata: {
+        imported_rows: dataRows.length,
+      },
     })
     .eq("id", importId);
 
