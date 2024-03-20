@@ -41,7 +41,18 @@ const DataPointsTable = ({ dataPoints, metricId }: DataPointsTableProps) => {
     [dataPoints],
   )
 
-  const [deleteDataPointMutation] = useMutation(DeleteDataPointMutation)
+  const [deleteDataPointMutation] = useMutation(DeleteDataPointMutation, {
+    update(cache, { data }) {
+      const deletedRecords =
+        data?.deleteFromMetricsDataPointsCollection.records ?? []
+
+      deletedRecords.forEach((record) => {
+        cache.evict({ id: record.nodeId })
+      })
+
+      cache.gc()
+    },
+  })
   const { toast } = useToast()
 
   const deleteDataPoint = (dataPoint: { time: string }) => {
