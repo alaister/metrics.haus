@@ -24,6 +24,9 @@ interface TeamMembersSelectorProps {
   onValueChange: (profileIds: string[]) => void
 }
 
+/**
+ * Uses react-select because it needs to be a multi-select and radix select is not multiselect
+ */
 const TeamMembersSelector = ({
   onValueChange,
   selectedTeamId,
