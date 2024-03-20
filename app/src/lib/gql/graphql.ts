@@ -229,8 +229,14 @@ export type MetricsDataPointsEdge = {
 }
 
 export type MetricsDataPointsFilter = {
+  /** Returns true only if all its inner filters are true, otherwise returns false */
+  and?: InputMaybe<Array<MetricsDataPointsFilter>>
   metricId?: InputMaybe<UuidFilter>
   nodeId?: InputMaybe<IdFilter>
+  /** Negates a filter */
+  not?: InputMaybe<MetricsDataPointsFilter>
+  /** Returns true if at least one of its inner filters is true, otherwise returns false */
+  or?: InputMaybe<Array<MetricsDataPointsFilter>>
   reportedBy?: InputMaybe<UuidFilter>
   time?: InputMaybe<DatetimeFilter>
   value?: InputMaybe<FloatFilter>
@@ -272,6 +278,8 @@ export type MetricsEdge = {
 }
 
 export type MetricsFilter = {
+  /** Returns true only if all its inner filters are true, otherwise returns false */
+  and?: InputMaybe<Array<MetricsFilter>>
   archived?: InputMaybe<BooleanFilter>
   createdAt?: InputMaybe<DatetimeFilter>
   description?: InputMaybe<StringFilter>
@@ -280,6 +288,10 @@ export type MetricsFilter = {
   interval?: InputMaybe<MetricIntervalFilter>
   name?: InputMaybe<StringFilter>
   nodeId?: InputMaybe<IdFilter>
+  /** Negates a filter */
+  not?: InputMaybe<MetricsFilter>
+  /** Returns true if at least one of its inner filters is true, otherwise returns false */
+  or?: InputMaybe<Array<MetricsFilter>>
   teamId?: InputMaybe<UuidFilter>
   unitShort?: InputMaybe<StringFilter>
   updatedAt?: InputMaybe<DatetimeFilter>
@@ -347,9 +359,15 @@ export type MetricsOwnersEdge = {
 }
 
 export type MetricsOwnersFilter = {
+  /** Returns true only if all its inner filters are true, otherwise returns false */
+  and?: InputMaybe<Array<MetricsOwnersFilter>>
   createdAt?: InputMaybe<DatetimeFilter>
   metricId?: InputMaybe<UuidFilter>
   nodeId?: InputMaybe<IdFilter>
+  /** Negates a filter */
+  not?: InputMaybe<MetricsOwnersFilter>
+  /** Returns true if at least one of its inner filters is true, otherwise returns false */
+  or?: InputMaybe<Array<MetricsOwnersFilter>>
   profileId?: InputMaybe<UuidFilter>
 }
 
@@ -407,6 +425,17 @@ export type MetricsUpdateResponse = {
 /** The root type for creating and mutating data */
 export type Mutation = {
   __typename?: 'Mutation'
+  addCompressionPolicy?: Maybe<Scalars['Int']['output']>
+  addContinuousAggregatePolicy?: Maybe<Scalars['Int']['output']>
+  addJob?: Maybe<Scalars['Int']['output']>
+  addReorderPolicy?: Maybe<Scalars['Int']['output']>
+  addRetentionPolicy?: Maybe<Scalars['Int']['output']>
+  approximateRowCount?: Maybe<Scalars['BigInt']['output']>
+  attachTablespace?: Maybe<Scalars['Opaque']['output']>
+  caggMigrate?: Maybe<Scalars['Opaque']['output']>
+  compressChunk?: Maybe<Scalars['Opaque']['output']>
+  decompressChunk?: Maybe<Scalars['Opaque']['output']>
+  deleteDataNode?: Maybe<Scalars['Boolean']['output']>
   /** Deletes zero or more records from the `Metrics` collection */
   deleteFromMetricsCollection: MetricsDeleteResponse
   /** Deletes zero or more records from the `MetricsDataPoints` collection */
@@ -419,6 +448,12 @@ export type Mutation = {
   deleteFromTeamMembersCollection: TeamMembersDeleteResponse
   /** Deletes zero or more records from the `Teams` collection */
   deleteFromTeamsCollection: TeamsDeleteResponse
+  deleteJob?: Maybe<Scalars['Opaque']['output']>
+  detachDataNode?: Maybe<Scalars['Int']['output']>
+  detachTablespace?: Maybe<Scalars['Int']['output']>
+  detachTablespaces?: Maybe<Scalars['Int']['output']>
+  hypertableIndexSize?: Maybe<Scalars['BigInt']['output']>
+  hypertableSize?: Maybe<Scalars['BigInt']['output']>
   /** Adds one or more `Metrics` records to the collection */
   insertIntoMetricsCollection?: Maybe<MetricsInsertResponse>
   /** Adds one or more `MetricsDataPoints` records to the collection */
@@ -429,6 +464,23 @@ export type Mutation = {
   insertIntoNotificationsCollection?: Maybe<NotificationsInsertResponse>
   /** Adds one or more `Teams` records to the collection */
   insertIntoTeamsCollection?: Maybe<TeamsInsertResponse>
+  locf?: Maybe<Scalars['Opaque']['output']>
+  moveChunk?: Maybe<Scalars['Opaque']['output']>
+  recompressChunk?: Maybe<Scalars['Opaque']['output']>
+  refreshContinuousAggregate?: Maybe<Scalars['Opaque']['output']>
+  removeCompressionPolicy?: Maybe<Scalars['Boolean']['output']>
+  removeContinuousAggregatePolicy?: Maybe<Scalars['Opaque']['output']>
+  removeReorderPolicy?: Maybe<Scalars['Opaque']['output']>
+  removeRetentionPolicy?: Maybe<Scalars['Opaque']['output']>
+  reorderChunk?: Maybe<Scalars['Opaque']['output']>
+  runJob?: Maybe<Scalars['Opaque']['output']>
+  setChunkTimeInterval?: Maybe<Scalars['Opaque']['output']>
+  setIntegerNowFunc?: Maybe<Scalars['Opaque']['output']>
+  setNumberPartitions?: Maybe<Scalars['Opaque']['output']>
+  setReplicationFactor?: Maybe<Scalars['Opaque']['output']>
+  timescaledbFdwHandler?: Maybe<Scalars['Opaque']['output']>
+  timescaledbPostRestore?: Maybe<Scalars['Boolean']['output']>
+  timescaledbPreRestore?: Maybe<Scalars['Boolean']['output']>
   /** Updates zero or more records in the `Metrics` collection */
   updateMetricsCollection: MetricsUpdateResponse
   /** Updates zero or more records in the `MetricsOwners` collection */
@@ -439,6 +491,98 @@ export type Mutation = {
   updateProfilesCollection: ProfilesUpdateResponse
   /** Updates zero or more records in the `Teams` collection */
   updateTeamsCollection: TeamsUpdateResponse
+}
+
+/** The root type for creating and mutating data */
+export type MutationAddCompressionPolicyArgs = {
+  compressAfter?: InputMaybe<Scalars['Opaque']['input']>
+  hypertable?: InputMaybe<Scalars['Opaque']['input']>
+  ifNotExists?: InputMaybe<Scalars['Boolean']['input']>
+  initialStart?: InputMaybe<Scalars['Datetime']['input']>
+  scheduleInterval?: InputMaybe<Scalars['Opaque']['input']>
+  timezone?: InputMaybe<Scalars['String']['input']>
+}
+
+/** The root type for creating and mutating data */
+export type MutationAddContinuousAggregatePolicyArgs = {
+  continuousAggregate?: InputMaybe<Scalars['Opaque']['input']>
+  endOffset?: InputMaybe<Scalars['Opaque']['input']>
+  ifNotExists?: InputMaybe<Scalars['Boolean']['input']>
+  initialStart?: InputMaybe<Scalars['Datetime']['input']>
+  scheduleInterval?: InputMaybe<Scalars['Opaque']['input']>
+  startOffset?: InputMaybe<Scalars['Opaque']['input']>
+  timezone?: InputMaybe<Scalars['String']['input']>
+}
+
+/** The root type for creating and mutating data */
+export type MutationAddJobArgs = {
+  checkConfig?: InputMaybe<Scalars['Opaque']['input']>
+  config?: InputMaybe<Scalars['JSON']['input']>
+  fixedSchedule?: InputMaybe<Scalars['Boolean']['input']>
+  initialStart?: InputMaybe<Scalars['Datetime']['input']>
+  proc?: InputMaybe<Scalars['Opaque']['input']>
+  scheduleInterval?: InputMaybe<Scalars['Opaque']['input']>
+  scheduled?: InputMaybe<Scalars['Boolean']['input']>
+  timezone?: InputMaybe<Scalars['String']['input']>
+}
+
+/** The root type for creating and mutating data */
+export type MutationAddReorderPolicyArgs = {
+  hypertable?: InputMaybe<Scalars['Opaque']['input']>
+  ifNotExists?: InputMaybe<Scalars['Boolean']['input']>
+  indexName?: InputMaybe<Scalars['Opaque']['input']>
+  initialStart?: InputMaybe<Scalars['Datetime']['input']>
+  timezone?: InputMaybe<Scalars['String']['input']>
+}
+
+/** The root type for creating and mutating data */
+export type MutationAddRetentionPolicyArgs = {
+  dropAfter?: InputMaybe<Scalars['Opaque']['input']>
+  ifNotExists?: InputMaybe<Scalars['Boolean']['input']>
+  initialStart?: InputMaybe<Scalars['Datetime']['input']>
+  relation?: InputMaybe<Scalars['Opaque']['input']>
+  scheduleInterval?: InputMaybe<Scalars['Opaque']['input']>
+  timezone?: InputMaybe<Scalars['String']['input']>
+}
+
+/** The root type for creating and mutating data */
+export type MutationApproximateRowCountArgs = {
+  relation?: InputMaybe<Scalars['Opaque']['input']>
+}
+
+/** The root type for creating and mutating data */
+export type MutationAttachTablespaceArgs = {
+  hypertable?: InputMaybe<Scalars['Opaque']['input']>
+  ifNotAttached?: InputMaybe<Scalars['Boolean']['input']>
+  tablespace?: InputMaybe<Scalars['Opaque']['input']>
+}
+
+/** The root type for creating and mutating data */
+export type MutationCaggMigrateArgs = {
+  cagg?: InputMaybe<Scalars['Opaque']['input']>
+  dropOld?: InputMaybe<Scalars['Boolean']['input']>
+  override?: InputMaybe<Scalars['Boolean']['input']>
+}
+
+/** The root type for creating and mutating data */
+export type MutationCompressChunkArgs = {
+  ifNotCompressed?: InputMaybe<Scalars['Boolean']['input']>
+  uncompressedChunk?: InputMaybe<Scalars['Opaque']['input']>
+}
+
+/** The root type for creating and mutating data */
+export type MutationDecompressChunkArgs = {
+  ifCompressed?: InputMaybe<Scalars['Boolean']['input']>
+  uncompressedChunk?: InputMaybe<Scalars['Opaque']['input']>
+}
+
+/** The root type for creating and mutating data */
+export type MutationDeleteDataNodeArgs = {
+  dropDatabase?: InputMaybe<Scalars['Boolean']['input']>
+  force?: InputMaybe<Scalars['Boolean']['input']>
+  ifExists?: InputMaybe<Scalars['Boolean']['input']>
+  nodeName?: InputMaybe<Scalars['Opaque']['input']>
+  repartition?: InputMaybe<Scalars['Boolean']['input']>
 }
 
 /** The root type for creating and mutating data */
@@ -478,6 +622,43 @@ export type MutationDeleteFromTeamsCollectionArgs = {
 }
 
 /** The root type for creating and mutating data */
+export type MutationDeleteJobArgs = {
+  jobId?: InputMaybe<Scalars['Int']['input']>
+}
+
+/** The root type for creating and mutating data */
+export type MutationDetachDataNodeArgs = {
+  dropRemoteData?: InputMaybe<Scalars['Boolean']['input']>
+  force?: InputMaybe<Scalars['Boolean']['input']>
+  hypertable?: InputMaybe<Scalars['Opaque']['input']>
+  ifAttached?: InputMaybe<Scalars['Boolean']['input']>
+  nodeName?: InputMaybe<Scalars['Opaque']['input']>
+  repartition?: InputMaybe<Scalars['Boolean']['input']>
+}
+
+/** The root type for creating and mutating data */
+export type MutationDetachTablespaceArgs = {
+  hypertable?: InputMaybe<Scalars['Opaque']['input']>
+  ifAttached?: InputMaybe<Scalars['Boolean']['input']>
+  tablespace?: InputMaybe<Scalars['Opaque']['input']>
+}
+
+/** The root type for creating and mutating data */
+export type MutationDetachTablespacesArgs = {
+  hypertable?: InputMaybe<Scalars['Opaque']['input']>
+}
+
+/** The root type for creating and mutating data */
+export type MutationHypertableIndexSizeArgs = {
+  indexName?: InputMaybe<Scalars['Opaque']['input']>
+}
+
+/** The root type for creating and mutating data */
+export type MutationHypertableSizeArgs = {
+  hypertable?: InputMaybe<Scalars['Opaque']['input']>
+}
+
+/** The root type for creating and mutating data */
 export type MutationInsertIntoMetricsCollectionArgs = {
   objects: Array<MetricsInsertInput>
 }
@@ -500,6 +681,99 @@ export type MutationInsertIntoNotificationsCollectionArgs = {
 /** The root type for creating and mutating data */
 export type MutationInsertIntoTeamsCollectionArgs = {
   objects: Array<TeamsInsertInput>
+}
+
+/** The root type for creating and mutating data */
+export type MutationLocfArgs = {
+  prev?: InputMaybe<Scalars['Opaque']['input']>
+  treatNullAsMissing?: InputMaybe<Scalars['Boolean']['input']>
+  value?: InputMaybe<Scalars['Opaque']['input']>
+}
+
+/** The root type for creating and mutating data */
+export type MutationMoveChunkArgs = {
+  chunk?: InputMaybe<Scalars['Opaque']['input']>
+  destinationTablespace?: InputMaybe<Scalars['Opaque']['input']>
+  indexDestinationTablespace?: InputMaybe<Scalars['Opaque']['input']>
+  reorderIndex?: InputMaybe<Scalars['Opaque']['input']>
+  verbose?: InputMaybe<Scalars['Boolean']['input']>
+}
+
+/** The root type for creating and mutating data */
+export type MutationRecompressChunkArgs = {
+  chunk?: InputMaybe<Scalars['Opaque']['input']>
+  ifNotCompressed?: InputMaybe<Scalars['Boolean']['input']>
+}
+
+/** The root type for creating and mutating data */
+export type MutationRefreshContinuousAggregateArgs = {
+  continuousAggregate?: InputMaybe<Scalars['Opaque']['input']>
+  windowEnd?: InputMaybe<Scalars['Opaque']['input']>
+  windowStart?: InputMaybe<Scalars['Opaque']['input']>
+}
+
+/** The root type for creating and mutating data */
+export type MutationRemoveCompressionPolicyArgs = {
+  hypertable?: InputMaybe<Scalars['Opaque']['input']>
+  ifExists?: InputMaybe<Scalars['Boolean']['input']>
+}
+
+/** The root type for creating and mutating data */
+export type MutationRemoveContinuousAggregatePolicyArgs = {
+  continuousAggregate?: InputMaybe<Scalars['Opaque']['input']>
+  ifExists?: InputMaybe<Scalars['Boolean']['input']>
+  ifNotExists?: InputMaybe<Scalars['Boolean']['input']>
+}
+
+/** The root type for creating and mutating data */
+export type MutationRemoveReorderPolicyArgs = {
+  hypertable?: InputMaybe<Scalars['Opaque']['input']>
+  ifExists?: InputMaybe<Scalars['Boolean']['input']>
+}
+
+/** The root type for creating and mutating data */
+export type MutationRemoveRetentionPolicyArgs = {
+  ifExists?: InputMaybe<Scalars['Boolean']['input']>
+  relation?: InputMaybe<Scalars['Opaque']['input']>
+}
+
+/** The root type for creating and mutating data */
+export type MutationReorderChunkArgs = {
+  chunk?: InputMaybe<Scalars['Opaque']['input']>
+  index?: InputMaybe<Scalars['Opaque']['input']>
+  verbose?: InputMaybe<Scalars['Boolean']['input']>
+}
+
+/** The root type for creating and mutating data */
+export type MutationRunJobArgs = {
+  jobId?: InputMaybe<Scalars['Int']['input']>
+}
+
+/** The root type for creating and mutating data */
+export type MutationSetChunkTimeIntervalArgs = {
+  chunkTimeInterval?: InputMaybe<Scalars['Opaque']['input']>
+  dimensionName?: InputMaybe<Scalars['Opaque']['input']>
+  hypertable?: InputMaybe<Scalars['Opaque']['input']>
+}
+
+/** The root type for creating and mutating data */
+export type MutationSetIntegerNowFuncArgs = {
+  hypertable?: InputMaybe<Scalars['Opaque']['input']>
+  integerNowFunc?: InputMaybe<Scalars['Opaque']['input']>
+  replaceIfExists?: InputMaybe<Scalars['Boolean']['input']>
+}
+
+/** The root type for creating and mutating data */
+export type MutationSetNumberPartitionsArgs = {
+  dimensionName?: InputMaybe<Scalars['Opaque']['input']>
+  hypertable?: InputMaybe<Scalars['Opaque']['input']>
+  numberPartitions?: InputMaybe<Scalars['Int']['input']>
+}
+
+/** The root type for creating and mutating data */
+export type MutationSetReplicationFactorArgs = {
+  hypertable?: InputMaybe<Scalars['Opaque']['input']>
+  replicationFactor?: InputMaybe<Scalars['Int']['input']>
 }
 
 /** The root type for creating and mutating data */
@@ -575,9 +849,15 @@ export type NotificationsEdge = {
 }
 
 export type NotificationsFilter = {
+  /** Returns true only if all its inner filters are true, otherwise returns false */
+  and?: InputMaybe<Array<NotificationsFilter>>
   createdAt?: InputMaybe<DatetimeFilter>
   id?: InputMaybe<UuidFilter>
   nodeId?: InputMaybe<IdFilter>
+  /** Negates a filter */
+  not?: InputMaybe<NotificationsFilter>
+  /** Returns true if at least one of its inner filters is true, otherwise returns false */
+  or?: InputMaybe<Array<NotificationsFilter>>
   profileId?: InputMaybe<UuidFilter>
   text?: InputMaybe<StringFilter>
 }
@@ -711,11 +991,17 @@ export type ProfilesEdge = {
 }
 
 export type ProfilesFilter = {
+  /** Returns true only if all its inner filters are true, otherwise returns false */
+  and?: InputMaybe<Array<ProfilesFilter>>
   avatarPath?: InputMaybe<StringFilter>
   createdAt?: InputMaybe<DatetimeFilter>
   id?: InputMaybe<UuidFilter>
   name?: InputMaybe<StringFilter>
   nodeId?: InputMaybe<IdFilter>
+  /** Negates a filter */
+  not?: InputMaybe<ProfilesFilter>
+  /** Returns true if at least one of its inner filters is true, otherwise returns false */
+  or?: InputMaybe<Array<ProfilesFilter>>
   updatedAt?: InputMaybe<DatetimeFilter>
 }
 
@@ -742,6 +1028,8 @@ export type ProfilesUpdateResponse = {
 /** The root type for querying data */
 export type Query = {
   __typename?: 'Query'
+  getTelemetryReport?: Maybe<Scalars['JSON']['output']>
+  isCurrentUserInTeam?: Maybe<Scalars['Boolean']['output']>
   /** A pagable collection of type `Metrics` */
   metricsCollection?: Maybe<MetricsConnection>
   /** A pagable collection of type `MetricsDataPoints` */
@@ -758,6 +1046,11 @@ export type Query = {
   teamMembersCollection?: Maybe<TeamMembersConnection>
   /** A pagable collection of type `Teams` */
   teamsCollection?: Maybe<TeamsConnection>
+}
+
+/** The root type for querying data */
+export type QueryIsCurrentUserInTeamArgs = {
+  teamId?: InputMaybe<Scalars['UUID']['input']>
 }
 
 /** The root type for querying data */
@@ -885,8 +1178,14 @@ export type TeamMembersEdge = {
 }
 
 export type TeamMembersFilter = {
+  /** Returns true only if all its inner filters are true, otherwise returns false */
+  and?: InputMaybe<Array<TeamMembersFilter>>
   createdAt?: InputMaybe<DatetimeFilter>
   nodeId?: InputMaybe<IdFilter>
+  /** Negates a filter */
+  not?: InputMaybe<TeamMembersFilter>
+  /** Returns true if at least one of its inner filters is true, otherwise returns false */
+  or?: InputMaybe<Array<TeamMembersFilter>>
   profileId?: InputMaybe<UuidFilter>
   teamId?: InputMaybe<UuidFilter>
   updatedAt?: InputMaybe<DatetimeFilter>
@@ -951,10 +1250,16 @@ export type TeamsEdge = {
 }
 
 export type TeamsFilter = {
+  /** Returns true only if all its inner filters are true, otherwise returns false */
+  and?: InputMaybe<Array<TeamsFilter>>
   createdAt?: InputMaybe<DatetimeFilter>
   id?: InputMaybe<UuidFilter>
   name?: InputMaybe<StringFilter>
   nodeId?: InputMaybe<IdFilter>
+  /** Negates a filter */
+  not?: InputMaybe<TeamsFilter>
+  /** Returns true if at least one of its inner filters is true, otherwise returns false */
+  or?: InputMaybe<Array<TeamsFilter>>
   ssoProviderId?: InputMaybe<StringFilter>
   updatedAt?: InputMaybe<DatetimeFilter>
 }
