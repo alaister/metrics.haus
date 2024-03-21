@@ -37,8 +37,8 @@ const TeamMembersSelector = ({
     },
   })
   const options = data?.teamMembersCollection?.edges.map((x) => ({
-    label: x.node.profile.name,
-    value: x.node.profile.id,
+    label: x.node.profile?.name || '-',
+    value: x.node.profile?.id || '-',
   }))
   const [selectedMembers, setSelectedMembers] = useState<
     MultiValue<{

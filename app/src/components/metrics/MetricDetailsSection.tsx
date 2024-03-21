@@ -75,7 +75,7 @@ const MetricDetailsSection = ({ metricNodeId }: MetricDetailsProps) => {
   const dataPoints =
     data.metricsDataPointsCollection?.edges.map((edge) => edge.node) ?? []
 
-  const lastDataPoint = dataPoints[dataPoints.length - 1]
+  const firstDataPoint = dataPoints[0]
 
   const archive = () => {
     archiveMutation({
@@ -103,7 +103,7 @@ const MetricDetailsSection = ({ metricNodeId }: MetricDetailsProps) => {
         <div className="flex gap-x-4">
           <span className="text-2xl font-bold">
             {data.unitShort || ''}
-            {lastDataPoint?.value?.toLocaleString() || '-'}
+            {firstDataPoint?.value?.toLocaleString() || '-'}
           </span>
           <GrowthBadge dataPoints={dataPoints} />
         </div>
