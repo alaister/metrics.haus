@@ -14,7 +14,7 @@ const MetricCardFragment = graphql(/* GraphQL */ `
     icon
     unitShort
     createdAt
-    metricsDataPointsCollection(orderBy: [{ time: AscNullsLast }]) {
+    metricsDataPointsCollection(orderBy: [{ time: DescNullsLast }]) {
       totalCount
       edges {
         node {
@@ -93,7 +93,7 @@ const MetricCard = memo(function MetricCard({ metricNodeId }: MetricCardProps) {
             dataPoints={filteredDataPoints}
           />
         </div>
-        <MetricCardTable dataPoints={filteredDataPoints} />
+        <MetricCardTable dataPoints={filteredDataPoints.slice(0, 6)} />
       </div>
     </Link>
   )

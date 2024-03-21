@@ -31,7 +31,9 @@ export const MetricCardTable = ({
             <TableCell className="font-medium">
               {format(new Date(point.time), 'yyyy-MM-dd')}
             </TableCell>
-            <TableCell className="text-right">{point.value}</TableCell>
+            <TableCell className="text-right">
+              {point.value.toLocaleString()}
+            </TableCell>
           </TableRow>
         ))}
       </TableBody>

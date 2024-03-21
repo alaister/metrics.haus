@@ -13,7 +13,7 @@ const MetricDetailsSectionFragment = graphql(/* GraphQL */ `
   fragment MetricDetailsSectionItem on Metrics {
     id
     unitShort
-    metricsDataPointsCollection(orderBy: [{ time: AscNullsLast }]) {
+    metricsDataPointsCollection(orderBy: [{ time: DescNullsLast }]) {
       totalCount
       edges {
         node {

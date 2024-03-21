@@ -13,7 +13,7 @@ export interface PointsState {
 
 const initialState: PointsState = {
   metricsInterval: {
-    from: subMonths(new Date(), 1).toISOString(),
+    from: subMonths(new Date(), 2).toISOString(),
     to: new Date().toISOString(),
   },
 }
