@@ -1,4 +1,4 @@
-import MetricDataPointForm from '~/components/metrics/MetricDataPointForm'
+import { MetricDataPointForm } from '~/components/metrics/MetricDataPointForm'
 import { Dialog, DialogContent } from '~/components/ui/Dialog'
 import { useModals, useParams } from '~/lib/router'
 
@@ -20,7 +20,7 @@ const NewDataPointModal = () => {
       }}
     >
       <DialogContent>
-        <MetricDataPointForm metricId={metricId} />
+        <MetricDataPointForm metricId={metricId} onSuccess={onClose} />
       </DialogContent>
     </Dialog>
   )

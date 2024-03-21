@@ -211,12 +211,10 @@ export type IdFilter = {
 };
 
 export enum ImportStatus {
-  Canceled = 'canceled',
   DataImporting = 'data_importing',
   Failed = 'failed',
   FileUploaded = 'file_uploaded',
-  Finished = 'finished',
-  ReadyForImport = 'ready_for_import'
+  Finished = 'finished'
 }
 
 /** Boolean expression comparing fields on type "ImportStatus" */
@@ -636,6 +634,8 @@ export type Mutation = {
   deleteFromMetricsDataPointsCollection: MetricsDataPointsDeleteResponse;
   /** Deletes zero or more records from the `MetricsOwners` collection */
   deleteFromMetricsOwnersCollection: MetricsOwnersDeleteResponse;
+  /** Deletes zero or more records from the `Notifications` collection */
+  deleteFromNotificationsCollection: NotificationsDeleteResponse;
   /** Deletes zero or more records from the `Threads` collection */
   deleteFromThreadsCollection: ThreadsDeleteResponse;
   /** Adds one or more `Comments` records to the collection */
@@ -648,10 +648,10 @@ export type Mutation = {
   insertIntoMetricsDataPointsCollection?: Maybe<MetricsDataPointsInsertResponse>;
   /** Adds one or more `MetricsOwners` records to the collection */
   insertIntoMetricsOwnersCollection?: Maybe<MetricsOwnersInsertResponse>;
+  /** Adds one or more `Notifications` records to the collection */
+  insertIntoNotificationsCollection?: Maybe<NotificationsInsertResponse>;
   /** Adds one or more `Threads` records to the collection */
   insertIntoThreadsCollection?: Maybe<ThreadsInsertResponse>;
-  /** Adds one or more `UserEvents` records to the collection */
-  insertIntoUserEventsCollection?: Maybe<UserEventsInsertResponse>;
   /** Updates zero or more records in the `Comments` collection */
   updateCommentsCollection: CommentsUpdateResponse;
   /** Updates zero or more records in the `Imports` collection */
@@ -705,6 +705,13 @@ export type MutationDeleteFromMetricsOwnersCollectionArgs = {
 
 
 /** The root type for creating and mutating data */
+export type MutationDeleteFromNotificationsCollectionArgs = {
+  atMost?: Scalars['Int']['input'];
+  filter?: InputMaybe<NotificationsFilter>;
+};
+
+
+/** The root type for creating and mutating data */
 export type MutationDeleteFromThreadsCollectionArgs = {
   atMost?: Scalars['Int']['input'];
   filter?: InputMaybe<ThreadsFilter>;
@@ -742,14 +749,14 @@ export type MutationInsertIntoMetricsOwnersCollectionArgs = {
 
 
 /** The root type for creating and mutating data */
-export type MutationInsertIntoThreadsCollectionArgs = {
-  objects: Array<ThreadsInsertInput>;
+export type MutationInsertIntoNotificationsCollectionArgs = {
+  objects: Array<NotificationsInsertInput>;
 };
 
 
 /** The root type for creating and mutating data */
-export type MutationInsertIntoUserEventsCollectionArgs = {
-  objects: Array<UserEventsInsertInput>;
+export type MutationInsertIntoThreadsCollectionArgs = {
+  objects: Array<ThreadsInsertInput>;
 };
 
 
@@ -815,7 +822,6 @@ export type Node = {
 
 export type Notifications = Node & {
   __typename?: 'Notifications';
-  body?: Maybe<Scalars['String']['output']>;
   createdAt?: Maybe<Scalars['Datetime']['output']>;
   id: Scalars['UUID']['output'];
   metadata?: Maybe<Scalars['JSON']['output']>;
@@ -823,15 +829,21 @@ export type Notifications = Node & {
   nodeId: Scalars['ID']['output'];
   profile: Profiles;
   profileId: Scalars['UUID']['output'];
-  seenAt?: Maybe<Scalars['Datetime']['output']>;
-  team: Teams;
-  teamId: Scalars['UUID']['output'];
+  text?: Maybe<Scalars['String']['output']>;
 };
 
 export type NotificationsConnection = {
   __typename?: 'NotificationsConnection';
   edges: Array<NotificationsEdge>;
   pageInfo: PageInfo;
+};
+
+export type NotificationsDeleteResponse = {
+  __typename?: 'NotificationsDeleteResponse';
+  /** Count of the records impacted by the mutation */
+  affectedCount: Scalars['Int']['output'];
+  /** Array of records impacted by the mutation */
+  records: Array<Notifications>;
 };
 
 export type NotificationsEdge = {
@@ -843,7 +855,6 @@ export type NotificationsEdge = {
 export type NotificationsFilter = {
   /** Returns true only if all its inner filters are true, otherwise returns false */
   and?: InputMaybe<Array<NotificationsFilter>>;
-  body?: InputMaybe<StringFilter>;
   createdAt?: InputMaybe<DatetimeFilter>;
   id?: InputMaybe<UuidFilter>;
   nodeId?: InputMaybe<IdFilter>;
@@ -852,21 +863,38 @@ export type NotificationsFilter = {
   /** Returns true if at least one of its inner filters is true, otherwise returns false */
   or?: InputMaybe<Array<NotificationsFilter>>;
   profileId?: InputMaybe<UuidFilter>;
-  seenAt?: InputMaybe<DatetimeFilter>;
-  teamId?: InputMaybe<UuidFilter>;
+  text?: InputMaybe<StringFilter>;
+};
+
+export type NotificationsInsertInput = {
+  createdAt?: InputMaybe<Scalars['Datetime']['input']>;
+  id?: InputMaybe<Scalars['UUID']['input']>;
+  metadata?: InputMaybe<Scalars['JSON']['input']>;
+  profileId?: InputMaybe<Scalars['UUID']['input']>;
+  text?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type NotificationsInsertResponse = {
+  __typename?: 'NotificationsInsertResponse';
+  /** Count of the records impacted by the mutation */
+  affectedCount: Scalars['Int']['output'];
+  /** Array of records impacted by the mutation */
+  records: Array<Notifications>;
 };
 
 export type NotificationsOrderBy = {
-  body?: InputMaybe<OrderByDirection>;
   createdAt?: InputMaybe<OrderByDirection>;
   id?: InputMaybe<OrderByDirection>;
   profileId?: InputMaybe<OrderByDirection>;
-  seenAt?: InputMaybe<OrderByDirection>;
-  teamId?: InputMaybe<OrderByDirection>;
+  text?: InputMaybe<OrderByDirection>;
 };
 
 export type NotificationsUpdateInput = {
-  seenAt?: InputMaybe<Scalars['Datetime']['input']>;
+  createdAt?: InputMaybe<Scalars['Datetime']['input']>;
+  id?: InputMaybe<Scalars['UUID']['input']>;
+  metadata?: InputMaybe<Scalars['JSON']['input']>;
+  profileId?: InputMaybe<Scalars['UUID']['input']>;
+  text?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type NotificationsUpdateResponse = {
@@ -919,7 +947,6 @@ export type Profiles = Node & {
   teamMembersCollection?: Maybe<TeamMembersConnection>;
   threadsCollection?: Maybe<ThreadsConnection>;
   updatedAt: Scalars['Datetime']['output'];
-  userEventsCollection?: Maybe<UserEventsConnection>;
 };
 
 
@@ -990,16 +1017,6 @@ export type ProfilesThreadsCollectionArgs = {
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Array<ThreadsOrderBy>>;
-};
-
-
-export type ProfilesUserEventsCollectionArgs = {
-  after?: InputMaybe<Scalars['Cursor']['input']>;
-  before?: InputMaybe<Scalars['Cursor']['input']>;
-  filter?: InputMaybe<UserEventsFilter>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<Array<UserEventsOrderBy>>;
 };
 
 export type ProfilesConnection = {
@@ -1074,8 +1091,6 @@ export type Query = {
   teamsCollection?: Maybe<TeamsConnection>;
   /** A pagable collection of type `Threads` */
   threadsCollection?: Maybe<ThreadsConnection>;
-  /** A pagable collection of type `UserEvents` */
-  userEventsCollection?: Maybe<UserEventsConnection>;
 };
 
 
@@ -1194,17 +1209,6 @@ export type QueryThreadsCollectionArgs = {
   orderBy?: InputMaybe<Array<ThreadsOrderBy>>;
 };
 
-
-/** The root type for querying data */
-export type QueryUserEventsCollectionArgs = {
-  after?: InputMaybe<Scalars['Cursor']['input']>;
-  before?: InputMaybe<Scalars['Cursor']['input']>;
-  filter?: InputMaybe<UserEventsFilter>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<Array<UserEventsOrderBy>>;
-};
-
 /** Boolean expression comparing fields on type "String" */
 export type StringFilter = {
   eq?: InputMaybe<Scalars['String']['input']>;
@@ -1276,7 +1280,6 @@ export type Teams = Node & {
   name: Scalars['String']['output'];
   /** Globally Unique Record Identifier */
   nodeId: Scalars['ID']['output'];
-  notificationsCollection?: Maybe<NotificationsConnection>;
   ssoProviderId?: Maybe<Scalars['String']['output']>;
   teamMembersCollection?: Maybe<TeamMembersConnection>;
   threadsCollection?: Maybe<ThreadsConnection>;
@@ -1301,16 +1304,6 @@ export type TeamsMetricsCollectionArgs = {
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Array<MetricsOrderBy>>;
-};
-
-
-export type TeamsNotificationsCollectionArgs = {
-  after?: InputMaybe<Scalars['Cursor']['input']>;
-  before?: InputMaybe<Scalars['Cursor']['input']>;
-  filter?: InputMaybe<NotificationsFilter>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<Array<NotificationsOrderBy>>;
 };
 
 
@@ -1508,84 +1501,6 @@ export type UuidFilter = {
   neq?: InputMaybe<Scalars['UUID']['input']>;
 };
 
-export enum UserEvent {
-  AddDataPoint = 'add_data_point',
-  AddMetric = 'add_metric',
-  Import = 'import',
-  UpdateAvatar = 'update_avatar',
-  ViewPage = 'view_page'
-}
-
-/** Boolean expression comparing fields on type "UserEvent" */
-export type UserEventFilter = {
-  eq?: InputMaybe<UserEvent>;
-  in?: InputMaybe<Array<UserEvent>>;
-  is?: InputMaybe<FilterIs>;
-  neq?: InputMaybe<UserEvent>;
-};
-
-export type UserEvents = Node & {
-  __typename?: 'UserEvents';
-  event: UserEvent;
-  id: Scalars['UUID']['output'];
-  meta?: Maybe<Scalars['JSON']['output']>;
-  /** Globally Unique Record Identifier */
-  nodeId: Scalars['ID']['output'];
-  ts: Scalars['Datetime']['output'];
-  user: Profiles;
-  userId: Scalars['UUID']['output'];
-  value?: Maybe<Scalars['String']['output']>;
-};
-
-export type UserEventsConnection = {
-  __typename?: 'UserEventsConnection';
-  edges: Array<UserEventsEdge>;
-  pageInfo: PageInfo;
-};
-
-export type UserEventsEdge = {
-  __typename?: 'UserEventsEdge';
-  cursor: Scalars['String']['output'];
-  node: UserEvents;
-};
-
-export type UserEventsFilter = {
-  /** Returns true only if all its inner filters are true, otherwise returns false */
-  and?: InputMaybe<Array<UserEventsFilter>>;
-  event?: InputMaybe<UserEventFilter>;
-  id?: InputMaybe<UuidFilter>;
-  nodeId?: InputMaybe<IdFilter>;
-  /** Negates a filter */
-  not?: InputMaybe<UserEventsFilter>;
-  /** Returns true if at least one of its inner filters is true, otherwise returns false */
-  or?: InputMaybe<Array<UserEventsFilter>>;
-  ts?: InputMaybe<DatetimeFilter>;
-  userId?: InputMaybe<UuidFilter>;
-  value?: InputMaybe<StringFilter>;
-};
-
-export type UserEventsInsertInput = {
-  event?: InputMaybe<UserEvent>;
-  meta?: InputMaybe<Scalars['JSON']['input']>;
-  value?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type UserEventsInsertResponse = {
-  __typename?: 'UserEventsInsertResponse';
-  /** Count of the records impacted by the mutation */
-  affectedCount: Scalars['Int']['output'];
-  /** Array of records impacted by the mutation */
-  records: Array<UserEvents>;
-};
-
-export type UserEventsOrderBy = {
-  event?: InputMaybe<OrderByDirection>;
-  id?: InputMaybe<OrderByDirection>;
-  ts?: InputMaybe<OrderByDirection>;
-  userId?: InputMaybe<OrderByDirection>;
-  value?: InputMaybe<OrderByDirection>;
-};
-
 export type CommentFragmentFragment = { __typename: 'Comments', nodeId: string, id: string, createdAt?: string | null, updatedAt?: string | null, body: string, profile: { __typename: 'Profiles', nodeId: string, id: string, name: string, avatarPath?: string | null } };
 
 export type CommentsFormInsertMutationMutationVariables = Exact<{
@@ -1663,21 +1578,21 @@ export type MetricDetailsQueryQueryVariables = Exact<{
 }>;
 
 
-export type MetricDetailsQueryQuery = { __typename: 'Query', node?: { __typename: 'Comments', nodeId: string } | { __typename: 'Imports', nodeId: string } | { __typename: 'Metrics', id: string, name: string, icon?: string | null, unitShort?: string | null, description?: string | null, nodeId: string, threadsCollection?: { __typename: 'ThreadsConnection', pageInfo: { __typename: 'PageInfo', hasNextPage: boolean, endCursor?: string | null }, edges: Array<{ __typename: 'ThreadsEdge', cursor: string, node: { __typename: 'Threads', nodeId: string, id: string, createdAt?: string | null, title: string, fromTimestamp?: string | null, toTimestamp?: string | null } }> } | null, metricsDataPointsCollection?: { __typename: 'MetricsDataPointsConnection', totalCount: number, edges: Array<{ __typename: 'MetricsDataPointsEdge', node: { __typename: 'MetricsDataPoints', nodeId: string, time: string, value: number } }> } | null } | { __typename: 'MetricsDataPoints', nodeId: string } | { __typename: 'MetricsOwners', nodeId: string } | { __typename: 'Notifications', nodeId: string } | { __typename: 'Profiles', nodeId: string } | { __typename: 'TeamMembers', nodeId: string } | { __typename: 'Teams', nodeId: string } | { __typename: 'Threads', nodeId: string } | { __typename: 'UserEvents', nodeId: string } | null };
+export type MetricDetailsQueryQuery = { __typename: 'Query', node?: { __typename: 'Comments', nodeId: string } | { __typename: 'Imports', nodeId: string } | { __typename: 'Metrics', id: string, name: string, icon?: string | null, unitShort?: string | null, description?: string | null, nodeId: string, threadsCollection?: { __typename: 'ThreadsConnection', pageInfo: { __typename: 'PageInfo', hasNextPage: boolean, endCursor?: string | null }, edges: Array<{ __typename: 'ThreadsEdge', cursor: string, node: { __typename: 'Threads', nodeId: string, id: string, createdAt?: string | null, title: string, fromTimestamp?: string | null, toTimestamp?: string | null } }> } | null, metricsDataPointsCollection?: { __typename: 'MetricsDataPointsConnection', totalCount: number, edges: Array<{ __typename: 'MetricsDataPointsEdge', node: { __typename: 'MetricsDataPoints', nodeId: string, time: string, value: number } }> } | null } | { __typename: 'MetricsDataPoints', nodeId: string } | { __typename: 'MetricsOwners', nodeId: string } | { __typename: 'Notifications', nodeId: string } | { __typename: 'Profiles', nodeId: string } | { __typename: 'TeamMembers', nodeId: string } | { __typename: 'Teams', nodeId: string } | { __typename: 'Threads', nodeId: string } | null };
 
 export type ImportsQueryQueryVariables = Exact<{
   nodeId: Scalars['ID']['input'];
 }>;
 
 
-export type ImportsQueryQuery = { __typename: 'Query', node?: { __typename: 'Comments', nodeId: string } | { __typename: 'Imports', nodeId: string, id: string, mapping?: string | null, status: ImportStatus, createdAt: string, fileName: string } | { __typename: 'Metrics', nodeId: string } | { __typename: 'MetricsDataPoints', nodeId: string } | { __typename: 'MetricsOwners', nodeId: string } | { __typename: 'Notifications', nodeId: string } | { __typename: 'Profiles', nodeId: string } | { __typename: 'TeamMembers', nodeId: string } | { __typename: 'Teams', nodeId: string } | { __typename: 'Threads', nodeId: string } | { __typename: 'UserEvents', nodeId: string } | null };
+export type ImportsQueryQuery = { __typename: 'Query', node?: { __typename: 'Comments', nodeId: string } | { __typename: 'Imports', nodeId: string, id: string, mapping?: string | null, status: ImportStatus, createdAt: string, fileName: string } | { __typename: 'Metrics', nodeId: string } | { __typename: 'MetricsDataPoints', nodeId: string } | { __typename: 'MetricsOwners', nodeId: string } | { __typename: 'Notifications', nodeId: string } | { __typename: 'Profiles', nodeId: string } | { __typename: 'TeamMembers', nodeId: string } | { __typename: 'Teams', nodeId: string } | { __typename: 'Threads', nodeId: string } | null };
 
 export type ThreadQueryQueryVariables = Exact<{
   nodeId: Scalars['ID']['input'];
 }>;
 
 
-export type ThreadQueryQuery = { __typename: 'Query', node?: { __typename: 'Comments', nodeId: string } | { __typename: 'Imports', nodeId: string } | { __typename: 'Metrics', nodeId: string } | { __typename: 'MetricsDataPoints', nodeId: string } | { __typename: 'MetricsOwners', nodeId: string } | { __typename: 'Notifications', nodeId: string } | { __typename: 'Profiles', nodeId: string } | { __typename: 'TeamMembers', nodeId: string } | { __typename: 'Teams', nodeId: string } | { __typename: 'Threads', nodeId: string, id: string, createdAt?: string | null, title: string, fromTimestamp?: string | null, toTimestamp?: string | null, commentsCollection?: { __typename: 'CommentsConnection', pageInfo: { __typename: 'PageInfo', hasNextPage: boolean, endCursor?: string | null }, edges: Array<{ __typename: 'CommentsEdge', cursor: string, node: { __typename: 'Comments', nodeId: string, id: string, createdAt?: string | null, updatedAt?: string | null, body: string, profile: { __typename: 'Profiles', nodeId: string, id: string, name: string, avatarPath?: string | null } } }> } | null } | { __typename: 'UserEvents', nodeId: string } | null };
+export type ThreadQueryQuery = { __typename: 'Query', node?: { __typename: 'Comments', nodeId: string } | { __typename: 'Imports', nodeId: string } | { __typename: 'Metrics', nodeId: string } | { __typename: 'MetricsDataPoints', nodeId: string } | { __typename: 'MetricsOwners', nodeId: string } | { __typename: 'Notifications', nodeId: string } | { __typename: 'Profiles', nodeId: string } | { __typename: 'TeamMembers', nodeId: string } | { __typename: 'Teams', nodeId: string } | { __typename: 'Threads', nodeId: string, id: string, createdAt?: string | null, title: string, fromTimestamp?: string | null, toTimestamp?: string | null, commentsCollection?: { __typename: 'CommentsConnection', pageInfo: { __typename: 'PageInfo', hasNextPage: boolean, endCursor?: string | null }, edges: Array<{ __typename: 'CommentsEdge', cursor: string, node: { __typename: 'Comments', nodeId: string, id: string, createdAt?: string | null, updatedAt?: string | null, body: string, profile: { __typename: 'Profiles', nodeId: string, id: string, name: string, avatarPath?: string | null } } }> } | null } | null };
 
 export const CommentFragmentFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CommentFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Comments"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"nodeId"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"body"}},{"kind":"Field","name":{"kind":"Name","value":"profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"nodeId"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"avatarPath"}}]}}]}}]} as unknown as DocumentNode<CommentFragmentFragment, unknown>;
 export const ThreadFragmentFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ThreadFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Threads"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"nodeId"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"fromTimestamp"}},{"kind":"Field","name":{"kind":"Name","value":"toTimestamp"}}]}}]} as unknown as DocumentNode<ThreadFragmentFragment, unknown>;
