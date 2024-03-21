@@ -11,6 +11,7 @@ import {
 } from 'recharts'
 import { cn } from '~/lib/utils'
 import { createTickDates, timestampToLabel } from '../../lib/chart-helpers'
+import { useMemo } from 'react'
 
 const MAX_TICKS = 5
 
@@ -35,7 +36,12 @@ export function LineChart({
 }: LineChartProps) {
   const isEmpty = dataPoints.length == 0
 
-  const dataForChart = isEmpty ? getRandomData() : dataPoints
+  const sortedDataPoints = useMemo(
+    () => dataPoints.sort((a, b) => +new Date(a.time) - +new Date(b.time)),
+    [dataPoints],
+  )
+
+  const dataForChart = isEmpty ? getRandomData() : sortedDataPoints
 
   const ticks = createTickDates(
     dataForChart.map((m) => new Date(m.time)),

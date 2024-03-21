@@ -49,7 +49,7 @@ const MetricCard = memo(function MetricCard({ metricNodeId }: MetricCardProps) {
     data.metricsDataPointsCollection?.edges.map((edge) => edge.node) ?? []
   const hasNoDataPoints = data.metricsDataPointsCollection?.totalCount === 0
 
-  const lastDataPoint = dataPoints[dataPoints.length - 1]
+  const firstDataPoint = dataPoints[0]
   const filteredDataPoints = dataPoints.filter((dp) => {
     if (interval.from && new Date(dp.time) < new Date(interval.from)) {
       return false
@@ -75,7 +75,7 @@ const MetricCard = memo(function MetricCard({ metricNodeId }: MetricCardProps) {
             <div>
               <span className="text-2xl font-bold">
                 {data.unitShort || ''}
-                {lastDataPoint?.value?.toLocaleString() || '-'}
+                {firstDataPoint?.value?.toLocaleString() || '-'}
               </span>
             </div>
           </div>
