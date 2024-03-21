@@ -13,6 +13,7 @@ const MetricCardFragment = graphql(/* GraphQL */ `
     name
     icon
     unitShort
+    tags
     createdAt
     metricsDataPointsCollection(orderBy: [{ time: DescNullsLast }]) {
       totalCount

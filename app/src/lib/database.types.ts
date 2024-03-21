@@ -150,6 +150,7 @@ export interface Database {
           id: string
           interval: Database["public"]["Enums"]["metric_interval"]
           name: string
+          tags: string[] | null
           team_id: string
           unit_short: string | null
           updated_at: string
@@ -162,6 +163,7 @@ export interface Database {
           id?: string
           interval: Database["public"]["Enums"]["metric_interval"]
           name: string
+          tags?: string[] | null
           team_id: string
           unit_short?: string | null
           updated_at?: string
@@ -174,6 +176,7 @@ export interface Database {
           id?: string
           interval?: Database["public"]["Enums"]["metric_interval"]
           name?: string
+          tags?: string[] | null
           team_id?: string
           unit_short?: string | null
           updated_at?: string
@@ -254,43 +257,31 @@ export interface Database {
       }
       notifications: {
         Row: {
-          body: string | null
           created_at: string | null
           id: string
           metadata: Json | null
           profile_id: string
-          seen_at: string | null
-          team_id: string
+          text: string | null
         }
         Insert: {
-          body?: string | null
           created_at?: string | null
           id?: string
           metadata?: Json | null
           profile_id: string
-          seen_at?: string | null
-          team_id: string
+          text?: string | null
         }
         Update: {
-          body?: string | null
           created_at?: string | null
           id?: string
           metadata?: Json | null
           profile_id?: string
-          seen_at?: string | null
-          team_id?: string
+          text?: string | null
         }
         Relationships: [
           {
             foreignKeyName: "notifications_profile_id_fkey"
             columns: ["profile_id"]
             referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "notifications_team_id_fkey"
-            columns: ["team_id"]
-            referencedRelation: "teams"
             referencedColumns: ["id"]
           }
         ]
@@ -439,66 +430,21 @@ export interface Database {
           }
         ]
       }
-      user_events: {
-        Row: {
-          event: Database["public"]["Enums"]["user_event"]
-          id: string
-          meta: Json | null
-          ts: string
-          user_id: string
-          value: string | null
-        }
-        Insert: {
-          event: Database["public"]["Enums"]["user_event"]
-          id?: string
-          meta?: Json | null
-          ts?: string
-          user_id?: string
-          value?: string | null
-        }
-        Update: {
-          event?: Database["public"]["Enums"]["user_event"]
-          id?: string
-          meta?: Json | null
-          ts?: string
-          user_id?: string
-          value?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "profile_events_profile_id_fkey"
-            columns: ["user_id"]
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          }
-        ]
-      }
     }
     Views: {
-      user_stats: {
-        Row: {
-          count: number | null
-          event: string | null
-        }
-        Relationships: []
-      }
-    }
-    Functions: {
       [_ in never]: never
     }
+    Functions: {
+      distinct_tags: {
+        Args: {
+          team_id: string
+        }
+        Returns: unknown
+      }
+    }
     Enums: {
-      import_status:
-        | "file_uploaded"
-        | "data_importing"
-        | "finished"
-        | "failed"
+      import_status: "file_uploaded" | "data_importing" | "finished" | "failed"
       metric_interval: "minute" | "hour" | "day" | "week" | "month"
-      user_event:
-        | "view_page"
-        | "add_metric"
-        | "add_data_point"
-        | "update_avatar"
-        | "import"
     }
     CompositeTypes: {
       [_ in never]: never
