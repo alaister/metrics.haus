@@ -35,7 +35,7 @@ function IntervalPicker(props: Props) {
   }
 
   return (
-    <div className={cn('grid gap-2', '')}>
+    <div className="grid gap-2">
       <Popover>
         <PopoverTrigger asChild>
           <Button
