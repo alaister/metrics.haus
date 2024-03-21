@@ -19,3 +19,9 @@ update (
     archived,
     tags
 ) on public.metrics to authenticated;
+
+create
+or replace function distinct_tags (team_id uuid) returns text[] as $$
+  SELECT ARRAY(SELECT DISTINCT(unnest(metrics.tags)) FROM metrics
+   WHERE team_id = $1);
+$$ language sql security invoker;
