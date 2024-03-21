@@ -245,8 +245,17 @@ function parseValueAsString(
   switch (columnMapping.type) {
     case "index":
       return row[keys[(columnMapping as CsvColumnMappingIndex).index]] || "";
-    case "name":
-      return row[(columnMapping as CsvColumnMappingName).name] || "";
+    case "name": {
+      const colName = Object.keys(row).find(
+        (name) =>
+          name.trim().toLowerCase() ===
+          (columnMapping as CsvColumnMappingName).name
+            .trim()
+            .toLocaleLowerCase()
+      );
+
+      return row[colName || ""] || "";
+    }
   }
 }
 
