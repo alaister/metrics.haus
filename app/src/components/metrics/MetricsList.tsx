@@ -1,33 +1,11 @@
-import { useQuery } from '@apollo/client'
-import { graphql } from '~/lib/gql'
 import MetricCard from './MetricCard'
+import { MetricsListQueryQuery } from '~/lib/gql/graphql'
 
-const MetricsListQuery = graphql(/* GraphQL */ `
-  query MetricsListQuery {
-    metricsCollection(
-      orderBy: [{ createdAt: DescNullsLast }]
-      filter: { archived: { eq: false } }
-    ) {
-      pageInfo {
-        hasNextPage
-        endCursor
-      }
-      edges {
-        cursor
-        node {
-          nodeId
-          ...MetricCardItem @nonreactive
-        }
-      }
-    }
-  }
-`)
+type MetricsType = NonNullable<
+  MetricsListQueryQuery['metricsCollection']
+>['edges']
 
-const MetricsList = () => {
-  const { data } = useQuery(MetricsListQuery)
-
-  const metrics = data?.metricsCollection?.edges ?? []
-
+const MetricsList = ({ metrics }: { metrics: MetricsType }) => {
   return (
     <div className="flex gap-4 overflow-x-auto">
       {metrics.length > 0 &&

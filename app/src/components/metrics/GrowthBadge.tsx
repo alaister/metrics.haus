@@ -27,7 +27,7 @@ const GrowthBadge = ({ dataPoints }: Props) => {
   const hasNoDataPoints = dataPoints?.length === 0
 
   return (
-    <div>
+    <>
       {dataPoints.length >= 2 && lastDataPoint.value > firstDataPoint.value ? (
         <Badge variant={'destructive'}>
           <ArrowDown className="h-3 w-4" />
@@ -41,7 +41,7 @@ const GrowthBadge = ({ dataPoints }: Props) => {
           {percentage}%
         </Badge>
       )}
-    </div>
+    </>
   )
 }
 
