@@ -4,6 +4,8 @@ import { graphql } from '~/lib/gql'
 import { Link } from '~/lib/router'
 import GrowthBadge from './GrowthBadge'
 import { LineChart } from './LineChart'
+import { MetricCardTable } from './MetricCardTable'
+import { useAppSelector } from '~/stores'
 
 const MetricCardFragment = graphql(/* GraphQL */ `
   fragment MetricCardItem on Metrics {
@@ -37,6 +39,7 @@ const MetricCard = memo(function MetricCard({ metricNodeId }: MetricCardProps) {
       nodeId: metricNodeId,
     },
   })
+  const interval = useAppSelector((state) => state.app.metricsInterval)
 
   if (!complete) {
     return null
@@ -47,16 +50,25 @@ const MetricCard = memo(function MetricCard({ metricNodeId }: MetricCardProps) {
   const hasNoDataPoints = data.metricsDataPointsCollection?.totalCount === 0
 
   const lastDataPoint = dataPoints[dataPoints.length - 1]
+  const filteredDataPoints = dataPoints.filter((dp) => {
+    if (interval.from && new Date(dp.time) < new Date(interval.from)) {
+      return false
+    }
+    if (interval.to && new Date(dp.time) > new Date(interval.to)) {
+      return false
+    }
+    return true
+  })
 
   return (
-    <Link to="/metrics/:id" params={{ id: data.id }}>
+    <Link to="/metrics/:id" params={{ id: data.id }} className="w-96">
       <div className="rounded-lg border shadow pt-4 cursor-pointer">
         <div className="px-4 pb-4 border-b">
           <div className="flex justify-between">
             <label className="tracking-tight text-sm font-medium">
               {data.name}
             </label>
-            <GrowthBadge dataPoints={dataPoints} />
+            <GrowthBadge dataPoints={filteredDataPoints} />
           </div>
 
           <div>
@@ -78,9 +90,10 @@ const MetricCard = memo(function MetricCard({ metricNodeId }: MetricCardProps) {
           <LineChart
             containerClassName="w-[110%] h-36 -ml-6"
             preview={true}
-            dataPoints={dataPoints}
+            dataPoints={filteredDataPoints}
           />
         </div>
+        <MetricCardTable dataPoints={filteredDataPoints} />
       </div>
     </Link>
   )

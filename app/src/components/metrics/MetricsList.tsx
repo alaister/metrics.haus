@@ -29,7 +29,7 @@ const MetricsList = () => {
   const metrics = data?.metricsCollection?.edges ?? []
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div className="flex gap-4 overflow-x-auto">
       {metrics.length > 0 &&
         metrics.map(({ node: metric }) => (
           <MetricCard key={metric.nodeId} metricNodeId={metric.nodeId} />

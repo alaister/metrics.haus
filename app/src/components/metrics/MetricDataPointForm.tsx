@@ -42,11 +42,14 @@ const formSchema = z.object({
 })
 
 export interface MetricFormProps {
-  onSuccess?: () => void
+  onSuccess: () => void
   metricId: string
 }
 
-const MetricForm = ({ onSuccess, metricId }: MetricFormProps) => {
+export const MetricDataPointForm = ({
+  onSuccess,
+  metricId,
+}: MetricFormProps) => {
   const { toast } = useToast()
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -196,5 +199,3 @@ const MetricForm = ({ onSuccess, metricId }: MetricFormProps) => {
     </Form>
   )
 }
-
-export default MetricForm
