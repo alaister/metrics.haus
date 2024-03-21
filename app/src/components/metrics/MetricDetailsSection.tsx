@@ -51,6 +51,17 @@ const MetricDetailsSection = ({ metricNodeId }: MetricDetailsProps) => {
   })
   const [archiveMutation, { loading: isArchiving }] = useMutation(
     MetricArchiveMutation,
+    {
+      update(cache, { data }) {
+        const deletedRecords = data?.updateMetricsCollection.records ?? []
+
+        deletedRecords.forEach((record) => {
+          cache.evict({ id: record.nodeId })
+        })
+
+        cache.gc()
+      },
+    },
   )
   const { toast } = useToast()
   const navigate = useNavigate()
