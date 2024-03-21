@@ -61,7 +61,7 @@ const MetricCard = memo(function MetricCard({ metricNodeId }: MetricCardProps) {
   })
 
   return (
-    <Link to="/metrics/:id" params={{ id: data.id }} className="w-96">
+    <Link to="/metrics/:id" params={{ id: data.id }} className="min-w-[384px]">
       <div className="rounded-lg border shadow pt-4 cursor-pointer">
         <div className="px-4 pb-4 border-b">
           <div className="flex justify-between">
