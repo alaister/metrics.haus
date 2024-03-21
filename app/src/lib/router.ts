@@ -6,11 +6,15 @@ import { components, hooks, utils } from '@generouted/react-router/client'
 export type Path =
   | `/`
   | `/account`
+  | `/imports`
+  | `/imports/:id`
+  | `/imports/new`
   | `/metrics/:id`
   | `/sign-in`
   | `/threads/:id`
 
 export type Params = {
+  '/imports/:id': { id: string }
   '/metrics/:id': { id: string }
   '/threads/:id': { id: string }
 }
