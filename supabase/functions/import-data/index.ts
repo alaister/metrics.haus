@@ -64,7 +64,15 @@ serve(async (req) => {
     Deno.env.get("SUPABASE_ANON_KEY") ?? "",
     {
       global: { headers: { Authorization: req.headers.get("Authorization")! } },
+      auth: {
+        persistSession: false,
+      },
     }
+  );
+
+  const supabaseAdminClient = createClient(
+    Deno.env.get("SUPABASE_URL") ?? "",
+    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
   );
 
   const { data: importData, error } = await supabaseClient
@@ -98,7 +106,7 @@ serve(async (req) => {
     });
   }
 
-  await supabaseClient
+  await supabaseAdminClient
     .from("imports")
     .update({
       status: "data_importing",
@@ -128,13 +136,12 @@ serve(async (req) => {
         time: dataRow.timestamp.toISOString(),
         metric_id: dataRow.metricId,
         value: dataRow.value,
-        reported_by: importData.uploaded_by,
       })),
       { ignoreDuplicates: true }
     );
 
   if (errorInsertingMetrics) {
-    await supabaseClient
+    await supabaseAdminClient
       .from("imports")
       .update({
         status: "failed",
@@ -152,7 +159,7 @@ serve(async (req) => {
     );
   }
 
-  await supabaseClient
+  const { error: errorUpdatingImport } = await supabaseAdminClient
     .from("imports")
     .update({
       status: "finished",
@@ -161,6 +168,12 @@ serve(async (req) => {
       },
     })
     .eq("id", importId);
+
+  if (errorUpdatingImport) {
+    console.error({ errorUpdatingImport });
+  }
+
+  console.log("Imported " + dataRows.length + " rows");
 
   return new Response(JSON.stringify({ dataRows }), {
     headers: defaultHeaders,
