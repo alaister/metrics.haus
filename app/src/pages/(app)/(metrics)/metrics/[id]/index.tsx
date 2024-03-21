@@ -17,6 +17,7 @@ export const MetricDetailsQuery = graphql(/* GraphQL */ `
         name
         icon
         unitShort
+        tags
         description
         threadsCollection {
           pageInfo {

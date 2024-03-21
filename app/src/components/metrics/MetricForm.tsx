@@ -26,6 +26,7 @@ import { graphql } from '~/lib/gql'
 import { MetricInterval, MetricsListQueryDocument } from '~/lib/gql/graphql'
 import { useToast } from '~/lib/hooks/use-toast'
 import { useAppSelector } from '~/stores'
+import CreatableSelect from 'react-select/creatable'
 
 const MetricInsertMutation = graphql(/* GraphQL */ `
   mutation MetricFormMutation($input: MetricsInsertInput!) {
@@ -53,6 +54,7 @@ const formSchema = z.object({
   interval: z.nativeEnum(MetricInterval),
   unitShort: z.string().max(3).optional(),
   members: z.optional(z.string().array()),
+  tags: z.optional(z.string().array()),
 })
 
 export interface MetricFormProps {
@@ -69,6 +71,7 @@ const MetricForm = ({ onSuccess }: MetricFormProps) => {
     defaultValues: {
       name: '',
       unitShort: '',
+      tags: [],
     },
   })
 
@@ -98,6 +101,7 @@ const MetricForm = ({ onSuccess }: MetricFormProps) => {
           interval: values.interval,
           unitShort: values.unitShort,
           teamId: selectedTeamId,
+          tags: values.tags,
         },
       },
       onError(error) {
@@ -115,6 +119,7 @@ const MetricForm = ({ onSuccess }: MetricFormProps) => {
             interval: MetricInterval.Week,
             members: [],
             unitShort: '',
+            tags: [],
           })
           onSuccess?.()
         }
@@ -203,6 +208,44 @@ const MetricForm = ({ onSuccess }: MetricFormProps) => {
               <FormLabel>Unit (Short)</FormLabel>
               <FormControl>
                 <Input placeholder="$, €, %, ..." {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="tags"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Tags</FormLabel>
+              <FormControl>
+                <CreatableSelect
+                  defaultValue={field.value?.map((it) => ({
+                    label: it,
+                    value: it,
+                  }))}
+                  onChange={(values) =>
+                    field.onChange(values.map((it) => it.value))
+                  }
+                  isMulti
+                  theme={(theme) => ({
+                    ...theme,
+                    borderRadius: 5,
+                  })}
+                  // copy pasta https://stackoverflow.com/a/74481208/1476137
+                  styles={{
+                    control: (base) => ({
+                      ...base,
+                      boxShadow: 'none',
+                      borderColor: '#e5e7eb',
+                      '&:hover': { borderColor: '#e5e7eb' },
+                      fontFamily: 'Inter var',
+                      fontSize: '14px',
+                    }),
+                  }}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
