@@ -68,7 +68,11 @@ const MetricCard = memo(function MetricCard({ metricNodeId }: MetricCardProps) {
     <Card className="w-96">
       <CardHeader>
         <CardTitle className="flex flex-row justify-between items-center">
-          <Link to="/metrics/:id" params={{ id: data.id }}>
+          <Link
+            to="/metrics/:id"
+            params={{ id: data.id }}
+            className="hover:underline"
+          >
             {data.name}
           </Link>
           <GrowthBadge dataPoints={filteredDataPoints} />
