@@ -6,6 +6,9 @@ import GrowthBadge from './GrowthBadge'
 import { LineChart } from './LineChart'
 import { MetricCardTable } from './MetricCardTable'
 import { useAppSelector } from '~/stores'
+import { LucideHeart } from 'lucide-react'
+import { Card, CardDescription, CardHeader, CardTitle } from '../ui/card'
+import { useFavouriteMetrics } from '~/lib/favouriteMetricsContext'
 
 const MetricCardFragment = graphql(/* GraphQL */ `
   fragment MetricCardItem on Metrics {
@@ -32,6 +35,7 @@ export interface MetricCardProps {
 }
 
 const MetricCard = memo(function MetricCard({ metricNodeId }: MetricCardProps) {
+  const { ids, setIds } = useFavouriteMetrics()
   const { data, complete } = useFragment({
     fragment: MetricCardFragment,
     fragmentName: 'MetricCardItem',
@@ -61,41 +65,49 @@ const MetricCard = memo(function MetricCard({ metricNodeId }: MetricCardProps) {
   })
 
   return (
-    <Link to="/metrics/:id" params={{ id: data.id }} className="min-w-[384px]">
-      <div className="rounded-lg border shadow pt-4 cursor-pointer">
-        <div className="px-4 pb-4 border-b">
-          <div className="flex justify-between">
-            <label className="tracking-tight text-sm font-medium">
-              {data.name}
-            </label>
-            <GrowthBadge dataPoints={filteredDataPoints} />
-          </div>
-
-          <div>
-            <div>
-              <span className="text-2xl font-bold">
-                {data.unitShort || ''}
-                {firstDataPoint?.value?.toLocaleString() || '-'}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <div className="overflow-hidden relative">
-          {hasNoDataPoints && (
-            <div className="z-20 bg-white/20 flex items-center justify-center -inset-0 w-full h-full absolute">
-              <span className="text-sm font-semibold">No Data Yet</span>
-            </div>
-          )}
-          <LineChart
-            containerClassName="w-[110%] h-36 -ml-6"
-            preview={true}
-            dataPoints={filteredDataPoints}
+    <Card className="w-96">
+      <CardHeader>
+        <CardTitle className="flex flex-row justify-between items-center">
+          <Link to="/metrics/:id" params={{ id: data.id }}>
+            {data.name}
+          </Link>
+          <GrowthBadge dataPoints={filteredDataPoints} />
+        </CardTitle>
+        <CardDescription className="flex flex-row justify-between items-center">
+          <span className="text-2xl font-bold">
+            {data.unitShort || ''}
+            {firstDataPoint?.value?.toLocaleString() || '-'}
+          </span>
+          <LucideHeart
+            color="red"
+            fill={ids.includes(data.id) ? '#F00' : '#FFF'}
+            onClick={() => {
+              if (ids.includes(data.id)) {
+                setIds(ids.filter((id) => id !== data.id))
+              } else {
+                const newIds = [...ids, data.id]
+                setIds(newIds)
+              }
+            }}
           />
-        </div>
-        <MetricCardTable dataPoints={filteredDataPoints.slice(0, 6)} />
+        </CardDescription>
+      </CardHeader>
+
+      <div className="overflow-hidden relative">
+        {hasNoDataPoints && (
+          <div className="z-20 bg-white/20 flex items-center justify-center -inset-0 w-full h-full absolute">
+            <span className="text-sm font-semibold">No Data Yet</span>
+          </div>
+        )}
+
+        <LineChart
+          containerClassName="w-[110%] h-36 -ml-6"
+          preview={true}
+          dataPoints={filteredDataPoints}
+        />
       </div>
-    </Link>
+      <MetricCardTable dataPoints={filteredDataPoints.slice(0, 6)} />
+    </Card>
   )
 })
 
