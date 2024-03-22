@@ -1,13 +1,16 @@
-import { Calendar as CalendarIcon } from 'lucide-react'
-import { ChangeEventHandler, useState } from 'react'
-import { SelectSingleEventHandler } from 'react-day-picker'
-import { cn } from '~/lib/utils'
+'use client'
+
 import { format } from 'date-fns'
+import { Calendar as CalendarIcon } from 'lucide-react'
+
+import { cn } from '~/lib/utils'
 import { Button } from './Button'
 import { Calendar } from './Calendar'
-import { Input } from './Input'
-import { Label } from './Label'
 import { Popover, PopoverContent, PopoverTrigger } from './Popover'
+import { SelectSingleEventHandler } from 'react-day-picker'
+import { ChangeEventHandler, useState } from 'react'
+import { Label } from './Label'
+import { Input } from './Input'
 
 interface DateTimePickerProps {
   date: Date
@@ -57,11 +60,11 @@ export function DateTimePicker({ date, setDate }: DateTimePickerProps) {
 
   return (
     <Popover>
-      <PopoverTrigger asChild className="z-10">
+      <PopoverTrigger asChild>
         <Button
-          variant="outline"
+          variant={'outline'}
           className={cn(
-            'w-full justify-start text-left font-normal',
+            'w-[280px] justify-start text-left font-normal',
             !date && 'text-muted-foreground',
           )}
         >

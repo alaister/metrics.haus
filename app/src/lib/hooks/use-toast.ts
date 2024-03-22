@@ -1,4 +1,6 @@
-import { ReactNode, useEffect, useState } from 'react'
+// Inspired by react-hot-toast library
+import * as React from 'react'
+
 import type { ToastActionElement, ToastProps } from '~/components/ui/Toast'
 
 const TOAST_LIMIT = 1
@@ -6,8 +8,8 @@ const TOAST_REMOVE_DELAY = 1000000
 
 type ToasterToast = ToastProps & {
   id: string
-  title?: ReactNode
-  description?: ReactNode
+  title?: React.ReactNode
+  description?: React.ReactNode
   action?: ToastActionElement
 }
 
@@ -21,7 +23,7 @@ const actionTypes = {
 let count = 0
 
 function genId() {
-  count = (count + 1) % Number.MAX_VALUE
+  count = (count + 1) % Number.MAX_SAFE_INTEGER
   return count.toString()
 }
 
@@ -165,9 +167,9 @@ function toast({ ...props }: Toast) {
 }
 
 function useToast() {
-  const [state, setState] = useState<State>(memoryState)
+  const [state, setState] = React.useState<State>(memoryState)
 
-  useEffect(() => {
+  React.useEffect(() => {
     listeners.push(setState)
     return () => {
       const index = listeners.indexOf(setState)
@@ -184,4 +186,4 @@ function useToast() {
   }
 }
 
-export { toast, useToast }
+export { useToast, toast }
